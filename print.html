@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Oak</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <noscript>
+            <style type="text/css">
+                .javascript-only {
+                    display: none;
+                }
+            </style>
+        </noscript>
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme;
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons javascript-only">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Oak</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </div>
+                <div id="searchresults-outer" class="searchresults-outer">
+                    <div class="searchresults-header" id="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="print.html#introduction" id="introduction"><h1>Introduction</h1></a>
+<p>Hello! You reached the <code>AbSolute</code> book.
+<code>AbSolute</code> is a constraint solver written in OCaml for research purposes, but we hope that it can be used outside of research as well!
+The main originality of this solver is to be based on <em>abstract interpretation</em>, which is a field studying static analysis of programs.
+We have discovered similitudes between constraint programming and abstract interpretation at the theoretical level, and this solver is a practical experimentation of these findings.
+In this book, you will learn how to <a href="getting-started.html">install AbSolute</a> and how to <a href="learn-absolute.html">solve your own constraint problems</a>.
+We also include a <a href="benchmarking.html">guide to kobe</a> which is a benchmarking tool with support for AbSolute and other solvers.
+For adventurous users, we provide a <a href="contributing.html">guide for contributing</a> to Absolute, as well as some notes <a href="research.html">about the research</a> relevant to this project.</p>
+<p>This project is available on <a href="https://github.com/ptal/absolute/">github</a>.</p>
+<a class="header" href="print.html#highlight-of-the-features" id="highlight-of-the-features"><h2>Highlight of the features</h2></a>
+<p>An abstract domain encapsulates a solver for a specific constraint language.
+We summarize the supported abstract domains in the table below (<code>c1,c2</code> are constraints, <code>X,Y</code> variables and <code>a,b</code> constants).
+Each abstract domain is parametrized by a bound type <code>Z</code>, <code>F</code> or <code>Q</code> if it contains variables over integers, floating point numbers or rational.</p>
+<table><thead><tr><th> Abstract domain </th><th> Constraint language </th><th> Propagation </th><th> Description </th></tr></thead><tbody>
+<tr><td> <code>Box(V)</code>        </td><td> Arithmetic constraints, functions (<code>sin</code>, <code>cos</code>, <code>sqrt</code>,...). </td><td>  HC4 algorithm, propagation loop </td><td> <code>Box</code> is parametric by a variable domain <code>V</code> (interval, open/close interval, or BDD). </td></tr>
+<tr><td> <code>Box_reified</code>   </td><td> Box constraint and reified constraint of the form (<code>X &lt;=&gt; c</code> where <code>X</code> is equal to <code>0</code> or <code>1</code>). </td><td> Same as <code>Box</code> + support for reified constraints </td><td> <code>Box_reified</code> is parametrized by a <code>Box</code> domain. </td></tr>
+<tr><td> <code>Octagon</code>       </td><td> Logic difference constraints (<code>X - Y &lt;= a</code>) </td><td> Incremental Floyd-Warshall algorithm </td><td> </td></tr>
+<tr><td> <code>Box_octagon_disjoint</code>   </td><td> Box and octagon constraints with equivalence constraints (<code>c1 &lt;=&gt; c2</code> where <code>c1</code> a box constraint and <code>c2</code> an octagonal constraint).  </td><td> Bridge between box and octagon domains when they are defined on disjoint set of variables. </td></tr>
+</tbody></table>
+<p>In addition, each domain is equipped with numerous splitting strategies that can impact the performance.</p>
+<a class="header" href="print.html#what-to-expect-next" id="what-to-expect-next"><h2>What to expect next?</h2></a>
+<p>We currently work on integrating a SAT solver, integrating back some features from the initial version of <a href="https://github.com/mpelleau/">AbSolute</a> such as support for linear programming through VPL and Apron library, and reduced product to combine domains.</p>
+<a class="header" href="print.html#getting-started" id="getting-started"><h1>Getting Started</h1></a>
+<p>The installation process should be easy, but do not hesitate to reach out for help if needed.</p>
+<a class="header" href="print.html#requirements" id="requirements"><h2>Requirements</h2></a>
+<p>The following is a list of the dependencies to build AbSolute; note that we explain below how to install <code>OCaml</code> if you do not have it already.</p>
+<ul>
+<li>An ANSI C compiler</li>
+<li><a href="http://ocaml.org/">OCaml</a> &gt;= 4.07.1</li>
+</ul>
+<a class="header" href="print.html#installation" id="installation"><h2>Installation</h2></a>
+<p>We install OCaml and AbSolute through the OCaml package manager <a href="http://opam.ocaml.org/">opam</a>.
+First, <a href="http://opam.ocaml.org/doc/Install.html">install opam</a> with your package manager and initialize it:</p>
+<pre><code class="language-sh">apt-get install opam # on Debian, see opam documentation for other distributions.
+opam init --comp 4.07.1+flambda # Initialize ~/.opam with a freshly compiled OCaml 4.07.1
+</code></pre>
+<p>The next step is to download and build AbSolute.
+If you intent to modify the source code and possibly contribute to the project, jump to the <a href="contributing.html">contributing chapter</a>.
+Otherwise, you can install it from <code>opam</code>:</p>
+<pre><code class="language-sh">opam repo add solvers git@github.com:ptal/solvers-opam.git
+opam install absolute
+</code></pre>
+<p><code>AbSolute</code> is currently only a library project, so it must be used in an OCaml project, which we explain in the <a href="learn-absolute.html">next chapter</a>.</p>
+<a class="header" href="print.html#learn-absolute" id="learn-absolute"><h1>Learn AbSolute</h1></a>
+<a class="header" href="print.html#benchmarking" id="benchmarking"><h1>Benchmarking</h1></a>
+<a class="header" href="print.html#contributing-to-absolute" id="contributing-to-absolute"><h1>Contributing to AbSolute</h1></a>
+<p>This guide is for anybody who wants to contribute to AbSolute.
+Before all, we encourage you to discuss your project with us to be sure your contributions can eventually be integrated.
+Make sure you installed <a href="getting-started.html">OCaml and Opam</a>.</p>
+<a class="header" href="print.html#installing-and-building-absolute" id="installing-and-building-absolute"><h2>Installing and building AbSolute</h2></a>
+<p>Install dependencies, clone and build AbSolute from the Github repository:</p>
+<pre><code class="language-sh">opam install dune extlib containers mlgmpidl mtime alcotest
+git clone https://github.com/ptal/AbSolute
+cd AbSolute
+make build
+make test
+</code></pre>
+<a class="header" href="print.html#development-flow" id="development-flow"><h2>Development flow</h2></a>
+<p>You should first create a branch or a fork, add and test the new feature, and then create a pull request to merge it into the mainstream repository.
+In a more detailed way:</p>
+<ol>
+<li>Make your changes in a branch.</li>
+<li>Document the <code>.mli</code> files of your code.</li>
+<li>Verify it passes all the tests, and that <a href="https://travis-ci.org/ptal/AbSolute">Travis</a> succeeds to build and test your branch.</li>
+<li>Send your changes into master.</li>
+<li>Publish the new version (see below).</li>
+</ol>
+<p>If you modify interfaces that are shared by several abstract domains (such as <a href="https://github.com/ptal/AbSolute/blob/master/src/domains/abstract_domain.ml">abstract_domain.ml</a>), you should create an issue on Github to discuss about it with the team, since it impacts virtually all the project.</p>
+<p>About the coding guidelines, you should try to code in the same way than the rest of the project, please observe how we code and do the same.
+One very important rule is that you indent using <em>2 spaces</em> and <strong>not tabulations</strong>, and create <code>.ml</code> and its documented <code>.mli</code> companion for every new file.</p>
+<p>In any case, do not hesitate to communicate and ask questions—stupid questions do not exist :-).
+Questions and discussions are very important so you do not lose time during development, and do not go in a wrong direction.</p>
+<a class="header" href="print.html#publishing" id="publishing"><h2>Publishing</h2></a>
+<p>We maintain version numbers according to <a href="http://semver.org/">semantic versioning</a> rules.
+We provide a script <a href="https://github.com/ptal/solvers-opam/blob/master/publish.sh">publish.sh</a> to automatically update the version of your OPAM project, create the tag on git, add the new version in the <a href="https://github.com/ptal/solvers-opam">solvers-opam</a> repository, and push all the changes online.
+It can be used as follows:</p>
+<pre><code class="language-sh">./publish.sh major ../AbSolute ../solvers-opam
+</code></pre>
+<p>It releases a new major version of the project <code>AbSolute</code> rooted at <code>../AbSolute</code>, and where the OPAM packages repository is rooted at <code>../solvers-opam</code>.
+The new version is installable with <code>opam update</code> followed by <code>opam install absolute</code>.</p>
+<p>For more usage information, you can type:</p>
+<pre><code class="language-sh">./publish.sh
+</code></pre>
+<p>This script is only compatible to Linux (not yet tested on MacOSX), so if you are on Windows, you should read this script (which is documented) to know what are the necessary steps.</p>
+<a class="header" href="print.html#research" id="research"><h1>Research</h1></a>
+<p>AbSolute has generated several research papers.
+Currently, the most general one to cite is:</p>
+<pre><code class="language-bibtex">@inproceedings{DBLP:conf/vmcai/PelleauMTB13,
+  author    = {Marie Pelleau and
+               Antoine Min{\'{e}} and
+               Charlotte Truchet and
+               Fr{\'{e}}d{\'{e}}ric Benhamou},
+  title     = {A Constraint Solver Based on Abstract Domains},
+  booktitle = {Verification, Model Checking, and Abstract Interpretation, 14th International
+               Conference, {VMCAI} 2013, Rome, Italy, January 20-22, 2013. Proceedings},
+  pages     = {434--454},
+  year      = {2013},
+  crossref  = {DBLP:conf/vmcai/2013},
+  url       = {https://doi.org/10.1007/978-3-642-35873-9\_26},
+  doi       = {10.1007/978-3-642-35873-9\_26},
+  timestamp = {Wed, 24 May 2017 08:30:31 +0200},
+  biburl    = {https://dblp.org/rec/bib/conf/vmcai/PelleauMTB13},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = '_FontAwesome/css/font-awesome.css';
+                document.head.insertBefore(link, document.head.firstChild)
+            }
+        </script>
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                window.print();
+            })
+        </script>
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>
