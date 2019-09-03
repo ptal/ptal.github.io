@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Oak</title>
+        <title>AbSolute Book</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -115,7 +115,7 @@
                             
                         </div>
 
-                        <h1 class="menu-title">Oak</h1> 
+                        <h1 class="menu-title">AbSolute Book</h1> 
 
                         <div class="right-buttons">
                             <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -156,7 +156,7 @@ In this book, you will learn how to <a href="getting-started.html">install AbSol
 We also include a <a href="benchmarking.html">guide to kobe</a> which is a benchmarking tool with support for AbSolute and other solvers.
 For adventurous users, we provide a <a href="contributing.html">guide for contributing</a> to Absolute, as well as some notes <a href="research.html">about the research</a> relevant to this project.</p>
 <p>This project is available on <a href="https://github.com/ptal/absolute/">github</a>.</p>
-<a class="header" href="print.html#highlight-of-the-features" id="highlight-of-the-features"><h2>Highlight of the features</h2></a>
+<a class="header" href="print.html#highlight-of-absolute-features" id="highlight-of-absolute-features"><h2>Highlight of AbSolute features</h2></a>
 <p>An abstract domain encapsulates a solver for a specific constraint language.
 We summarize the supported abstract domains in the table below (<code>c1,c2</code> are constraints, <code>X,Y</code> variables and <code>a,b</code> constants).
 Each abstract domain is parametrized by a bound type <code>Z</code>, <code>F</code> or <code>Q</code> if it contains variables over integers, floating point numbers or rational.</p>
@@ -169,6 +169,14 @@ Each abstract domain is parametrized by a bound type <code>Z</code>, <code>F</co
 <p>In addition, each domain is equipped with numerous splitting strategies that can impact the performance.</p>
 <a class="header" href="print.html#what-to-expect-next" id="what-to-expect-next"><h2>What to expect next?</h2></a>
 <p>We currently work on integrating a SAT solver, integrating back some features from the initial version of <a href="https://github.com/mpelleau/">AbSolute</a> such as support for linear programming through VPL and Apron library, and reduced product to combine domains.</p>
+<a class="header" href="print.html#absolute-ecosystem" id="absolute-ecosystem"><h2>AbSolute ecosystem</h2></a>
+<p>We have several projects relevant to AbSolute that are worth checking out:</p>
+<ul>
+<li><a href="https://github.com/ptal/kobe">kobe</a>: Constraint benchmarking tools suite.
+It is described in more depth in the <a href="benchmarking.md">benchmarking chapter</a>.</li>
+<li><a href="https://github.com/ptal/ptal.github.io">ptal.github.io</a>: The repository hosting this book.</li>
+<li><a href="https://github.com/ptal/solvers-opam">solvers-opam</a>: The OPAM packages repository containing libraries and executables surrounding constraint solving.</li>
+</ul>
 <a class="header" href="print.html#getting-started" id="getting-started"><h1>Getting Started</h1></a>
 <p>The installation process should be easy, but do not hesitate to reach out for help if needed.</p>
 <a class="header" href="print.html#requirements" id="requirements"><h2>Requirements</h2></a>
@@ -192,6 +200,8 @@ opam install absolute
 <p><code>AbSolute</code> is currently only a library project, so it must be used in an OCaml project, which we explain in the <a href="learn-absolute.html">next chapter</a>.</p>
 <a class="header" href="print.html#learn-absolute" id="learn-absolute"><h1>Learn AbSolute</h1></a>
 <a class="header" href="print.html#benchmarking" id="benchmarking"><h1>Benchmarking</h1></a>
+<p>This project helps to compare AbSolute to other solvers including Chuffed and GeCode.
+We also provide data sets for a scheduling problem and an automated testing chain.</p>
 <a class="header" href="print.html#contributing-to-absolute" id="contributing-to-absolute"><h1>Contributing to AbSolute</h1></a>
 <p>This guide is for anybody who wants to contribute to AbSolute.
 Before all, we encourage you to discuss your project with us to be sure your contributions can eventually be integrated.
