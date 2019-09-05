@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Guide for Contributors - AbSolute Book</title>
+        <title>Scheduling Data Sets - AbSolute Book</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html" class="active"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html" class="active"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -147,58 +147,89 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="contributing.html#contributing-to-absolute" id="contributing-to-absolute"><h1>Contributing to AbSolute</h1></a>
-<p>This guide is for anybody who wants to contribute to AbSolute.
-Before all, we encourage you to discuss your project with us to be sure your contributions can eventually be integrated.
-Make sure you installed <a href="getting-started.html">OCaml and Opam</a>.</p>
-<a class="header" href="contributing.html#installing-and-building-absolute" id="installing-and-building-absolute"><h2>Installing and building AbSolute</h2></a>
-<p>Install dependencies, clone and build AbSolute from the Github repository:</p>
-<pre><code class="language-sh">opam install dune extlib containers mlgmpidl mtime alcotest
-git clone https://github.com/ptal/AbSolute
-cd AbSolute
-make build
-make test
-</code></pre>
-<a class="header" href="contributing.html#development-flow" id="development-flow"><h2>Development flow</h2></a>
-<p>You should first create a branch or a fork, add and test the new feature, and then create a pull request to merge it into the mainstream repository.
-In a more detailed way:</p>
+                        <a class="header" href="scheduling-data.html#scheduling-data-sets" id="scheduling-data-sets"><h1>Scheduling Data Sets</h1></a>
+<p><code>kobe</code> parses different file format describing scheduling problems such as RCPSP and its variants.
+We give a list of the supported formats and data sets available in <a href="https://github.com/ptal/kobe-rcpsp">kobe-rcpsp</a>, and credit the owners of these data sets.
+We have clean these data sets of all the meta-information that was uneccessary to us, but feel free to consult the references given for the full data set.</p>
+<p>We formatted known optimum results in a CSV format that is common to every data set (e.g. <code>data/rcpsp/j30.sm/optimum/optimum.csv</code>).</p>
+<a class="header" href="scheduling-data.html#rcpsp" id="rcpsp"><h2>RCPSP</h2></a>
 <ol>
-<li>Make your changes in a branch.</li>
-<li>Document the <code>.mli</code> files of your code.</li>
-<li>Verify it passes all the tests, and that <a href="https://travis-ci.org/ptal/AbSolute">Travis</a> succeeds to build and test your branch.</li>
-<li>Send your changes into master.</li>
-<li>Publish the new version (see below).</li>
+<li>
+<p>Patterson (.rcp): Format originally used to evaluate RCPSP in Patterson (1984).
+It is the format used by the RanGen1 and RanGen2 generators.
+Sets of instances:</p>
+<ol>
+<li>Patterson: 110 instances.</li>
+<li>RG300[1]: 480 instances, 300 activities, 4 resources.</li>
+<li>RG30[2]: 900, 180, 240, 240, 240 instances, 30 activities, 4 resources.
+Resource data a bit &quot;restricted&quot; (in the way it was generated) on the RG30 sets.</li>
+<li>MT[3]: 900, 800, 1200, 1200 instances, 30 activities, 0 resource.
+ResSet[4]: Can be merged with MT for resources specifications.</li>
 </ol>
-<p>If you modify interfaces that are shared by several abstract domains (such as <a href="https://github.com/ptal/AbSolute/blob/master/src/domains/abstract_domain.ml">abstract_domain.ml</a>), you should create an issue on Github to discuss about it with the team, since it impacts virtually all the project.</p>
-<p>About the coding guidelines, you should try to code in the same way than the rest of the project, please observe how we code and do the same.
-One very important rule is that you indent using <em>2 spaces</em> and <strong>not tabulations</strong>, and create <code>.ml</code> and its documented <code>.mli</code> companion for every new file.</p>
-<p>In any case, do not hesitate to communicate and ask questions—stupid questions do not exist :-).
-Questions and discussions are very important so you do not lose time during development, and do not go in a wrong direction.</p>
-<a class="header" href="contributing.html#publishing" id="publishing"><h2>Publishing</h2></a>
-<p>We maintain version numbers according to <a href="http://semver.org/">semantic versioning</a> rules.
-We provide a script <a href="https://github.com/ptal/solvers-opam/blob/master/publish.sh">publish.sh</a> to automatically update the version of your OPAM project, create the tag on git, add the new version in the <a href="https://github.com/ptal/solvers-opam">solvers-opam</a> repository, and push all the changes online.
-It can be used as follows:</p>
-<pre><code class="language-sh">./publish.sh major ../AbSolute ../solvers-opam
-</code></pre>
-<p>It releases a new major version of the project <code>AbSolute</code> rooted at <code>../AbSolute</code>, and where the OPAM packages repository is rooted at <code>../solvers-opam</code>.
-The new version is installable with <code>opam update</code> followed by <code>opam install absolute</code>.</p>
-<p>For more usage information, you can type:</p>
-<pre><code class="language-sh">./publish.sh
-</code></pre>
-<p>This script is only compatible to Linux (not yet tested on MacOSX), so if you are on Windows, you should read this script (which is documented) to know what are the necessary steps.</p>
+<p>[1] Debels, Dieter and Vanhoucke, Mario. &quot;A Decomposition-Based Genetic Algorithm for the Resource-Constrained Project-Scheduling Problem&quot;, 2007.</p>
+<p>[2] Mario Vanhoucke, José Coelho, Dieter Debels, Broos Maenhout, Luís V. Tavares, &quot;An evaluation of the adequacy of project network generators with systematically sampled networks&quot;, European Journal of Operational Research, Volume 187, Issue 2, 2008.</p>
+<p>[3] Vanhoucke, M., 2010, &quot;Measuring time: Improving project performance using earned value management&quot; 1st ed., Springer: 164 pages.</p>
+<p>[4] Testing and validating algorithms for resource-constrained project scheduling (in submission).</p>
+</li>
+<li>
+<p>SM format (.sm):</p>
+</li>
+</ol>
+<p>Format of the PSPLIB, a well-known library for RCPSP with sets of instances of 30, 60, 90 and 120 activities.
+Sets of instances:
+1. j30: 480 instances, 30 activities and 4 resources.
+2. j60: 480 instances, 60 activities and 4 resources.
+3. j90: 480 instances, 90 activities and 4 resources.
+4. j120: 600 instances, 120 activities and 4 resources.</p>
+<p>R. Kolisch and A. Sprecher, “PSPLIB-a project scheduling problem library: OR software-ORSEP operations research software exchange program,” European journal of operational research, vol. 96, no. 1, pp. 205–216, 1997.</p>
+<p>http://www.om-db.wi.tum.de/psplib/getdata.cgi?mode=sm</p>
+<a class="header" href="scheduling-data.html#rcpspmax" id="rcpspmax"><h2>RCPSP/max</h2></a>
+<ol start="3">
+<li>ProGenMax format (.SCH):</li>
+</ol>
+<p>Format of the sets of instances produced by the ProGenMax instance generator.
+It concerns the RCPSP/max problem.</p>
+<p>Sets of instances:
+1. C, D: each 540 instances, 100 activities, 5 resources.
+2. UBO_N: each 90 instances, N activities, 5 resources.
+N in 10, 20, 50, 100, 200, 500 and 1000.
+3. J_N: 270 instances, N activities, 5 resources.
+N in 10, 20, 30.</p>
+<p>http://www.wiwi.tu-clausthal.de/de/abteilungen/produktion/forschung/schwerpunkte/project-generator/rcpspmax/</p>
+<a class="header" href="scheduling-data.html#mmrcpsp-multi-mode-rcpsp" id="mmrcpsp-multi-mode-rcpsp"><h2>MMRCPSP (multi-mode RCPSP)</h2></a>
+<ol start="2">
+<li>
+<p>SM format (.sm): Similar to for RCPSP. With nonrenewable resources.</p>
+<p>Sets of instances:</p>
+<ol>
+<li>J_N: 3840 instances in total, N activities,
+N in 10, 12, 14, 16, 18, 20, 30</li>
+</ol>
+</li>
+<li>
+<p>SM format light (.sm): Similar to SM format but without some headers.</p>
+<p>Sets of instances:</p>
+<ol>
+<li>MMLIB50: 540 instances, 50 activities, 3 modes.</li>
+<li>MMLIB100: 540 instances, 100 activities, 3 modes.</li>
+<li>MMLIB+: 3240 instances, 50 or 100 activities, 3, 6 or 9 modes.</li>
+</ol>
+<p>[1] V. Van Peteghem and M. Vanhoucke, “An experimental investigation of metaheuristics for the multi-mode resource-constrained project scheduling problem on new dataset instances,” European Journal of Operational Research, vol. 235, no. 1, pp. 62–72, May 2014.</p>
+</li>
+</ol>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="scheduling-data.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="minizinc-benchmarking.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="research.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="contributing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -210,13 +241,13 @@ The new version is installable with <code>opam update</code> followed by <code>o
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="scheduling-data.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="minizinc-benchmarking.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="research.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="contributing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

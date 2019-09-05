@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html" class="active"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html" class="active"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -148,8 +148,31 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="benchmarking.html#benchmarking" id="benchmarking"><h1>Benchmarking</h1></a>
-<p>This project helps to compare AbSolute to other solvers including Chuffed and GeCode.
-We also provide data sets for a scheduling problem and an automated testing chain.</p>
+<p>In this chapter, we present <a href="https://github.com/ptal/kobe">kobe</a>, a constraint benchmarking tools suite for various solvers including GeCode, Chuffed and AbSolute.
+The goals of this benchmarking tools suite are:</p>
+<ol>
+<li>Reproducibility of the research results.</li>
+<li>Report of the full results whereas in research papers it is often summarized.</li>
+<li>Automate benchmarking of different solvers on different problems.</li>
+<li>Analysis of the benchmarking results.</li>
+</ol>
+<p>This work is on-going and replicability problems might still be present.
+In case of problems, please do not hesitate to contact us on the <a href="https://github.com/ptal/kobe/issues">issues tracker</a> or by <a href="mailto:pierre.talbot@univ-nantes.fr">email</a>.</p>
+<a class="header" href="benchmarking.html#getting-started" id="getting-started"><h2>Getting started</h2></a>
+<p>First, make sure you followed the instruction of the general <a href="getting-started.html">getting started section</a>.
+If so, you can install <code>kobe</code> through opam:</p>
+<pre><code class="language-sh">opam install kobe
+</code></pre>
+<p>You will have three new binaries in your path: <code>kobegen</code>, <code>kobe</code> and <code>kobeview</code>.</p>
+<a class="header" href="benchmarking.html#sheet-cheats" id="sheet-cheats"><h2>Sheet cheats</h2></a>
+<p>This gives you a list of the valid values for some entries of the benchmarking configuration file (explained below).</p>
+<ul>
+<li>Families of problems supported (directory in the JSON entry <code>problem_sets.path</code>): <code>rcpsp</code>, <code>rcpsp-max</code>.</li>
+<li>Solvers kind (<code>solvers_kind</code>): see function <code>run_bench</code> in <a href="https://github.com/ptal/kobe/blob/master/src/kobe/kobe.ml">kobe.ml</a>.</li>
+<li>AbSolute domains (<code>solvers_kind.AbSolute.domains</code>): see function <code>bench_absolute</code> in <a href="https://github.com/ptal/kobe/blob/master/src/kobe/kobe.ml">kobe.ml</a>.</li>
+<li>Box splitting strategies (<code>solvers_kind.AbSolute.domains.strategies</code>): see function <code>make_box_strategy</code> in <a href="https://github.com/ptal/kobe/blob/master/src/kobe/kobe.ml">kobe.ml</a>.</li>
+<li>Octagon splitting strategies (<code>solvers_kind.AbSolute.domains.strategies</code>): see function <code>make_octagon_strategy</code> in <a href="https://github.com/ptal/kobe/blob/master/src/kobe/kobe.ml">kobe.ml</a>.</li>
+</ul>
 
                     </main>
 
@@ -162,7 +185,7 @@ We also provide data sets for a scheduling problem and an automated testing chai
                         
 
                         
-                            <a rel="next" href="contributing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="benchmarking-tutorial.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -180,7 +203,7 @@ We also provide data sets for a scheduling problem and an automated testing chai
                 
 
                 
-                    <a href="contributing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="benchmarking-tutorial.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

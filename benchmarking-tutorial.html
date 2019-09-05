@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>AbSolute Book</title>
+        <title>Tutorial - AbSolute Book</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html" class="active"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -147,89 +147,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="print.html#introduction" id="introduction"><h1>Introduction</h1></a>
-<p>Hello! You reached the <code>AbSolute</code> book.
-<code>AbSolute</code> is a constraint solver written in OCaml for research purposes, but we hope that it can be used outside of research as well!
-The main originality of this solver is to be based on <em>abstract interpretation</em>, which is a field studying static analysis of programs.
-We have discovered similitudes between constraint programming and abstract interpretation at the theoretical level, and this solver is a practical experimentation of these findings.
-In this book, you will learn how to <a href="getting-started.html">install AbSolute</a> and how to <a href="learn-absolute.html">solve your own constraint problems</a>.
-We also include a <a href="benchmarking.html">guide to kobe</a> which is a benchmarking tool with support for AbSolute and other solvers.
-For adventurous users, we provide a <a href="contributing.html">guide for contributing</a> to Absolute, as well as some notes <a href="research.html">about the research</a> relevant to this project.</p>
-<p>This project is available on <a href="https://github.com/ptal/absolute/">github</a>.</p>
-<a class="header" href="print.html#highlight-of-absolute-features" id="highlight-of-absolute-features"><h2>Highlight of AbSolute features</h2></a>
-<p>An abstract domain encapsulates a solver for a specific constraint language.
-We summarize the supported abstract domains in the table below (<code>c1,c2</code> are constraints, <code>X,Y</code> variables and <code>a,b</code> constants).
-Each abstract domain is parametrized by a bound type <code>Z</code>, <code>F</code> or <code>Q</code> if it contains variables over integers, floating point numbers or rational.</p>
-<table><thead><tr><th> Abstract domain </th><th> Constraint language </th><th> Propagation </th><th> Description </th></tr></thead><tbody>
-<tr><td> <code>Box(V)</code>        </td><td> Arithmetic constraints, functions (<code>sin</code>, <code>cos</code>, <code>sqrt</code>,...). </td><td>  HC4 algorithm, propagation loop </td><td> <code>Box</code> is parametric by a variable domain <code>V</code> (interval, open/close interval, or BDD). </td></tr>
-<tr><td> <code>Box_reified</code>   </td><td> Box constraint and reified constraint of the form (<code>X &lt;=&gt; c</code> where <code>X</code> is equal to <code>0</code> or <code>1</code>). </td><td> Same as <code>Box</code> + support for reified constraints </td><td> <code>Box_reified</code> is parametrized by a <code>Box</code> domain. </td></tr>
-<tr><td> <code>Octagon</code>       </td><td> Logic difference constraints (<code>X - Y &lt;= a</code>) </td><td> Incremental Floyd-Warshall algorithm </td><td> </td></tr>
-<tr><td> <code>Box_octagon_disjoint</code>   </td><td> Box and octagon constraints with equivalence constraints (<code>c1 &lt;=&gt; c2</code> where <code>c1</code> a box constraint and <code>c2</code> an octagonal constraint).  </td><td> Bridge between box and octagon domains when they are defined on disjoint set of variables. </td></tr>
-</tbody></table>
-<p>In addition, each domain is equipped with numerous splitting strategies that can impact the performance.</p>
-<a class="header" href="print.html#what-to-expect-next" id="what-to-expect-next"><h2>What to expect next?</h2></a>
-<p>We currently work on integrating a SAT solver, integrating back some features from the initial version of <a href="https://github.com/mpelleau/">AbSolute</a> such as support for linear programming through VPL and Apron library, and reduced product to combine domains.</p>
-<a class="header" href="print.html#absolute-ecosystem" id="absolute-ecosystem"><h2>AbSolute ecosystem</h2></a>
-<p>We have several projects relevant to AbSolute that are worth checking out:</p>
-<ul>
-<li><a href="https://github.com/ptal/kobe">kobe</a>: Constraint benchmarking tools suite.
-It is described in more depth in the <a href="benchmarking.md">benchmarking chapter</a>.</li>
-<li><a href="https://github.com/ptal/ptal.github.io">ptal.github.io</a>: The repository hosting this book.</li>
-<li><a href="https://github.com/ptal/solvers-opam">solvers-opam</a>: The OPAM packages repository containing libraries and executables surrounding constraint solving.</li>
-</ul>
-<a class="header" href="print.html#getting-started" id="getting-started"><h1>Getting Started</h1></a>
-<p>The installation process should be easy, but do not hesitate to reach out for help if needed.</p>
-<a class="header" href="print.html#requirements" id="requirements"><h2>Requirements</h2></a>
-<p>The following is a list of the dependencies to build AbSolute; note that we explain below how to install <code>OCaml</code> if you do not have it already.</p>
-<ul>
-<li>An ANSI C compiler</li>
-<li><a href="http://ocaml.org/">OCaml</a> &gt;= 4.07.1</li>
-</ul>
-<a class="header" href="print.html#installation" id="installation"><h2>Installation</h2></a>
-<p>We install OCaml and AbSolute through the OCaml package manager <a href="http://opam.ocaml.org/">opam</a>.
-First, <a href="http://opam.ocaml.org/doc/Install.html">install opam</a> with your package manager and initialize it:</p>
-<pre><code class="language-sh">apt-get install opam # on Debian, see opam documentation for other distributions.
-opam init --comp 4.07.1+flambda # Initialize ~/.opam with a freshly compiled OCaml 4.07.1
-</code></pre>
-<p>The next step is to download and build AbSolute.
-If you intent to modify the source code and possibly contribute to the project, jump to the <a href="contributing.html">contributing chapter</a>.
-Otherwise, you can install it from <code>opam</code>:</p>
-<pre><code class="language-sh">opam repo add solvers git@github.com:ptal/solvers-opam.git
-opam install absolute
-</code></pre>
-<p><code>AbSolute</code> is currently only a library project, so it must be used in an OCaml project, which we explain in the <a href="learn-absolute.html">next chapter</a>.</p>
-<p>To update <code>absolute</code> (and any OPAM package) to the latest version, you can simply type:</p>
-<pre><code class="language-sh">opam update
-opam install absolute
-</code></pre>
-<a class="header" href="print.html#learn-absolute" id="learn-absolute"><h1>Learn AbSolute</h1></a>
-<a class="header" href="print.html#benchmarking" id="benchmarking"><h1>Benchmarking</h1></a>
-<p>In this chapter, we present <a href="https://github.com/ptal/kobe">kobe</a>, a constraint benchmarking tools suite for various solvers including GeCode, Chuffed and AbSolute.
-The goals of this benchmarking tools suite are:</p>
-<ol>
-<li>Reproducibility of the research results.</li>
-<li>Report of the full results whereas in research papers it is often summarized.</li>
-<li>Automate benchmarking of different solvers on different problems.</li>
-<li>Analysis of the benchmarking results.</li>
-</ol>
-<p>This work is on-going and replicability problems might still be present.
-In case of problems, please do not hesitate to contact us on the <a href="https://github.com/ptal/kobe/issues">issues tracker</a> or by <a href="mailto:pierre.talbot@univ-nantes.fr">email</a>.</p>
-<a class="header" href="print.html#getting-started-1" id="getting-started-1"><h2>Getting started</h2></a>
-<p>First, make sure you followed the instruction of the general <a href="getting-started.html">getting started section</a>.
-If so, you can install <code>kobe</code> through opam:</p>
-<pre><code class="language-sh">opam install kobe
-</code></pre>
-<p>You will have three new binaries in your path: <code>kobegen</code>, <code>kobe</code> and <code>kobeview</code>.</p>
-<a class="header" href="print.html#sheet-cheats" id="sheet-cheats"><h2>Sheet cheats</h2></a>
-<p>This gives you a list of the valid values for some entries of the benchmarking configuration file (explained below).</p>
-<ul>
-<li>Families of problems supported (directory in the JSON entry <code>problem_sets.path</code>): <code>rcpsp</code>, <code>rcpsp-max</code>.</li>
-<li>Solvers kind (<code>solvers_kind</code>): see function <code>run_bench</code> in <a href="https://github.com/ptal/kobe/blob/master/src/kobe/kobe.ml">kobe.ml</a>.</li>
-<li>AbSolute domains (<code>solvers_kind.AbSolute.domains</code>): see function <code>bench_absolute</code> in <a href="https://github.com/ptal/kobe/blob/master/src/kobe/kobe.ml">kobe.ml</a>.</li>
-<li>Box splitting strategies (<code>solvers_kind.AbSolute.domains.strategies</code>): see function <code>make_box_strategy</code> in <a href="https://github.com/ptal/kobe/blob/master/src/kobe/kobe.ml">kobe.ml</a>.</li>
-<li>Octagon splitting strategies (<code>solvers_kind.AbSolute.domains.strategies</code>): see function <code>make_octagon_strategy</code> in <a href="https://github.com/ptal/kobe/blob/master/src/kobe/kobe.ml">kobe.ml</a>.</li>
-</ul>
-<a class="header" href="print.html#step-by-step-tutorial" id="step-by-step-tutorial"><h1>Step by step tutorial</h1></a>
+                        <a class="header" href="benchmarking-tutorial.html#step-by-step-tutorial" id="step-by-step-tutorial"><h1>Step by step tutorial</h1></a>
 <p>We go through the necessary steps to design and perform benchmarks.
 If you want to try these steps out by yourself, a full <a href="https://github.com/ptal/kobe/tree/example">example project</a> is provided.
 Here are the steps explained in this section:</p>
@@ -240,7 +158,7 @@ Here are the steps explained in this section:</p>
 <li><a href="benchmarking-tutorial.html#a4-perform-the-benchmark">Perform the benchmark</a></li>
 <li><a href="benchmarking-tutorial.html#a5-view-and-analyse-the-results">View and analyse the results</a></li>
 </ol>
-<a class="header" href="print.html#a1-gather-data-sets" id="a1-gather-data-sets"><h3>1. Gather data sets</h3></a>
+<a class="header" href="benchmarking-tutorial.html#a1-gather-data-sets" id="a1-gather-data-sets"><h3>1. Gather data sets</h3></a>
 <p>Data sets must be contained in a directory with a specific structures, for example:</p>
 <pre><code>data
   rcpsp
@@ -268,7 +186,7 @@ A <em>data set</em> is a directory containing two things:</p>
 </ol>
 <p>Once we have these data, we can proceed to the description of our benchmarks.
 Sample data are available in the directory <a href="https://github.com/ptal/kobe/tree/example/data">data</a>.</p>
-<a class="header" href="print.html#a2-create-the-benchmark-configuration-file" id="a2-create-the-benchmark-configuration-file"><h3>2. Create the benchmark configuration file</h3></a>
+<a class="header" href="benchmarking-tutorial.html#a2-create-the-benchmark-configuration-file" id="a2-create-the-benchmark-configuration-file"><h3>2. Create the benchmark configuration file</h3></a>
 <p>The benchmarks to perform are described in a single JSON configuration file.
 For the sake of example, we will benchmark with AbSolute because it is already available to us (for GeCode and Chuffed, see <a href="minizinc-benchmarking.html">MiniZinc Benchmarking</a>).
 Let's have a look at the configuration file <a href="https://github.com/ptal/kobe/tree/example/scheduling-data.json">example/scheduling-data.json</a>:</p>
@@ -327,7 +245,7 @@ The data sets are contained in <code>input_dir/path</code>.</li>
 </li>
 </ul>
 <p>You can adapt each entry depending on your needs, please see the section <a href="benchmarking.html#sheet-cheats">Sheet cheats</a> for supported values.</p>
-<a class="header" href="print.html#a3-generate-bench-instances" id="a3-generate-bench-instances"><h3>3. Generate bench instances</h3></a>
+<a class="header" href="benchmarking-tutorial.html#a3-generate-bench-instances" id="a3-generate-bench-instances"><h3>3. Generate bench instances</h3></a>
 <p>Once we have the benchmarking configuration file ready, we prepare the benchmarking session by generating one file per benchmark instance.</p>
 <pre><code class="language-sh">$ kobegen scheduling-benchmark.json
 10 bench files generated.
@@ -356,7 +274,7 @@ For conveniency, <code>kobegen</code> outputs a list of the benchmarking command
 <p><code>kobegen</code> <em>does not execute</em> <code>exec.sh</code>, it just outputs the commands to execute.
 It is particularly useful for launching benchmarks in parallel on a server, <code>exec.sh</code> can be used to launch a job.</p>
 <p>Here <code>exec.sh</code> contains the single command <code>kobe $1 | tee $2</code> where <code>kobe</code> is the program explained next.</p>
-<a class="header" href="print.html#a4-perform-the-benchmark" id="a4-perform-the-benchmark"><h3>4. Perform the benchmark</h3></a>
+<a class="header" href="benchmarking-tutorial.html#a4-perform-the-benchmark" id="a4-perform-the-benchmark"><h3>4. Perform the benchmark</h3></a>
 <p>Almost everything is settled, only the commands output by <code>kobegen</code> need to be run.
 The results are stored in a CSV format which looks as follows:</p>
 <pre><code class="language-csv">problem, nodes, solutions, fails, time, optimum
@@ -376,7 +294,7 @@ Here is some additional information on this output format:</p>
 <p>Note that a combination of <code>timeout</code> with an optimum value means that the solver could not perform an optimality proof.</p>
 <p>The benchmarking results can be shared by creating a pull request on the <a href="https://github.com/ptal/kobe-database">kobe-database</a> repository.
 You can also explore the results that are already there!</p>
-<a class="header" href="print.html#a5-view-and-analyse-the-results" id="a5-view-and-analyse-the-results"><h3>5. View and analyse the results</h3></a>
+<a class="header" href="benchmarking-tutorial.html#a5-view-and-analyse-the-results" id="a5-view-and-analyse-the-results"><h3>5. View and analyse the results</h3></a>
 <p>In the simple example of this tutorial, we already have 10 different files which can be cumbersome to examine by hand.
 We provide <code>kobeview</code> to view and analyse the results stored in the database directory.</p>
 <pre><code class="language-sh">kobeview database &gt; view_database.json
@@ -385,144 +303,21 @@ We provide <code>kobeview</code> to view and analyse the results stored in the d
 Note that all analysis are done locally in Javascript, so this website can be used offline.
 You can click on &quot;Time step&quot; to have several graphs on our benchmarks (&quot;instance inclusion&quot; and &quot;cactus plot&quot; only work when there are several solvers, this should be fixed).</p>
 <p>A limited number of analysis are available currently, but you can participate by contributing to kobeview, or create your own program since the database contains only CSV and JSON files.</p>
-<a class="header" href="print.html#minizinc-benchmarking" id="minizinc-benchmarking"><h1>MiniZinc Benchmarking</h1></a>
-<a class="header" href="print.html#scheduling-data-sets" id="scheduling-data-sets"><h1>Scheduling Data Sets</h1></a>
-<p><code>kobe</code> parses different file format describing scheduling problems such as RCPSP and its variants.
-We give a list of the supported formats and data sets available in <a href="https://github.com/ptal/kobe-rcpsp">kobe-rcpsp</a>, and credit the owners of these data sets.
-We have clean these data sets of all the meta-information that was uneccessary to us, but feel free to consult the references given for the full data set.</p>
-<p>We formatted known optimum results in a CSV format that is common to every data set (e.g. <code>data/rcpsp/j30.sm/optimum/optimum.csv</code>).</p>
-<a class="header" href="print.html#rcpsp" id="rcpsp"><h2>RCPSP</h2></a>
-<ol>
-<li>
-<p>Patterson (.rcp): Format originally used to evaluate RCPSP in Patterson (1984).
-It is the format used by the RanGen1 and RanGen2 generators.
-Sets of instances:</p>
-<ol>
-<li>Patterson: 110 instances.</li>
-<li>RG300[1]: 480 instances, 300 activities, 4 resources.</li>
-<li>RG30[2]: 900, 180, 240, 240, 240 instances, 30 activities, 4 resources.
-Resource data a bit &quot;restricted&quot; (in the way it was generated) on the RG30 sets.</li>
-<li>MT[3]: 900, 800, 1200, 1200 instances, 30 activities, 0 resource.
-ResSet[4]: Can be merged with MT for resources specifications.</li>
-</ol>
-<p>[1] Debels, Dieter and Vanhoucke, Mario. &quot;A Decomposition-Based Genetic Algorithm for the Resource-Constrained Project-Scheduling Problem&quot;, 2007.</p>
-<p>[2] Mario Vanhoucke, José Coelho, Dieter Debels, Broos Maenhout, Luís V. Tavares, &quot;An evaluation of the adequacy of project network generators with systematically sampled networks&quot;, European Journal of Operational Research, Volume 187, Issue 2, 2008.</p>
-<p>[3] Vanhoucke, M., 2010, &quot;Measuring time: Improving project performance using earned value management&quot; 1st ed., Springer: 164 pages.</p>
-<p>[4] Testing and validating algorithms for resource-constrained project scheduling (in submission).</p>
-</li>
-<li>
-<p>SM format (.sm):</p>
-</li>
-</ol>
-<p>Format of the PSPLIB, a well-known library for RCPSP with sets of instances of 30, 60, 90 and 120 activities.
-Sets of instances:
-1. j30: 480 instances, 30 activities and 4 resources.
-2. j60: 480 instances, 60 activities and 4 resources.
-3. j90: 480 instances, 90 activities and 4 resources.
-4. j120: 600 instances, 120 activities and 4 resources.</p>
-<p>R. Kolisch and A. Sprecher, “PSPLIB-a project scheduling problem library: OR software-ORSEP operations research software exchange program,” European journal of operational research, vol. 96, no. 1, pp. 205–216, 1997.</p>
-<p>http://www.om-db.wi.tum.de/psplib/getdata.cgi?mode=sm</p>
-<a class="header" href="print.html#rcpspmax" id="rcpspmax"><h2>RCPSP/max</h2></a>
-<ol start="3">
-<li>ProGenMax format (.SCH):</li>
-</ol>
-<p>Format of the sets of instances produced by the ProGenMax instance generator.
-It concerns the RCPSP/max problem.</p>
-<p>Sets of instances:
-1. C, D: each 540 instances, 100 activities, 5 resources.
-2. UBO_N: each 90 instances, N activities, 5 resources.
-N in 10, 20, 50, 100, 200, 500 and 1000.
-3. J_N: 270 instances, N activities, 5 resources.
-N in 10, 20, 30.</p>
-<p>http://www.wiwi.tu-clausthal.de/de/abteilungen/produktion/forschung/schwerpunkte/project-generator/rcpspmax/</p>
-<a class="header" href="print.html#mmrcpsp-multi-mode-rcpsp" id="mmrcpsp-multi-mode-rcpsp"><h2>MMRCPSP (multi-mode RCPSP)</h2></a>
-<ol start="2">
-<li>
-<p>SM format (.sm): Similar to for RCPSP. With nonrenewable resources.</p>
-<p>Sets of instances:</p>
-<ol>
-<li>J_N: 3840 instances in total, N activities,
-N in 10, 12, 14, 16, 18, 20, 30</li>
-</ol>
-</li>
-<li>
-<p>SM format light (.sm): Similar to SM format but without some headers.</p>
-<p>Sets of instances:</p>
-<ol>
-<li>MMLIB50: 540 instances, 50 activities, 3 modes.</li>
-<li>MMLIB100: 540 instances, 100 activities, 3 modes.</li>
-<li>MMLIB+: 3240 instances, 50 or 100 activities, 3, 6 or 9 modes.</li>
-</ol>
-<p>[1] V. Van Peteghem and M. Vanhoucke, “An experimental investigation of metaheuristics for the multi-mode resource-constrained project scheduling problem on new dataset instances,” European Journal of Operational Research, vol. 235, no. 1, pp. 62–72, May 2014.</p>
-</li>
-</ol>
-<a class="header" href="print.html#contributing-to-absolute" id="contributing-to-absolute"><h1>Contributing to AbSolute</h1></a>
-<p>This guide is for anybody who wants to contribute to AbSolute.
-Before all, we encourage you to discuss your project with us to be sure your contributions can eventually be integrated.
-Make sure you installed <a href="getting-started.html">OCaml and Opam</a>.</p>
-<a class="header" href="print.html#installing-and-building-absolute" id="installing-and-building-absolute"><h2>Installing and building AbSolute</h2></a>
-<p>Install dependencies, clone and build AbSolute from the Github repository:</p>
-<pre><code class="language-sh">opam install dune extlib containers mlgmpidl mtime alcotest
-git clone https://github.com/ptal/AbSolute
-cd AbSolute
-make build
-make test
-</code></pre>
-<a class="header" href="print.html#development-flow" id="development-flow"><h2>Development flow</h2></a>
-<p>You should first create a branch or a fork, add and test the new feature, and then create a pull request to merge it into the mainstream repository.
-In a more detailed way:</p>
-<ol>
-<li>Make your changes in a branch.</li>
-<li>Document the <code>.mli</code> files of your code.</li>
-<li>Verify it passes all the tests, and that <a href="https://travis-ci.org/ptal/AbSolute">Travis</a> succeeds to build and test your branch.</li>
-<li>Send your changes into master.</li>
-<li>Publish the new version (see below).</li>
-</ol>
-<p>If you modify interfaces that are shared by several abstract domains (such as <a href="https://github.com/ptal/AbSolute/blob/master/src/domains/abstract_domain.ml">abstract_domain.ml</a>), you should create an issue on Github to discuss about it with the team, since it impacts virtually all the project.</p>
-<p>About the coding guidelines, you should try to code in the same way than the rest of the project, please observe how we code and do the same.
-One very important rule is that you indent using <em>2 spaces</em> and <strong>not tabulations</strong>, and create <code>.ml</code> and its documented <code>.mli</code> companion for every new file.</p>
-<p>In any case, do not hesitate to communicate and ask questions—stupid questions do not exist :-).
-Questions and discussions are very important so you do not lose time during development, and do not go in a wrong direction.</p>
-<a class="header" href="print.html#publishing" id="publishing"><h2>Publishing</h2></a>
-<p>We maintain version numbers according to <a href="http://semver.org/">semantic versioning</a> rules.
-We provide a script <a href="https://github.com/ptal/solvers-opam/blob/master/publish.sh">publish.sh</a> to automatically update the version of your OPAM project, create the tag on git, add the new version in the <a href="https://github.com/ptal/solvers-opam">solvers-opam</a> repository, and push all the changes online.
-It can be used as follows:</p>
-<pre><code class="language-sh">./publish.sh major ../AbSolute ../solvers-opam
-</code></pre>
-<p>It releases a new major version of the project <code>AbSolute</code> rooted at <code>../AbSolute</code>, and where the OPAM packages repository is rooted at <code>../solvers-opam</code>.
-The new version is installable with <code>opam update</code> followed by <code>opam install absolute</code>.</p>
-<p>For more usage information, you can type:</p>
-<pre><code class="language-sh">./publish.sh
-</code></pre>
-<p>This script is only compatible to Linux (not yet tested on MacOSX), so if you are on Windows, you should read this script (which is documented) to know what are the necessary steps.</p>
-<a class="header" href="print.html#research" id="research"><h1>Research</h1></a>
-<p>AbSolute has generated several research papers.
-Currently, the most general one to cite is:</p>
-<pre><code class="language-bibtex">@inproceedings{DBLP:conf/vmcai/PelleauMTB13,
-  author    = {Marie Pelleau and
-               Antoine Min{\'{e}} and
-               Charlotte Truchet and
-               Fr{\'{e}}d{\'{e}}ric Benhamou},
-  title     = {A Constraint Solver Based on Abstract Domains},
-  booktitle = {Verification, Model Checking, and Abstract Interpretation, 14th International
-               Conference, {VMCAI} 2013, Rome, Italy, January 20-22, 2013. Proceedings},
-  pages     = {434--454},
-  year      = {2013},
-  crossref  = {DBLP:conf/vmcai/2013},
-  url       = {https://doi.org/10.1007/978-3-642-35873-9\_26},
-  doi       = {10.1007/978-3-642-35873-9\_26},
-  timestamp = {Wed, 24 May 2017 08:30:31 +0200},
-  biburl    = {https://dblp.org/rec/bib/conf/vmcai/PelleauMTB13},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
-}
-</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="benchmarking.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
+                        
+                            <a rel="next" href="minizinc-benchmarking.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         
 
                         <div style="clear: both"></div>
@@ -532,7 +327,15 @@ Currently, the most general one to cite is:</p>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a href="benchmarking.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
+                
+                    <a href="minizinc-benchmarking.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
                 
             </nav>
 
@@ -565,12 +368,6 @@ Currently, the most general one to cite is:</p>
         <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
         
 
-        
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                window.print();
-            })
-        </script>
         
 
         <script src="highlight.js"></script>
