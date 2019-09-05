@@ -149,7 +149,7 @@
                     <main>
                         <a class="header" href="benchmarking-tutorial.html#step-by-step-tutorial" id="step-by-step-tutorial"><h1>Step by step tutorial</h1></a>
 <p>We go through the necessary steps to design and perform benchmarks.
-If you want to try these steps out by yourself, a full <a href="https://github.com/ptal/kobe/tree/example">example project</a> is provided.
+If you want to try these steps out by yourself, a full <a href="https://github.com/ptal/kobe/tree/master/example">example project</a> is provided.
 Here are the steps explained in this section:</p>
 <ol>
 <li><a href="benchmarking-tutorial.html#a1-gather-data-sets">Gather data sets</a></li>
@@ -185,11 +185,11 @@ A <em>data set</em> is a directory containing two things:</p>
 <li>A list of <em>data instance</em> files, for example <code>j301_1.sm</code>, <code>j301_2.sm</code>,...</li>
 </ol>
 <p>Once we have these data, we can proceed to the description of our benchmarks.
-Sample data are available in the directory <a href="https://github.com/ptal/kobe/tree/example/data">data</a>.</p>
+Sample data are available in the directory <a href="https://github.com/ptal/kobe/tree/master/example/data">data</a>.</p>
 <a class="header" href="benchmarking-tutorial.html#a2-create-the-benchmark-configuration-file" id="a2-create-the-benchmark-configuration-file"><h3>2. Create the benchmark configuration file</h3></a>
 <p>The benchmarks to perform are described in a single JSON configuration file.
 For the sake of example, we will benchmark with AbSolute because it is already available to us (for GeCode and Chuffed, see <a href="minizinc-benchmarking.html">MiniZinc Benchmarking</a>).
-Let's have a look at the configuration file <a href="https://github.com/ptal/kobe/tree/example/scheduling-data.json">example/scheduling-data.json</a>:</p>
+Let's have a look at the configuration file <a href="https://github.com/ptal/kobe/blob/master/example/scheduling-benchmark.json">example/scheduling-data.json</a>:</p>
 <pre><code class="language-json">{
   &quot;bench_exec&quot;: &quot;./exec.sh&quot;,
   &quot;input_dir&quot; : &quot;data/&quot;,

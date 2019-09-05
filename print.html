@@ -231,7 +231,7 @@ If so, you can install <code>kobe</code> through opam:</p>
 </ul>
 <a class="header" href="print.html#step-by-step-tutorial" id="step-by-step-tutorial"><h1>Step by step tutorial</h1></a>
 <p>We go through the necessary steps to design and perform benchmarks.
-If you want to try these steps out by yourself, a full <a href="https://github.com/ptal/kobe/tree/example">example project</a> is provided.
+If you want to try these steps out by yourself, a full <a href="https://github.com/ptal/kobe/tree/master/example">example project</a> is provided.
 Here are the steps explained in this section:</p>
 <ol>
 <li><a href="benchmarking-tutorial.html#a1-gather-data-sets">Gather data sets</a></li>
@@ -267,11 +267,11 @@ A <em>data set</em> is a directory containing two things:</p>
 <li>A list of <em>data instance</em> files, for example <code>j301_1.sm</code>, <code>j301_2.sm</code>,...</li>
 </ol>
 <p>Once we have these data, we can proceed to the description of our benchmarks.
-Sample data are available in the directory <a href="https://github.com/ptal/kobe/tree/example/data">data</a>.</p>
+Sample data are available in the directory <a href="https://github.com/ptal/kobe/tree/master/example/data">data</a>.</p>
 <a class="header" href="print.html#a2-create-the-benchmark-configuration-file" id="a2-create-the-benchmark-configuration-file"><h3>2. Create the benchmark configuration file</h3></a>
 <p>The benchmarks to perform are described in a single JSON configuration file.
 For the sake of example, we will benchmark with AbSolute because it is already available to us (for GeCode and Chuffed, see <a href="minizinc-benchmarking.html">MiniZinc Benchmarking</a>).
-Let's have a look at the configuration file <a href="https://github.com/ptal/kobe/tree/example/scheduling-data.json">example/scheduling-data.json</a>:</p>
+Let's have a look at the configuration file <a href="https://github.com/ptal/kobe/blob/master/example/scheduling-benchmark.json">example/scheduling-data.json</a>:</p>
 <pre><code class="language-json">{
   &quot;bench_exec&quot;: &quot;./exec.sh&quot;,
   &quot;input_dir&quot; : &quot;data/&quot;,
@@ -392,11 +392,10 @@ We give a list of the supported formats and data sets available in <a href="http
 We have clean these data sets of all the meta-information that was uneccessary to us, but feel free to consult the references given for the full data set.</p>
 <p>We formatted known optimum results in a CSV format that is common to every data set (e.g. <code>data/rcpsp/j30.sm/optimum/optimum.csv</code>).</p>
 <a class="header" href="print.html#rcpsp" id="rcpsp"><h2>RCPSP</h2></a>
-<ol>
-<li>
-<p>Patterson (.rcp): Format originally used to evaluate RCPSP in Patterson (1984).
-It is the format used by the RanGen1 and RanGen2 generators.
-Sets of instances:</p>
+<a class="header" href="print.html#patterson-rcp" id="patterson-rcp"><h3>Patterson (.rcp)</h3></a>
+<p>Format originally used to evaluate RCPSP in Patterson (1984).
+It is the format used by the RanGen1 and RanGen2 generators.</p>
+<p>Data sets:</p>
 <ol>
 <li>Patterson: 110 instances.</li>
 <li>RG300[1]: 480 instances, 300 activities, 4 resources.</li>
@@ -409,53 +408,47 @@ ResSet[4]: Can be merged with MT for resources specifications.</li>
 <p>[2] Mario Vanhoucke, José Coelho, Dieter Debels, Broos Maenhout, Luís V. Tavares, &quot;An evaluation of the adequacy of project network generators with systematically sampled networks&quot;, European Journal of Operational Research, Volume 187, Issue 2, 2008.</p>
 <p>[3] Vanhoucke, M., 2010, &quot;Measuring time: Improving project performance using earned value management&quot; 1st ed., Springer: 164 pages.</p>
 <p>[4] Testing and validating algorithms for resource-constrained project scheduling (in submission).</p>
-</li>
-<li>
-<p>SM format (.sm):</p>
-</li>
+<a class="header" href="print.html#sm-format-sm" id="sm-format-sm"><h3>SM format (.sm)</h3></a>
+<p>Format of the PSPLIB, a well-known library for RCPSP with sets of instances of 30, 60, 90 and 120 activities.</p>
+<p>Data sets:</p>
+<ol>
+<li>j30: 480 instances, 30 activities and 4 resources.</li>
+<li>j60: 480 instances, 60 activities and 4 resources.</li>
+<li>j90: 480 instances, 90 activities and 4 resources.</li>
+<li>j120: 600 instances, 120 activities and 4 resources.</li>
 </ol>
-<p>Format of the PSPLIB, a well-known library for RCPSP with sets of instances of 30, 60, 90 and 120 activities.
-Sets of instances:
-1. j30: 480 instances, 30 activities and 4 resources.
-2. j60: 480 instances, 60 activities and 4 resources.
-3. j90: 480 instances, 90 activities and 4 resources.
-4. j120: 600 instances, 120 activities and 4 resources.</p>
 <p>R. Kolisch and A. Sprecher, “PSPLIB-a project scheduling problem library: OR software-ORSEP operations research software exchange program,” European journal of operational research, vol. 96, no. 1, pp. 205–216, 1997.</p>
 <p>http://www.om-db.wi.tum.de/psplib/getdata.cgi?mode=sm</p>
 <a class="header" href="print.html#rcpspmax" id="rcpspmax"><h2>RCPSP/max</h2></a>
-<ol start="3">
-<li>ProGenMax format (.SCH):</li>
-</ol>
+<a class="header" href="print.html#progenmax-format-sch" id="progenmax-format-sch"><h3>ProGenMax format (.SCH):</h3></a>
 <p>Format of the sets of instances produced by the ProGenMax instance generator.
 It concerns the RCPSP/max problem.</p>
-<p>Sets of instances:
-1. C, D: each 540 instances, 100 activities, 5 resources.
-2. UBO_N: each 90 instances, N activities, 5 resources.
-N in 10, 20, 50, 100, 200, 500 and 1000.
-3. J_N: 270 instances, N activities, 5 resources.
-N in 10, 20, 30.</p>
+<p>Data sets:</p>
+<ol>
+<li>C, D: each 540 instances, 100 activities, 5 resources.</li>
+<li>UBO_N: each 90 instances, N activities, 5 resources.
+N in 10, 20, 50, 100, 200, 500 and 1000.</li>
+<li>J_N: 270 instances, N activities, 5 resources.
+N in 10, 20, 30.</li>
+</ol>
 <p>http://www.wiwi.tu-clausthal.de/de/abteilungen/produktion/forschung/schwerpunkte/project-generator/rcpspmax/</p>
 <a class="header" href="print.html#mmrcpsp-multi-mode-rcpsp" id="mmrcpsp-multi-mode-rcpsp"><h2>MMRCPSP (multi-mode RCPSP)</h2></a>
-<ol start="2">
-<li>
-<p>SM format (.sm): Similar to for RCPSP. With nonrenewable resources.</p>
-<p>Sets of instances:</p>
+<a class="header" href="print.html#sm-format-sm-1" id="sm-format-sm-1"><h3>SM format (.sm)</h3></a>
+<p>Similar to RCPSP. With nonrenewable resources.</p>
+<p>Data sets:</p>
 <ol>
 <li>J_N: 3840 instances in total, N activities,
 N in 10, 12, 14, 16, 18, 20, 30</li>
 </ol>
-</li>
-<li>
-<p>SM format light (.sm): Similar to SM format but without some headers.</p>
-<p>Sets of instances:</p>
+<a class="header" href="print.html#sm-format-light-sm" id="sm-format-light-sm"><h3>SM format light (.sm)</h3></a>
+<p>Similar to SM format but without some headers.</p>
+<p>Data sets:</p>
 <ol>
 <li>MMLIB50: 540 instances, 50 activities, 3 modes.</li>
 <li>MMLIB100: 540 instances, 100 activities, 3 modes.</li>
 <li>MMLIB+: 3240 instances, 50 or 100 activities, 3, 6 or 9 modes.</li>
 </ol>
 <p>[1] V. Van Peteghem and M. Vanhoucke, “An experimental investigation of metaheuristics for the multi-mode resource-constrained project scheduling problem on new dataset instances,” European Journal of Operational Research, vol. 235, no. 1, pp. 62–72, May 2014.</p>
-</li>
-</ol>
 <a class="header" href="print.html#contributing-to-absolute" id="contributing-to-absolute"><h1>Contributing to AbSolute</h1></a>
 <p>This guide is for anybody who wants to contribute to AbSolute.
 Before all, we encourage you to discuss your project with us to be sure your contributions can eventually be integrated.
