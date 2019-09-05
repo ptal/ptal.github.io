@@ -174,6 +174,7 @@ Each abstract domain is parametrized by a bound type <code>Z</code>, <code>F</co
 <ul>
 <li><a href="https://github.com/ptal/kobe">kobe</a>: Constraint benchmarking tools suite.
 It is described in more depth in the <a href="benchmarking.md">benchmarking chapter</a>.</li>
+<li><a href="https://github.com/ptal/minisatml">minisatml</a>: SAT solver based on MiniSAT, note that this project is a library not directly executable.</li>
 <li><a href="https://github.com/ptal/ptal.github.io">ptal.github.io</a>: The repository hosting this book.</li>
 <li><a href="https://github.com/ptal/solvers-opam">solvers-opam</a>: The OPAM packages repository containing libraries and executables surrounding constraint solving.</li>
 </ul>
@@ -460,6 +461,15 @@ git clone https://github.com/ptal/AbSolute
 cd AbSolute
 make build
 make test
+</code></pre>
+<p>You might also be interested by cloning the following repositories which all relevant to the AbSolute project:</p>
+<pre><code class="language-sh">git clone https://github.com/ptal/kobe
+git clone https://github.com/ptal/kobe-rcpsp
+git clone https://github.com/ptal/kobe-sat
+git clone https://github.com/ptal/kobe-database
+git clone https://github.com/ptal/minisatml
+git clone https://github.com/ptal/solvers-opam
+git clone https://github.com/ptal/ptal.github.io
 </code></pre>
 <a class="header" href="print.html#development-flow" id="development-flow"><h2>Development flow</h2></a>
 <p>You should first create a branch or a fork, add and test the new feature, and then create a pull request to merge it into the mainstream repository.
