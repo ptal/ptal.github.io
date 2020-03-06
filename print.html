@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li><li><a href="sat-data.html"><strong aria-hidden="true">4.4.</strong> SAT Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li><li><a href="changelog.html"><strong aria-hidden="true">7.</strong> Changelog</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -151,7 +151,7 @@
 <p>Hello! You reached the <code>AbSolute</code> book.
 <code>AbSolute</code> is a constraint solver written in OCaml for research purposes, but we hope that it can be used outside of research as well!
 The main originality of this solver is to be based on <em>abstract interpretation</em>, which is a field studying static analysis of programs.
-We have discovered similitudes between constraint programming and abstract interpretation at the theoretical level, and this solver is a practical experimentation of these findings.
+We and others have discovered similitudes between constraint programming and abstract interpretation at the theoretical level, and this solver is a practical experimentation of these findings.
 In this book, you will learn how to <a href="getting-started.html">install AbSolute</a> and how to <a href="learn-absolute.html">solve your own constraint problems</a>.
 We also include a <a href="benchmarking.html">guide to kobe</a> which is a benchmarking tool with support for AbSolute and other solvers.
 For adventurous users, we provide a <a href="contributing.html">guide for contributing</a> to Absolute, as well as some notes <a href="research.html">about the research</a> relevant to this project.</p>
@@ -161,14 +161,22 @@ For adventurous users, we provide a <a href="contributing.html">guide for contri
 We summarize the supported abstract domains in the table below (<code>c1,c2</code> are constraints, <code>X,Y</code> variables and <code>a,b</code> constants).
 Each abstract domain is parametrized by a bound type <code>Z</code>, <code>F</code> or <code>Q</code> if it contains variables over integers, floating point numbers or rational.</p>
 <table><thead><tr><th> Abstract domain </th><th> Constraint language </th><th> Propagation </th><th> Description </th></tr></thead><tbody>
-<tr><td> <code>Box(V)</code>        </td><td> Arithmetic constraints, functions (<code>sin</code>, <code>cos</code>, <code>sqrt</code>,...). </td><td>  HC4 algorithm, propagation loop </td><td> <code>Box</code> is parametric by a variable domain <code>V</code> (interval, open/close interval, or BDD). </td></tr>
-<tr><td> <code>Box_reified</code>   </td><td> Box constraint and reified constraint of the form (<code>X &lt;=&gt; c</code> where <code>X</code> is equal to <code>0</code> or <code>1</code>). </td><td> Same as <code>Box</code> + support for reified constraints </td><td> <code>Box_reified</code> is parametrized by a <code>Box</code> domain. </td></tr>
-<tr><td> <code>Octagon</code>       </td><td> Logic difference constraints (<code>X - Y &lt;= a</code>) </td><td> Incremental Floyd-Warshall algorithm </td><td> </td></tr>
-<tr><td> <code>Box_octagon_disjoint</code>   </td><td> Box and octagon constraints with equivalence constraints (<code>c1 &lt;=&gt; c2</code> where <code>c1</code> a box constraint and <code>c2</code> an octagonal constraint).  </td><td> Bridge between box and octagon domains when they are defined on disjoint set of variables. </td></tr>
+<tr><td> <code>Box(V)</code>        </td><td> Interval constraints (<code>X &lt;= a</code>, <code>X &gt;= b</code>) </td><td> None </td><td> Simple Cartesian product of variable domains. <code>Box</code> is parametric in a variable domain <code>V</code> (interval, open/close interval, or BDD). </td></tr>
+<tr><td> <code>SAT</code>    </td><td> Propositional formula (<code>(X \/ Y) /\ (true \/ Z)</code>) </td><td> Conflict driven clause learning </td><td> Based on Minisat. This domain is experimental (and probably bugged!). </td></tr>
+<tr><td> <code>Octagon(B)</code>    </td><td> Logic difference constraints (<code>X - Y &lt;= a</code>) </td><td> Incremental Floyd-Warshall algorithm </td><td> <code>B</code> is the bound type. </td></tr>
+</tbody></table>
+<p>In addition, new abstract domains can be derived from existing ones using <em>abstract transformers</em>.</p>
+<table><thead><tr><th> Abstract transformers </th><th> Constraint language </th><th> Propagation </th><th> Description </th></tr></thead><tbody>
+<tr><td> <code>Direct_product(A1,..,An)</code> </td><td> Union of <code>A1</code>,...,<code>An</code>. </td><td> Component-wise propagation of each subdomains. </td><td> In addition to the classical direct product of abstract interpretation, it has some facilities for transformers that shares subdomains. </td></tr>
+<tr><td> <code>Logic_completion(A)</code> </td><td> Quantifier-free logic formula where predicates are constraints in <code>A</code> </td><td> Based on the entailment of constraint in <code>A</code>. </td><td> Equip an abstract domain <code>A</code> with logical formula. Also called &quot;natural domain SMT&quot;. </td></tr>
+<tr><td> <code>Propagator_completion(A)</code> </td><td> Arithmetic constraints, functions (<code>sin</code>, <code>cos</code>, <code>sqrt</code>,...). </td><td>  HC4 algorithm </td><td> Equip an abstract domain <code>A</code> with propagators (functions implementing arithmetic constraints). </td></tr>
+<tr><td> <code>Cascade_product(A,B)</code> </td><td> Union of <code>A</code> and <code>B</code>. </td><td> Transfer over-approximation <code>A</code>-constraints into <code>B</code>, and then an exact approximation whenever the constraint is instantiated enough. </td><td> Can be used to transfer non-linear constraints to a linear solver whenever the non-linear variables are instantiated. </td></tr>
+<tr><td> <code>Event_loop(A1,...,An)</code> </td><td> None </td><td> Propagation loop of the propagators in <code>A1</code>,...,<code>An</code> </td><td> Meta abstract domain, computing the closure of <code>A1</code>...<code>An</code> more efficiently than <code>Direct_product</code>. <code>Ai</code> closure must be decomposable into propagators (i.e. sub-closure operators). </td></tr>
 </tbody></table>
 <p>In addition, each domain is equipped with numerous splitting strategies that can impact the performance.</p>
 <a class="header" href="print.html#what-to-expect-next" id="what-to-expect-next"><h2>What to expect next?</h2></a>
-<p>We currently work on integrating a SAT solver, integrating back some features from the initial version of <a href="https://github.com/mpelleau/">AbSolute</a> such as support for linear programming through VPL and Apron library, and reduced product to combine domains.</p>
+<p>A linear programming solver such as VPL, or the one of Apron should be added.
+The next big step is to integrate ideas from <em>abstract conflict driven learning</em> (ACDL) to support conflicts learning.</p>
 <a class="header" href="print.html#absolute-ecosystem" id="absolute-ecosystem"><h2>AbSolute ecosystem</h2></a>
 <p>We have several projects relevant to AbSolute that are worth checking out:</p>
 <ul>
@@ -184,13 +192,13 @@ It is described in more depth in the <a href="benchmarking.md">benchmarking chap
 <p>The following is a list of the dependencies to build AbSolute; note that we explain below how to install <code>OCaml</code> if you do not have it already.</p>
 <ul>
 <li>An ANSI C compiler</li>
-<li><a href="http://ocaml.org/">OCaml</a> &gt;= 4.07.1</li>
+<li><a href="http://ocaml.org/">OCaml</a> &gt;= 4.09.0</li>
 </ul>
 <a class="header" href="print.html#installation" id="installation"><h2>Installation</h2></a>
 <p>We install OCaml and AbSolute through the OCaml package manager <a href="http://opam.ocaml.org/">opam</a>.
 First, <a href="http://opam.ocaml.org/doc/Install.html">install opam</a> with your package manager and initialize it:</p>
 <pre><code class="language-sh">apt-get install opam # on Debian, see opam documentation for other distributions.
-opam init --comp 4.07.1+flambda # Initialize ~/.opam with a freshly compiled OCaml 4.07.1
+opam init --comp 4.09.0+flambda # Initialize ~/.opam with a freshly compiled OCaml 4.07.1
 </code></pre>
 <p>The next step is to download and build AbSolute.
 If you intent to modify the source code and possibly contribute to the project, jump to the <a href="contributing.html">contributing chapter</a>.
@@ -204,6 +212,192 @@ opam install absolute
 opam install absolute
 </code></pre>
 <a class="header" href="print.html#learn-absolute" id="learn-absolute"><h1>Learn AbSolute</h1></a>
+<p>We show step-by-step how to use AbSolute in order to solve a constraint problems.
+This code presented in this chapter is available online at <a href="https://github.com/ptal/absolute-demo/blob/master/src/nqueens.ml">absolute-demo</a>.
+This project can be forked and used as a template for your own project.</p>
+<p>This simple introduction cannot serve as a full introduction to constraint programming, and we refer to <a href="https://www.coursera.org/learn/basic-modeling">this online class</a> to learn how to model a constraint problem.</p>
+<p>In this tutorial, you will learn how to solve the famous n-queens problem in AbSolute.
+It encompasses the following steps:</p>
+<ol>
+<li>Create a model of the N-Queens using the structures of AbSolute.</li>
+<li>Build a constraint solver by assembling abstract domains together that is able to solve this problem.</li>
+<li>Type the formula created in (1) into the abstract domain.</li>
+<li>Run the solver and print the solution.</li>
+</ol>
+<a class="header" href="print.html#model-of-the-n-queens-problem" id="model-of-the-n-queens-problem"><h2>Model of the N-Queens problem</h2></a>
+<p>The N-Queens problem is a toy constraint problem where we try to place <code>n</code> queens on a chess board of size <code>n*n</code> such that no queen can attack each other.
+A complete description is available on <a href="https://en.wikipedia.org/wiki/Nqueens">Wikipedia</a>.</p>
+<p>A simple model for this problem is constituted of <code>n</code> variables <code>x1,...,xN</code>, one for each queen.
+Since, it is only possible to have one queen per line on the chess board, we can already decide that <code>x1</code> is on the first line, <code>x2</code> on the second, etc.
+The following function creates a list of string variables:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+(** [make_vars n] creates `n` variables named `x1`,...,`xn`. *)
+let rec make_vars = function
+  | 0 -&gt; []
+  | n -&gt; (&quot;x&quot; ^ (string_of_int n))::(make_vars (n-1))
+#}</code></pre></pre>
+<p>The value of the variable <code>xi</code> will be the column of <code>xi</code> on the chess board.
+Therefore, a queen variable can take a value between <code>1</code> and <code>n</code>.
+These corresponds to constraints of the form <code>x1 &gt;= 0 /\ x1 &lt;= n</code>, which translates in OCaml as:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+(** [var_in_dom l u x] ensures that `x &gt;= l` and `x &lt;= u`. *)
+let var_in_dom l u x =
+  [Cmp(Var x, GEQ, Cst(Bound_rat.of_int l, Int));
+   Cmp(Var x, LEQ, Cst(Bound_rat.of_int u, Int))]
+
+(** [vars_in_dom l u vars] ensures that all variables in `vars` are in the interval [l..u]. *)
+let rec vars_in_dom l u = function
+  | [] -&gt; []
+  | x::vars -&gt; (var_in_dom l u x)@(vars_in_dom l u vars)
+#}</code></pre></pre>
+<p>Finally, we need to ensure that two queens cannot attack each other.
+For instance, to check that <code>xi</code> and <code>xj</code> do not attack each other, we need to fulfill the following constraints (<code>i &lt; j</code>):</p>
+<ul>
+<li><code>xi != xj</code>: <code>xi</code> and <code>xj</code> are not on the same column.</li>
+<li><code>qi + i != qj + j</code>: <code>xi</code> and <code>xj</code> are not on a same ascending diagonal.</li>
+<li><code>qi - i != qj - j</code>: <code>xi</code> and <code>xj</code> are not on a same descending diagonal.</li>
+</ul>
+<p>This translates into OCaml as follows:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let noattack vars i j =
+  let qi, qj = List.nth vars i, List.nth vars j in
+  let ci = Cst(Bound_rat.of_int i, Int) in
+  let cj = Cst(Bound_rat.of_int j, Int) in
+  [Cmp(Var qi, NEQ, Var qj);
+   Cmp(Binary(Var qi, ADD, ci), NEQ, Binary(Var qj, ADD, cj));
+   Cmp(Binary(Var qi, SUB, ci), NEQ, Binary(Var qj, SUB, cj))]
+
+let rec noattack_i vars i j =
+  if j &gt;= List.length vars then []
+  else (noattack vars i j)@(noattack_i vars i (j+1))
+
+let noattack_all vars =
+  let rec aux i =
+    if i &gt;= List.length vars then []
+    else (noattack_i vars i (i+1))@(aux (i+1)) in
+  aux 0
+#}</code></pre></pre>
+<p>By assembling all these constraints, we can design the full formula for the n-queens problem:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let make_nqueens n =
+  let vars = List.rev (make_vars n) in
+  let domains = List.rev (vars_in_dom 1 n vars) in
+  let constraints = List.rev (noattack_all vars) in
+  let rec make_formula = function
+    | [] -&gt; QFFormula (conjunction (domains@constraints))
+    | x::vars -&gt; Exists(x, Concrete Int, make_formula vars) in
+  make_formula vars
+#}</code></pre></pre>
+<p>It generates a conjunctive formula with variables existentially quantified, for instance: <code>Ǝx1.Ǝx2...Ǝxn.x1 &gt;= 1 /\ ... /\ x7 - 6 &lt;&gt; x8 - 7</code>.</p>
+<a class="header" href="print.html#an-abstract-domain-for-the-n-queens-problem" id="an-abstract-domain-for-the-n-queens-problem"><h2>An abstract domain for the N-Queens problem</h2></a>
+<p>AbSolute is designed to be modular, thus you can craft your own constraint solver accordingly to your problem.
+We design an abstract domain one supporting integer arithmetic constraints:</p>
+<pre><code>module Box = Box.Make(Bound_int)(Itv.Itv)(Box_split.First_fail_LB)
+module PC = Propagator_completion(Box.Vardom)(Box)
+module E = Event_loop(Event_atom(PC))
+module A = Direct_product(
+  Prod_cons(Box)(
+  Prod_cons(PC)(
+  Prod_atom(E))))
+
+let box_uid = 1
+let pc_uid = 2
+let event_uid = 3
+
+let init () : A.t =
+  let box = ref (Box.empty box_uid) in
+  let pc = ref (PC.init PC.I.{uid=pc_uid; a=box}) in
+  let event = ref (E.init event_uid pc) in
+  A.init 0 (Owned box, (Owned pc, Owned event))
+</code></pre>
+<p>The <code>Box</code> abstract domain supports variables defined on interval domain (e.g. <code>x &gt;= 1 /\ x &lt;= 10</code>).
+The propagator completion <code>PC</code> equips <code>Box</code> with arbitrary arithmetic constraints (e.g. <code>x * x + y - 2 &gt; 0</code>).
+The domain <code>Event_loop</code> is a meta abstract domain, not supporting any constraint, but useful to compute efficiently the fixpoint of the closure operator of <code>PC</code>.
+These three domains are next assembled together in a direct product <code>A</code>.
+<code>A</code> is only the type of the abstract domain, thus we need to create an element of <code>A</code>, which is realized by the function <code>init</code>.
+Each abstract element has a dedicated unique identifier (UID), that is useful in the next section.</p>
+<a class="header" href="print.html#type-the-formula-in-the-abstract-domain" id="type-the-formula-in-the-abstract-domain"><h2>Type the formula in the abstract domain</h2></a>
+<p>We now have the formula on one side, and the abstract domain on the other side.
+The remaining step is to assign each part of the formula to the UID of an abstract element.
+We call this process <em>typing</em>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+(** Given a formula, we assign each of its variables and constraints to an abstract domain.
+   For the abstract domain `A`, all the variables and interval constraint go into `Box`, and the rest go into `PC`. *)
+let type_formula formula =
+  let rec aux' = function
+    (* Domain constraint go into `Box`. *)
+    | Cmp (Var x, LEQ, Cst (i,ty)) -&gt; box_uid, TCmp(Var x, LEQ, Cst (i,ty))
+    | Cmp (Var x, GEQ, Cst (i,ty)) -&gt; box_uid, TCmp(Var x, GEQ, Cst (i,ty))
+    (* Other constraint go into `PC`. *)
+    | Cmp c -&gt; pc_uid, TCmp c
+    | And (f1,f2) -&gt; pc_uid, TAnd(aux' f1, aux' f2)
+    (* All other constraint are not supported in this abstract domain. *)
+    | _ -&gt; raise (Wrong_modelling &quot;Constraint not supported by the current abstract domain.&quot;) in
+  let rec aux = function
+    | Exists(name, ty, qf) -&gt; TExists({name; ty; uid=box_uid}, aux qf)
+    | QFFormula f -&gt; TQFFormula (aux' f) in
+  aux formula
+#}</code></pre></pre>
+<p>The unary constraint of the variable are directly typed into <code>box_uid</code>, while the others are typed into <code>pc_uid</code>.
+The abstract domain <code>A</code> does support any constraint (for instance disjunction), thus we throw an error if we encounter an unsupported constraint.</p>
+<a class="header" href="print.html#finding-a-solution" id="finding-a-solution"><h2>Finding a solution</h2></a>
+<p>Now that we have a typed formula, the remaining and most important step is to find a solution to this formula.
+A solution is an assignment of the variable such that all constraints are satisfied.
+We first instantiate the solver with the created abstract domain.</p>
+<pre><code>module Solver = Fixpoint.Solver.Make(A)
+module T = Solver.T
+</code></pre>
+<p>The next function is the main and last one, it assembles all the previous step and call the solver on the formula:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let _ =
+  let nqueens = 8 in
+  try
+    (* (1) Merge the three previous steps. *)
+    let qformula = make_nqueens nqueens in
+    let a = init () in
+    let tf = type_formula qformula in
+    (* (1b) Print the typed formula (optional). *)
+    print_tformula a tf;
+    (* (2) Interpret the typed formula into the abstract element. *)
+    let a, cs = A.interpret a Exact tf in
+    (* (3) Add the interpreted constraints into the abstract element. *)
+    let a = List.fold_left A.weak_incremental_closure a cs in
+    (* (4) Create the solver. *)
+    let bound_sol = T.BoundSolutions 1 in
+    let transformer = T.init a [bound_sol] in
+    (* (5) Run the solver. *)
+    let (gs,_) =
+      try Solver.solve transformer
+      with Solver.T.StopSearch t -&gt; t in
+    if T.(gs.stats.sols) &gt; 0 then
+      print_solution nqueens gs
+    else
+      Printf.printf &quot;No solution found.&quot;
+  with e -&gt;
+    Printf.printf &quot;Exception: %s\n&quot; (Printexc.to_string e)
+
+#}</code></pre></pre>
+<p>The project can be compiled and run as follows:</p>
+<pre><code>git clone https://github.com/ptal/absolute-demo.git
+cd absolute-demo
+make
+./_build/install/default/bin/nqueens
+</code></pre>
+<p>You can change the variable <code>nqueens</code> to decrease or increase the size of the chess board.
+Check for instance with <code>nqueens = 3</code> and <code>nqueens = 4</code>, and verify the solution on paper.</p>
+<p>Many other features are available, and you can explore them in the <a href="ptal.github.io/doc">developer documentation</a></p>
 <a class="header" href="print.html#benchmarking" id="benchmarking"><h1>Benchmarking</h1></a>
 <p>In this chapter, we present <a href="https://github.com/ptal/kobe">kobe</a>, a constraint benchmarking tools suite for various solvers including GeCode, Chuffed and AbSolute.
 The goals of this benchmarking tools suite are:</p>
@@ -264,7 +458,7 @@ Here are the steps explained in this section:</p>
 A <em>problem</em> is a directory containing one or more data sets of the same underlying problem.
 A <em>data set</em> is a directory containing two things:</p>
 <ol>
-<li>A file <code>optimum/optimum.csv</code> listing the name of each data file along with their optimum values (in case of an optimization problem).</li>
+<li>A file <code>optimum/optimum.csv</code> or <code>solution/solution.csv</code> listing the name of each data file along with their optimum values (in case of an optimization problem) or their satisfiability (in case of a satisfaction problem).</li>
 <li>A list of <em>data instance</em> files, for example <code>j301_1.sm</code>, <code>j301_2.sm</code>,...</li>
 </ol>
 <p>Once we have these data, we can proceed to the description of our benchmarks.
@@ -386,6 +580,35 @@ We provide <code>kobeview</code> to view and analyse the results stored in the d
 Note that all analysis are done locally in Javascript, so this website can be used offline.
 You can click on &quot;Time step&quot; to have several graphs on our benchmarks (&quot;instance inclusion&quot; and &quot;cactus plot&quot; only work when there are several solvers, this should be fixed).</p>
 <p>A limited number of analysis are available currently, but you can participate by contributing to kobeview, or create your own program since the database contains only CSV and JSON files.</p>
+<a class="header" href="print.html#supporting-a-new-dataset" id="supporting-a-new-dataset"><h2>Supporting a new dataset</h2></a>
+<p>In case <code>kobe</code> does not support your problem, new contributions are welcomed!
+We describe here the basic steps to add a new format and problem specification to kobe, which involves modifying its code.
+To illustrate the necessary steps, we will pretend we add benchmarking support for the jobshop problem:</p>
+<a class="header" href="print.html#formatting-the-data-set" id="formatting-the-data-set"><h3>Formatting the data set</h3></a>
+<p>Format the data instances of your problem (see also &quot;Gather data sets&quot; section above).
+We have one github repository per problem's family (e.g. <a href="github.com/ptal/kobe-rcpsp">scheduling</a> or <a href="github.com/ptal/kobe-sat">sat</a>).
+The data in these data sets are usually classified according to the origin of the instances (e.g. &quot;Taillard instances&quot;) and the problem's kind (e.g. RCPSP or RCPSP/max).
+Each data directory contains the set of instances, and an additional directory named either <code>solution</code> for satisfiability problems or <code>optimum</code> for optimization problems.</p>
+<a class="header" href="print.html#parsing-the-data" id="parsing-the-data"><h3>Parsing the data</h3></a>
+<p>The first step is to parse the data instances into an OCaml structure specific to your problem.
+To achieve that, in <code>kobe/parsers</code>, select the sub-directory according to the category of your problem or create one, and create <code>jobshop_jss.ml</code> and <code>jobshop_data.ml</code> where the first is the parser and the second the data structure parsed.
+Usually, the format follows a similar pattern so you can have a look in existing files to get started.
+Don't forget to also create the corresponding <code>.mli</code> and to add some comments in the code and in this manual (e.g. <a href="scheduling-data.html">Scheduling data sets</a>).
+Please cite your sources (papers and origin of data).</p>
+<p>In the file <code>dispatch.ml</code> add a variant to <code>problem</code> (e.g. <code>JOBSHOP of jobshop</code>), and redirect the file to the right parser in the function <code>dispatch</code> according to the file extension.</p>
+<a class="header" href="print.html#create-the-model" id="create-the-model"><h3>Create the model</h3></a>
+<p>Once we parsed our data into a suited structure, it is time to create the constraints model.
+We create a file <code>models/jobshop.ml</code> with a single function <code>formula_of_jobshop: jobshop -&gt; bab_qformula</code>.
+<code>bab_qformula</code> is a representation of a formula where a value must be minimized or maximized.
+It also works for satisfiability as well.
+You can look to existing models for examples.
+Similarly to <code>dispatch.ml</code> in the previous section, you must register your new function in <code>models.ml</code>.</p>
+<p>If you want to support MiniZinc model, you need to convert the data parsed in the previous section to a DZN file that will be feed to your MiniZinc model.
+To achieve that, create a file <code>generators/jobshop2dzn.ml</code> (replace <code>jobshop</code> by the name of your problem), and register this function in <code>mzn.ml</code>.</p>
+<a class="header" href="print.html#running-the-new-model" id="running-the-new-model"><h3>Running the new model</h3></a>
+<p>That should be it!
+You can now try and run your new model with various solvers (GeCode, Chuffed, AbSolute).
+Check if the obtained results are right with our analyzer tool <code>kobeview</code>.</p>
 <a class="header" href="print.html#minizinc-benchmarking" id="minizinc-benchmarking"><h1>MiniZinc Benchmarking</h1></a>
 <a class="header" href="print.html#scheduling-data-sets" id="scheduling-data-sets"><h1>Scheduling Data Sets</h1></a>
 <p><code>kobe</code> parses different file format describing scheduling problems such as RCPSP and its variants.
@@ -450,6 +673,65 @@ N in 10, 12, 14, 16, 18, 20, 30</li>
 <li>MMLIB+: 3240 instances, 50 or 100 activities, 3, 6 or 9 modes.</li>
 </ol>
 <p>[1] V. Van Peteghem and M. Vanhoucke, “An experimental investigation of metaheuristics for the multi-mode resource-constrained project scheduling problem on new dataset instances,” European Journal of Operational Research, vol. 235, no. 1, pp. 62–72, May 2014.</p>
+<a class="header" href="print.html#job-shop-scheduling-problem" id="job-shop-scheduling-problem"><h2>Job shop scheduling problem</h2></a>
+<p>The data sets and optimum are extracted and formatted from the following sources:</p>
+<ol>
+<li><a href="http://optimizizer.com/jobshop.php">optimizizer.com</a></li>
+<li><a href="https://github.com/tamy0612/JSPLIB">Yasumasa Tamura's Github</a></li>
+</ol>
+<p>Data sets:</p>
+<ol>
+<li>ABZ: 5 instances, due to Adams et al. [1].</li>
+<li>FT: 3 instances, due to Fisher and Thompson [2].</li>
+<li>LA: 40 instances due to Lawrence [3].</li>
+<li>ORB: 10 instances due to Applegate and Cook [4].</li>
+<li>SWV: 20 instances due to Storer et al. [5].</li>
+<li>YN: 4 instances due to Yamada and Nakano [6].</li>
+<li>TA: 80 instances due to Taillard [7].</li>
+<li>Demirkol: 80 instances due to Demirkol et al. [8].</li>
+<li>CAR: 8 instances due to Carlier and Pinson [9].</li>
+</ol>
+<p>All data sets are formatted according to the following format:</p>
+<pre><code># Comments start with '#'
+&lt;jobs&gt; &lt;machines&gt;
+Each line has N operations where an operation is a couple &lt;machine_idx&gt; &lt;duration&gt;.
+</code></pre>
+<p>[1] J. Adams, E. Balas, D. Zawack. &quot;The shifting bottleneck procedure for job shop scheduling.&quot;, Management Science, Vol. 34, Issue 3, pp. 391-401, 1988.</p>
+<p>[2] J.F. Muth, G.L. Thompson. &quot;Industrial scheduling.&quot;, Englewood Cliffs, NJ, Prentice-Hall, 1963.</p>
+<p>[3] S. Lawrence. &quot;Resource constrained project scheduling: an experimental investigation of heuristic scheduling techniques (Supplement).&quot;, Graduate School of Industrial Administration. Pittsburgh, Pennsylvania, Carnegie-Mellon University, 1984.</p>
+<p>[4] D. Applegate, W. Cook. &quot;A computational study of job-shop scheduling.&quot;, ORSA Journal on Computer, Vol. 3, Isuue 2, pp. 149-156, 1991.</p>
+<p>[5] R.H. Storer, S.D. Wu, R. Vaccari. &quot;New search spaces for sequencing problems with applications to job-shop scheduling.&quot;, Management Science Vol. 38, Issue 10, pp. 1495-1509, 1992.</p>
+<p>[6] T. Yamada, R. Nakano. &quot;A genetic algorithm applicable to large-scale job-shop problems.&quot;, Proceedings of the Second international workshop on parallel problem solving from Nature (PPSN'2). Brussels (Belgium), pp. 281-290, 1992.</p>
+<p>[7] E. Taillard. &quot;Benchmarks for basic scheduling problems&quot;, European Journal of Operational Research, Vol. 64, Issue 2, pp. 278-285, 1993.</p>
+<p>[8] Ebru Demirkol, Sanjay Mehta, Reha Uzsoy. &quot;Benchmarks for shop scheduling problems&quot;, European Journal of Operational Research, 109(1), 1998, pp. 137-141.</p>
+<p>[9] J. Carlier and E. Pinson. An Algorithm for Solving the Job-Shop Problem. Management Science, 35(2):164–176, 1989.</p>
+<a class="header" href="print.html#flexible-job-shop-scheduling-problem" id="flexible-job-shop-scheduling-problem"><h2>Flexible job shop scheduling problem</h2></a>
+<p>The information about the data sets have been taken from [5], and optimum bounds from [5,6].</p>
+<p>Data sets:</p>
+<ol>
+<li>Barnes: 21 instances, due to Chambers and Barnes [1].</li>
+<li>Brandimarte: 10 instances, due to Brandimarte [2].</li>
+<li>Dauzere: 18 instances, due to Dauzère-Pérès and Paulli [3].</li>
+<li>Hurink: 3 data sets of 66 instances each modifying the ABZ, FT, LA, ORB data sets of the job shop scheduling, due to Hurink [4].
+<ol>
+<li>edata: Few operations may be assigned to more than one machine.</li>
+<li>rdata: Most of the operations may be assigned to some machines.</li>
+<li>vdata: All operations may be assigned to several machines.</li>
+</ol>
+</li>
+</ol>
+<p>All data sets have the following format (taken from the file <code>DataSetExplanation.txt</code> coming with the benchmarks):</p>
+<ol>
+<li>In the first line there are (at least) 2 numbers: the first is the number of jobs and the second the number of machines (the 3rd is not necessary, it is the average number of machines per operation)</li>
+<li>Every row represents one job: the first number is the number of operations of that job, the second number (let's say k&gt;=1) is the number of machines that can process the first operation; then according to k, there are k pairs of numbers (machine,processing time) that specify which are the machines and the processing times; then the data for the second operation and so on...</li>
+</ol>
+<p>[1] J. B. Chambers and J. W. Barnes. Flexible Job Shop Scheduling by Tabu Search. The University of Texas, Austin, TX, Technical Report Series ORP96-09, Graduate Program in Operations Research and Industrial Engineering, 1996.</p>
+<p>[2] P. Brandimarte. Routing and Scheduling in a Flexible Job Shop by Tabu Search. Annals of Operations Research, 41(3):157–183, 1993.</p>
+<p>[3] S. Dauzère-Pérès and J. Paulli. Solving the General Multiprocessor Job-Shop Scheduling Problem. Technical report, Rotterdam School of Management, Erasmus Universiteit Rotterdam, 1994.</p>
+<p>[4] J. Hurink, B. Jurisch, and M. Thole, “Tabu search for the job-shop scheduling problem with multi-purpose machines,” Operations-Research-Spektrum, vol. 15, no. 4, pp. 205–215, 1994.</p>
+<p>[5] Behnke, D., &amp; Geiger, M. J. (2012). Test instances for the flexible job shop scheduling problem with work centers. Arbeitspapier/Research Paper/Helmut-Schmidt-Universität, Lehrstuhl für Betriebswirtschaftslehre, insbes. Logistik-Management.</p>
+<p>[6] A. Schutt, T. Feydy, and P. J. Stuckey, “Scheduling Optional Tasks with Explanation,” in Principles and Practice of Constraint Programming, Berlin, Heidelberg, 2013, vol. 8124, pp. 628–644.</p>
+<a class="header" href="print.html#sat-data-sets" id="sat-data-sets"><h1>SAT Data Sets</h1></a>
 <a class="header" href="print.html#contributing-to-absolute" id="contributing-to-absolute"><h1>Contributing to AbSolute</h1></a>
 <p>This guide is for anybody who wants to contribute to AbSolute.
 Before all, we encourage you to discuss your project with us to be sure your contributions can eventually be integrated.
@@ -462,7 +744,7 @@ cd AbSolute
 make build
 make test
 </code></pre>
-<p>You might also be interested by cloning the following repositories which all relevant to the AbSolute project:</p>
+<p>You might also be interested by cloning the following repositories which are all relevant to the AbSolute project:</p>
 <pre><code class="language-sh">git clone https://github.com/ptal/kobe
 git clone https://github.com/ptal/kobe-rcpsp
 git clone https://github.com/ptal/kobe-sat
@@ -481,10 +763,12 @@ In a more detailed way:</p>
 <li>Send your changes into master.</li>
 <li>Publish the new version (see below).</li>
 </ol>
-<p>If you modify interfaces that are shared by several abstract domains (such as <a href="https://github.com/ptal/AbSolute/blob/master/src/domains/abstract_domain.ml">abstract_domain.ml</a>), you should create an issue on Github to discuss about it with the team, since it impacts virtually all the project.</p>
+<p>If you modify interfaces that are shared by several abstract domains (such as <a href="https://github.com/ptal/AbSolute/blob/master/src/domains/abstract_domain.mli">abstract_domain.mli</a>), you should create an issue on Github to discuss about it with the team, since it impacts virtually all the project.
+It is important to try to keep the number of functions in the signature minimal.
+If you notice a function is not used anymore, you should not hesitate to remove it; but please contact us to validate your hypothesis so you don't lose time trying to remove it.</p>
 <p>About the coding guidelines, you should try to code in the same way than the rest of the project, please observe how we code and do the same.
 One very important rule is that you indent using <em>2 spaces</em> and <strong>not tabulations</strong>, and create <code>.ml</code> and its documented <code>.mli</code> companion for every new file.</p>
-<p>In any case, do not hesitate to communicate and ask questions—stupid questions do not exist :-).
+<p>In any case, do not hesitate to communicate and ask questions; stupid questions do not exist :-).
 Questions and discussions are very important so you do not lose time during development, and do not go in a wrong direction.</p>
 <a class="header" href="print.html#publishing" id="publishing"><h2>Publishing</h2></a>
 <p>We maintain version numbers according to <a href="http://semver.org/">semantic versioning</a> rules.
@@ -498,6 +782,31 @@ The new version is installable with <code>opam update</code> followed by <code>o
 <pre><code class="language-sh">./publish.sh
 </code></pre>
 <p>This script is only compatible to Linux (not yet tested on MacOSX), so if you are on Windows, you should read this script (which is documented) to know what are the necessary steps.</p>
+<a class="header" href="print.html#local-version-of-absolute-in-opam" id="local-version-of-absolute-in-opam"><h2>Local version of AbSolute in OPAM</h2></a>
+<p>It is often convenient to have a local version of AbSolute in OPAM, for instance when moving from <code>kobe</code> to <code>AbSolute</code> so we can detect bugs before committing and publishing a new version.
+We first pin a local version of AbSolute:</p>
+<pre><code class="language-sh"># Remove the currently installed version of AbSolute (not sure if it is necessary though).
+opam remove absolute
+# Pin a local version of AbSolute where `AbSolute` is the name of the git repository.
+opam pin add absolute AbSolute
+</code></pre>
+<p>The next step is to edit the OPAM configuration file of AbSolute in order to avoid being synchronized with git (since we want to work solely on the local copy).
+Write <code>opam pin edit absolute</code> in your terminal, and change the following line:</p>
+<pre><code class="language-sh">url {
+  src:
+    &quot;git+file:///home/ptalbot/repositories/absolute-project/AbSolute#master&quot;
+}
+</code></pre>
+<p>by removing the <code>git+</code> part of the URL:</p>
+<pre><code class="language-sh">url {
+  src:
+    &quot;file:///home/ptalbot/repositories/absolute-project/AbSolute#master&quot;
+}
+</code></pre>
+<p>Each time you make some changes and want to use the newest local version of AbSolute just type:</p>
+<pre><code class="language-sh">opam upgrade .
+</code></pre>
+<p>in the repository of AbSolute.</p>
 <a class="header" href="print.html#research" id="research"><h1>Research</h1></a>
 <p>AbSolute has generated several research papers.
 Currently, the most general one to cite is:</p>
@@ -519,6 +828,40 @@ Currently, the most general one to cite is:</p>
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 </code></pre>
+<a class="header" href="print.html#changelog" id="changelog"><h1>Changelog</h1></a>
+<p>We describe the main changes operated in each version of AbSolute.
+This is especially useful when analyzing the results in <a href="https://github.com/ptal/kobe-database">kobe-database</a>.</p>
+<p>Version 0.10.0:</p>
+<ul>
+<li>Add a function <code>has_changed</code> in <code>Abstract_domain</code> to detect fixed point of the closure operator more precisely.</li>
+<li>Fix bugs in <code>CascadeProduct</code>.</li>
+</ul>
+<p>Version 0.9.2: Fix a bugs in <code>replace_uid</code> and <code>instantiate_vars</code> where constraints were wrongly rewritten.</p>
+<p>Version 0.9.1: Rewrite the <code>solve</code> function in CPS to avoid possible stack overflow.</p>
+<p>Version 0.9.0:</p>
+<ul>
+<li>Add the domain product <code>Cascade_product</code> which transfers a constraint to a more specialized domain when instantiated enough.</li>
+<li><code>Propagator_completion</code> now automatically exchanges equalities over its sub-domains.</li>
+<li>Add a minimalist search strategy language.</li>
+</ul>
+<p>Version 0.8.0:</p>
+<ul>
+<li>Add an <code>embed</code> function which is the inverse of <code>project</code> in abstract domain, it increases the efficiency of the HC4 algorithm.</li>
+<li>Fix the min/max filtering in interval.</li>
+<li>New converter between bounds to avoid always going through rational when converting a bound.</li>
+</ul>
+<p>Version 0.7.0:</p>
+<ul>
+<li>Add the propagator completion domain transformer, which equips any projection-based abstract domain with propagators.</li>
+<li>The box domain does not contain anymore its constraints.</li>
+<li>Fix a bug when selecting the new bounds in the branch-and-bound algorithm.</li>
+</ul>
+<p>Version 0.6.0:</p>
+<ul>
+<li>New architecture of products based on abstract domain sharing.</li>
+<li>Typing of the logic formula according to the type of an abstract domain.</li>
+<li>Note: this version was bugged due to a problem in the BAB algorithm (fixed in 0.7.0).</li>
+</ul>
 
                     </main>
 

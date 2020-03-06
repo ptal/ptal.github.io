@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html" class="active"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html" class="active"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li><li><a href="sat-data.html"><strong aria-hidden="true">4.4.</strong> SAT Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li><li><a href="changelog.html"><strong aria-hidden="true">7.</strong> Changelog</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -210,6 +210,64 @@ N in 10, 12, 14, 16, 18, 20, 30</li>
 <li>MMLIB+: 3240 instances, 50 or 100 activities, 3, 6 or 9 modes.</li>
 </ol>
 <p>[1] V. Van Peteghem and M. Vanhoucke, “An experimental investigation of metaheuristics for the multi-mode resource-constrained project scheduling problem on new dataset instances,” European Journal of Operational Research, vol. 235, no. 1, pp. 62–72, May 2014.</p>
+<a class="header" href="scheduling-data.html#job-shop-scheduling-problem" id="job-shop-scheduling-problem"><h2>Job shop scheduling problem</h2></a>
+<p>The data sets and optimum are extracted and formatted from the following sources:</p>
+<ol>
+<li><a href="http://optimizizer.com/jobshop.php">optimizizer.com</a></li>
+<li><a href="https://github.com/tamy0612/JSPLIB">Yasumasa Tamura's Github</a></li>
+</ol>
+<p>Data sets:</p>
+<ol>
+<li>ABZ: 5 instances, due to Adams et al. [1].</li>
+<li>FT: 3 instances, due to Fisher and Thompson [2].</li>
+<li>LA: 40 instances due to Lawrence [3].</li>
+<li>ORB: 10 instances due to Applegate and Cook [4].</li>
+<li>SWV: 20 instances due to Storer et al. [5].</li>
+<li>YN: 4 instances due to Yamada and Nakano [6].</li>
+<li>TA: 80 instances due to Taillard [7].</li>
+<li>Demirkol: 80 instances due to Demirkol et al. [8].</li>
+<li>CAR: 8 instances due to Carlier and Pinson [9].</li>
+</ol>
+<p>All data sets are formatted according to the following format:</p>
+<pre><code># Comments start with '#'
+&lt;jobs&gt; &lt;machines&gt;
+Each line has N operations where an operation is a couple &lt;machine_idx&gt; &lt;duration&gt;.
+</code></pre>
+<p>[1] J. Adams, E. Balas, D. Zawack. &quot;The shifting bottleneck procedure for job shop scheduling.&quot;, Management Science, Vol. 34, Issue 3, pp. 391-401, 1988.</p>
+<p>[2] J.F. Muth, G.L. Thompson. &quot;Industrial scheduling.&quot;, Englewood Cliffs, NJ, Prentice-Hall, 1963.</p>
+<p>[3] S. Lawrence. &quot;Resource constrained project scheduling: an experimental investigation of heuristic scheduling techniques (Supplement).&quot;, Graduate School of Industrial Administration. Pittsburgh, Pennsylvania, Carnegie-Mellon University, 1984.</p>
+<p>[4] D. Applegate, W. Cook. &quot;A computational study of job-shop scheduling.&quot;, ORSA Journal on Computer, Vol. 3, Isuue 2, pp. 149-156, 1991.</p>
+<p>[5] R.H. Storer, S.D. Wu, R. Vaccari. &quot;New search spaces for sequencing problems with applications to job-shop scheduling.&quot;, Management Science Vol. 38, Issue 10, pp. 1495-1509, 1992.</p>
+<p>[6] T. Yamada, R. Nakano. &quot;A genetic algorithm applicable to large-scale job-shop problems.&quot;, Proceedings of the Second international workshop on parallel problem solving from Nature (PPSN'2). Brussels (Belgium), pp. 281-290, 1992.</p>
+<p>[7] E. Taillard. &quot;Benchmarks for basic scheduling problems&quot;, European Journal of Operational Research, Vol. 64, Issue 2, pp. 278-285, 1993.</p>
+<p>[8] Ebru Demirkol, Sanjay Mehta, Reha Uzsoy. &quot;Benchmarks for shop scheduling problems&quot;, European Journal of Operational Research, 109(1), 1998, pp. 137-141.</p>
+<p>[9] J. Carlier and E. Pinson. An Algorithm for Solving the Job-Shop Problem. Management Science, 35(2):164–176, 1989.</p>
+<a class="header" href="scheduling-data.html#flexible-job-shop-scheduling-problem" id="flexible-job-shop-scheduling-problem"><h2>Flexible job shop scheduling problem</h2></a>
+<p>The information about the data sets have been taken from [5], and optimum bounds from [5,6].</p>
+<p>Data sets:</p>
+<ol>
+<li>Barnes: 21 instances, due to Chambers and Barnes [1].</li>
+<li>Brandimarte: 10 instances, due to Brandimarte [2].</li>
+<li>Dauzere: 18 instances, due to Dauzère-Pérès and Paulli [3].</li>
+<li>Hurink: 3 data sets of 66 instances each modifying the ABZ, FT, LA, ORB data sets of the job shop scheduling, due to Hurink [4].
+<ol>
+<li>edata: Few operations may be assigned to more than one machine.</li>
+<li>rdata: Most of the operations may be assigned to some machines.</li>
+<li>vdata: All operations may be assigned to several machines.</li>
+</ol>
+</li>
+</ol>
+<p>All data sets have the following format (taken from the file <code>DataSetExplanation.txt</code> coming with the benchmarks):</p>
+<ol>
+<li>In the first line there are (at least) 2 numbers: the first is the number of jobs and the second the number of machines (the 3rd is not necessary, it is the average number of machines per operation)</li>
+<li>Every row represents one job: the first number is the number of operations of that job, the second number (let's say k&gt;=1) is the number of machines that can process the first operation; then according to k, there are k pairs of numbers (machine,processing time) that specify which are the machines and the processing times; then the data for the second operation and so on...</li>
+</ol>
+<p>[1] J. B. Chambers and J. W. Barnes. Flexible Job Shop Scheduling by Tabu Search. The University of Texas, Austin, TX, Technical Report Series ORP96-09, Graduate Program in Operations Research and Industrial Engineering, 1996.</p>
+<p>[2] P. Brandimarte. Routing and Scheduling in a Flexible Job Shop by Tabu Search. Annals of Operations Research, 41(3):157–183, 1993.</p>
+<p>[3] S. Dauzère-Pérès and J. Paulli. Solving the General Multiprocessor Job-Shop Scheduling Problem. Technical report, Rotterdam School of Management, Erasmus Universiteit Rotterdam, 1994.</p>
+<p>[4] J. Hurink, B. Jurisch, and M. Thole, “Tabu search for the job-shop scheduling problem with multi-purpose machines,” Operations-Research-Spektrum, vol. 15, no. 4, pp. 205–215, 1994.</p>
+<p>[5] Behnke, D., &amp; Geiger, M. J. (2012). Test instances for the flexible job shop scheduling problem with work centers. Arbeitspapier/Research Paper/Helmut-Schmidt-Universität, Lehrstuhl für Betriebswirtschaftslehre, insbes. Logistik-Management.</p>
+<p>[6] A. Schutt, T. Feydy, and P. J. Stuckey, “Scheduling Optional Tasks with Explanation,” in Principles and Practice of Constraint Programming, Berlin, Heidelberg, 2013, vol. 8124, pp. 628–644.</p>
 
                     </main>
 
@@ -222,7 +280,7 @@ N in 10, 12, 14, 16, 18, 20, 30</li>
                         
 
                         
-                            <a rel="next" href="contributing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="sat-data.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -240,7 +298,7 @@ N in 10, 12, 14, 16, 18, 20, 30</li>
                 
 
                 
-                    <a href="contributing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="sat-data.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

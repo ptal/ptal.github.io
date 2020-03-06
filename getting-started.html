@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html" class="active"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html" class="active"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li><li><a href="sat-data.html"><strong aria-hidden="true">4.4.</strong> SAT Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li><li><a href="changelog.html"><strong aria-hidden="true">7.</strong> Changelog</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -153,13 +153,13 @@
 <p>The following is a list of the dependencies to build AbSolute; note that we explain below how to install <code>OCaml</code> if you do not have it already.</p>
 <ul>
 <li>An ANSI C compiler</li>
-<li><a href="http://ocaml.org/">OCaml</a> &gt;= 4.07.1</li>
+<li><a href="http://ocaml.org/">OCaml</a> &gt;= 4.09.0</li>
 </ul>
 <a class="header" href="getting-started.html#installation" id="installation"><h2>Installation</h2></a>
 <p>We install OCaml and AbSolute through the OCaml package manager <a href="http://opam.ocaml.org/">opam</a>.
 First, <a href="http://opam.ocaml.org/doc/Install.html">install opam</a> with your package manager and initialize it:</p>
 <pre><code class="language-sh">apt-get install opam # on Debian, see opam documentation for other distributions.
-opam init --comp 4.07.1+flambda # Initialize ~/.opam with a freshly compiled OCaml 4.07.1
+opam init --comp 4.09.0+flambda # Initialize ~/.opam with a freshly compiled OCaml 4.07.1
 </code></pre>
 <p>The next step is to download and build AbSolute.
 If you intent to modify the source code and possibly contribute to the project, jump to the <a href="contributing.html">contributing chapter</a>.

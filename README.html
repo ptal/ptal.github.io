@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+            <ol class="chapter"><li><a href="README.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li><li><a href="sat-data.html"><strong aria-hidden="true">4.4.</strong> SAT Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li><li><a href="changelog.html"><strong aria-hidden="true">7.</strong> Changelog</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -151,7 +151,7 @@
 <p>Hello! You reached the <code>AbSolute</code> book.
 <code>AbSolute</code> is a constraint solver written in OCaml for research purposes, but we hope that it can be used outside of research as well!
 The main originality of this solver is to be based on <em>abstract interpretation</em>, which is a field studying static analysis of programs.
-We have discovered similitudes between constraint programming and abstract interpretation at the theoretical level, and this solver is a practical experimentation of these findings.
+We and others have discovered similitudes between constraint programming and abstract interpretation at the theoretical level, and this solver is a practical experimentation of these findings.
 In this book, you will learn how to <a href="getting-started.html">install AbSolute</a> and how to <a href="learn-absolute.html">solve your own constraint problems</a>.
 We also include a <a href="benchmarking.html">guide to kobe</a> which is a benchmarking tool with support for AbSolute and other solvers.
 For adventurous users, we provide a <a href="contributing.html">guide for contributing</a> to Absolute, as well as some notes <a href="research.html">about the research</a> relevant to this project.</p>
@@ -161,14 +161,22 @@ For adventurous users, we provide a <a href="contributing.html">guide for contri
 We summarize the supported abstract domains in the table below (<code>c1,c2</code> are constraints, <code>X,Y</code> variables and <code>a,b</code> constants).
 Each abstract domain is parametrized by a bound type <code>Z</code>, <code>F</code> or <code>Q</code> if it contains variables over integers, floating point numbers or rational.</p>
 <table><thead><tr><th> Abstract domain </th><th> Constraint language </th><th> Propagation </th><th> Description </th></tr></thead><tbody>
-<tr><td> <code>Box(V)</code>        </td><td> Arithmetic constraints, functions (<code>sin</code>, <code>cos</code>, <code>sqrt</code>,...). </td><td>  HC4 algorithm, propagation loop </td><td> <code>Box</code> is parametric by a variable domain <code>V</code> (interval, open/close interval, or BDD). </td></tr>
-<tr><td> <code>Box_reified</code>   </td><td> Box constraint and reified constraint of the form (<code>X &lt;=&gt; c</code> where <code>X</code> is equal to <code>0</code> or <code>1</code>). </td><td> Same as <code>Box</code> + support for reified constraints </td><td> <code>Box_reified</code> is parametrized by a <code>Box</code> domain. </td></tr>
-<tr><td> <code>Octagon</code>       </td><td> Logic difference constraints (<code>X - Y &lt;= a</code>) </td><td> Incremental Floyd-Warshall algorithm </td><td> </td></tr>
-<tr><td> <code>Box_octagon_disjoint</code>   </td><td> Box and octagon constraints with equivalence constraints (<code>c1 &lt;=&gt; c2</code> where <code>c1</code> a box constraint and <code>c2</code> an octagonal constraint).  </td><td> Bridge between box and octagon domains when they are defined on disjoint set of variables. </td></tr>
+<tr><td> <code>Box(V)</code>        </td><td> Interval constraints (<code>X &lt;= a</code>, <code>X &gt;= b</code>) </td><td> None </td><td> Simple Cartesian product of variable domains. <code>Box</code> is parametric in a variable domain <code>V</code> (interval, open/close interval, or BDD). </td></tr>
+<tr><td> <code>SAT</code>    </td><td> Propositional formula (<code>(X \/ Y) /\ (true \/ Z)</code>) </td><td> Conflict driven clause learning </td><td> Based on Minisat. This domain is experimental (and probably bugged!). </td></tr>
+<tr><td> <code>Octagon(B)</code>    </td><td> Logic difference constraints (<code>X - Y &lt;= a</code>) </td><td> Incremental Floyd-Warshall algorithm </td><td> <code>B</code> is the bound type. </td></tr>
+</tbody></table>
+<p>In addition, new abstract domains can be derived from existing ones using <em>abstract transformers</em>.</p>
+<table><thead><tr><th> Abstract transformers </th><th> Constraint language </th><th> Propagation </th><th> Description </th></tr></thead><tbody>
+<tr><td> <code>Direct_product(A1,..,An)</code> </td><td> Union of <code>A1</code>,...,<code>An</code>. </td><td> Component-wise propagation of each subdomains. </td><td> In addition to the classical direct product of abstract interpretation, it has some facilities for transformers that shares subdomains. </td></tr>
+<tr><td> <code>Logic_completion(A)</code> </td><td> Quantifier-free logic formula where predicates are constraints in <code>A</code> </td><td> Based on the entailment of constraint in <code>A</code>. </td><td> Equip an abstract domain <code>A</code> with logical formula. Also called &quot;natural domain SMT&quot;. </td></tr>
+<tr><td> <code>Propagator_completion(A)</code> </td><td> Arithmetic constraints, functions (<code>sin</code>, <code>cos</code>, <code>sqrt</code>,...). </td><td>  HC4 algorithm </td><td> Equip an abstract domain <code>A</code> with propagators (functions implementing arithmetic constraints). </td></tr>
+<tr><td> <code>Cascade_product(A,B)</code> </td><td> Union of <code>A</code> and <code>B</code>. </td><td> Transfer over-approximation <code>A</code>-constraints into <code>B</code>, and then an exact approximation whenever the constraint is instantiated enough. </td><td> Can be used to transfer non-linear constraints to a linear solver whenever the non-linear variables are instantiated. </td></tr>
+<tr><td> <code>Event_loop(A1,...,An)</code> </td><td> None </td><td> Propagation loop of the propagators in <code>A1</code>,...,<code>An</code> </td><td> Meta abstract domain, computing the closure of <code>A1</code>...<code>An</code> more efficiently than <code>Direct_product</code>. <code>Ai</code> closure must be decomposable into propagators (i.e. sub-closure operators). </td></tr>
 </tbody></table>
 <p>In addition, each domain is equipped with numerous splitting strategies that can impact the performance.</p>
 <a class="header" href="README.html#what-to-expect-next" id="what-to-expect-next"><h2>What to expect next?</h2></a>
-<p>We currently work on integrating a SAT solver, integrating back some features from the initial version of <a href="https://github.com/mpelleau/">AbSolute</a> such as support for linear programming through VPL and Apron library, and reduced product to combine domains.</p>
+<p>A linear programming solver such as VPL, or the one of Apron should be added.
+The next big step is to integrate ideas from <em>abstract conflict driven learning</em> (ACDL) to support conflicts learning.</p>
 <a class="header" href="README.html#absolute-ecosystem" id="absolute-ecosystem"><h2>AbSolute ecosystem</h2></a>
 <p>We have several projects relevant to AbSolute that are worth checking out:</p>
 <ul>

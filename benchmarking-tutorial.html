@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html" class="active"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html" class="active"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li><li><a href="sat-data.html"><strong aria-hidden="true">4.4.</strong> SAT Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li><li><a href="changelog.html"><strong aria-hidden="true">7.</strong> Changelog</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -181,7 +181,7 @@ Here are the steps explained in this section:</p>
 A <em>problem</em> is a directory containing one or more data sets of the same underlying problem.
 A <em>data set</em> is a directory containing two things:</p>
 <ol>
-<li>A file <code>optimum/optimum.csv</code> listing the name of each data file along with their optimum values (in case of an optimization problem).</li>
+<li>A file <code>optimum/optimum.csv</code> or <code>solution/solution.csv</code> listing the name of each data file along with their optimum values (in case of an optimization problem) or their satisfiability (in case of a satisfaction problem).</li>
 <li>A list of <em>data instance</em> files, for example <code>j301_1.sm</code>, <code>j301_2.sm</code>,...</li>
 </ol>
 <p>Once we have these data, we can proceed to the description of our benchmarks.
@@ -303,6 +303,35 @@ We provide <code>kobeview</code> to view and analyse the results stored in the d
 Note that all analysis are done locally in Javascript, so this website can be used offline.
 You can click on &quot;Time step&quot; to have several graphs on our benchmarks (&quot;instance inclusion&quot; and &quot;cactus plot&quot; only work when there are several solvers, this should be fixed).</p>
 <p>A limited number of analysis are available currently, but you can participate by contributing to kobeview, or create your own program since the database contains only CSV and JSON files.</p>
+<a class="header" href="benchmarking-tutorial.html#supporting-a-new-dataset" id="supporting-a-new-dataset"><h2>Supporting a new dataset</h2></a>
+<p>In case <code>kobe</code> does not support your problem, new contributions are welcomed!
+We describe here the basic steps to add a new format and problem specification to kobe, which involves modifying its code.
+To illustrate the necessary steps, we will pretend we add benchmarking support for the jobshop problem:</p>
+<a class="header" href="benchmarking-tutorial.html#formatting-the-data-set" id="formatting-the-data-set"><h3>Formatting the data set</h3></a>
+<p>Format the data instances of your problem (see also &quot;Gather data sets&quot; section above).
+We have one github repository per problem's family (e.g. <a href="github.com/ptal/kobe-rcpsp">scheduling</a> or <a href="github.com/ptal/kobe-sat">sat</a>).
+The data in these data sets are usually classified according to the origin of the instances (e.g. &quot;Taillard instances&quot;) and the problem's kind (e.g. RCPSP or RCPSP/max).
+Each data directory contains the set of instances, and an additional directory named either <code>solution</code> for satisfiability problems or <code>optimum</code> for optimization problems.</p>
+<a class="header" href="benchmarking-tutorial.html#parsing-the-data" id="parsing-the-data"><h3>Parsing the data</h3></a>
+<p>The first step is to parse the data instances into an OCaml structure specific to your problem.
+To achieve that, in <code>kobe/parsers</code>, select the sub-directory according to the category of your problem or create one, and create <code>jobshop_jss.ml</code> and <code>jobshop_data.ml</code> where the first is the parser and the second the data structure parsed.
+Usually, the format follows a similar pattern so you can have a look in existing files to get started.
+Don't forget to also create the corresponding <code>.mli</code> and to add some comments in the code and in this manual (e.g. <a href="scheduling-data.html">Scheduling data sets</a>).
+Please cite your sources (papers and origin of data).</p>
+<p>In the file <code>dispatch.ml</code> add a variant to <code>problem</code> (e.g. <code>JOBSHOP of jobshop</code>), and redirect the file to the right parser in the function <code>dispatch</code> according to the file extension.</p>
+<a class="header" href="benchmarking-tutorial.html#create-the-model" id="create-the-model"><h3>Create the model</h3></a>
+<p>Once we parsed our data into a suited structure, it is time to create the constraints model.
+We create a file <code>models/jobshop.ml</code> with a single function <code>formula_of_jobshop: jobshop -&gt; bab_qformula</code>.
+<code>bab_qformula</code> is a representation of a formula where a value must be minimized or maximized.
+It also works for satisfiability as well.
+You can look to existing models for examples.
+Similarly to <code>dispatch.ml</code> in the previous section, you must register your new function in <code>models.ml</code>.</p>
+<p>If you want to support MiniZinc model, you need to convert the data parsed in the previous section to a DZN file that will be feed to your MiniZinc model.
+To achieve that, create a file <code>generators/jobshop2dzn.ml</code> (replace <code>jobshop</code> by the name of your problem), and register this function in <code>mzn.ml</code>.</p>
+<a class="header" href="benchmarking-tutorial.html#running-the-new-model" id="running-the-new-model"><h3>Running the new model</h3></a>
+<p>That should be it!
+You can now try and run your new model with various solvers (GeCode, Chuffed, AbSolute).
+Check if the obtained results are right with our analyzer tool <code>kobeview</code>.</p>
 
                     </main>
 

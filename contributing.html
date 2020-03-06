@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html" class="active"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li><li><a href="sat-data.html"><strong aria-hidden="true">4.4.</strong> SAT Data Sets</a></li></ol></li><li><a href="contributing.html" class="active"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li><li><a href="changelog.html"><strong aria-hidden="true">7.</strong> Changelog</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -159,7 +159,7 @@ cd AbSolute
 make build
 make test
 </code></pre>
-<p>You might also be interested by cloning the following repositories which all relevant to the AbSolute project:</p>
+<p>You might also be interested by cloning the following repositories which are all relevant to the AbSolute project:</p>
 <pre><code class="language-sh">git clone https://github.com/ptal/kobe
 git clone https://github.com/ptal/kobe-rcpsp
 git clone https://github.com/ptal/kobe-sat
@@ -178,10 +178,12 @@ In a more detailed way:</p>
 <li>Send your changes into master.</li>
 <li>Publish the new version (see below).</li>
 </ol>
-<p>If you modify interfaces that are shared by several abstract domains (such as <a href="https://github.com/ptal/AbSolute/blob/master/src/domains/abstract_domain.ml">abstract_domain.ml</a>), you should create an issue on Github to discuss about it with the team, since it impacts virtually all the project.</p>
+<p>If you modify interfaces that are shared by several abstract domains (such as <a href="https://github.com/ptal/AbSolute/blob/master/src/domains/abstract_domain.mli">abstract_domain.mli</a>), you should create an issue on Github to discuss about it with the team, since it impacts virtually all the project.
+It is important to try to keep the number of functions in the signature minimal.
+If you notice a function is not used anymore, you should not hesitate to remove it; but please contact us to validate your hypothesis so you don't lose time trying to remove it.</p>
 <p>About the coding guidelines, you should try to code in the same way than the rest of the project, please observe how we code and do the same.
 One very important rule is that you indent using <em>2 spaces</em> and <strong>not tabulations</strong>, and create <code>.ml</code> and its documented <code>.mli</code> companion for every new file.</p>
-<p>In any case, do not hesitate to communicate and ask questions—stupid questions do not exist :-).
+<p>In any case, do not hesitate to communicate and ask questions; stupid questions do not exist :-).
 Questions and discussions are very important so you do not lose time during development, and do not go in a wrong direction.</p>
 <a class="header" href="contributing.html#publishing" id="publishing"><h2>Publishing</h2></a>
 <p>We maintain version numbers according to <a href="http://semver.org/">semantic versioning</a> rules.
@@ -195,13 +197,38 @@ The new version is installable with <code>opam update</code> followed by <code>o
 <pre><code class="language-sh">./publish.sh
 </code></pre>
 <p>This script is only compatible to Linux (not yet tested on MacOSX), so if you are on Windows, you should read this script (which is documented) to know what are the necessary steps.</p>
+<a class="header" href="contributing.html#local-version-of-absolute-in-opam" id="local-version-of-absolute-in-opam"><h2>Local version of AbSolute in OPAM</h2></a>
+<p>It is often convenient to have a local version of AbSolute in OPAM, for instance when moving from <code>kobe</code> to <code>AbSolute</code> so we can detect bugs before committing and publishing a new version.
+We first pin a local version of AbSolute:</p>
+<pre><code class="language-sh"># Remove the currently installed version of AbSolute (not sure if it is necessary though).
+opam remove absolute
+# Pin a local version of AbSolute where `AbSolute` is the name of the git repository.
+opam pin add absolute AbSolute
+</code></pre>
+<p>The next step is to edit the OPAM configuration file of AbSolute in order to avoid being synchronized with git (since we want to work solely on the local copy).
+Write <code>opam pin edit absolute</code> in your terminal, and change the following line:</p>
+<pre><code class="language-sh">url {
+  src:
+    &quot;git+file:///home/ptalbot/repositories/absolute-project/AbSolute#master&quot;
+}
+</code></pre>
+<p>by removing the <code>git+</code> part of the URL:</p>
+<pre><code class="language-sh">url {
+  src:
+    &quot;file:///home/ptalbot/repositories/absolute-project/AbSolute#master&quot;
+}
+</code></pre>
+<p>Each time you make some changes and want to use the newest local version of AbSolute just type:</p>
+<pre><code class="language-sh">opam upgrade .
+</code></pre>
+<p>in the repository of AbSolute.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="scheduling-data.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="sat-data.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
@@ -219,7 +246,7 @@ The new version is installable with <code>opam update</code> followed by <code>o
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="scheduling-data.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="sat-data.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 

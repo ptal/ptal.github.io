@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html" class="active"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li></ol>
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html" class="active"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li><li><a href="sat-data.html"><strong aria-hidden="true">4.4.</strong> SAT Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li><li><a href="changelog.html"><strong aria-hidden="true">7.</strong> Changelog</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -148,6 +148,192 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="learn-absolute.html#learn-absolute" id="learn-absolute"><h1>Learn AbSolute</h1></a>
+<p>We show step-by-step how to use AbSolute in order to solve a constraint problems.
+This code presented in this chapter is available online at <a href="https://github.com/ptal/absolute-demo/blob/master/src/nqueens.ml">absolute-demo</a>.
+This project can be forked and used as a template for your own project.</p>
+<p>This simple introduction cannot serve as a full introduction to constraint programming, and we refer to <a href="https://www.coursera.org/learn/basic-modeling">this online class</a> to learn how to model a constraint problem.</p>
+<p>In this tutorial, you will learn how to solve the famous n-queens problem in AbSolute.
+It encompasses the following steps:</p>
+<ol>
+<li>Create a model of the N-Queens using the structures of AbSolute.</li>
+<li>Build a constraint solver by assembling abstract domains together that is able to solve this problem.</li>
+<li>Type the formula created in (1) into the abstract domain.</li>
+<li>Run the solver and print the solution.</li>
+</ol>
+<a class="header" href="learn-absolute.html#model-of-the-n-queens-problem" id="model-of-the-n-queens-problem"><h2>Model of the N-Queens problem</h2></a>
+<p>The N-Queens problem is a toy constraint problem where we try to place <code>n</code> queens on a chess board of size <code>n*n</code> such that no queen can attack each other.
+A complete description is available on <a href="https://en.wikipedia.org/wiki/Nqueens">Wikipedia</a>.</p>
+<p>A simple model for this problem is constituted of <code>n</code> variables <code>x1,...,xN</code>, one for each queen.
+Since, it is only possible to have one queen per line on the chess board, we can already decide that <code>x1</code> is on the first line, <code>x2</code> on the second, etc.
+The following function creates a list of string variables:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+(** [make_vars n] creates `n` variables named `x1`,...,`xn`. *)
+let rec make_vars = function
+  | 0 -&gt; []
+  | n -&gt; (&quot;x&quot; ^ (string_of_int n))::(make_vars (n-1))
+#}</code></pre></pre>
+<p>The value of the variable <code>xi</code> will be the column of <code>xi</code> on the chess board.
+Therefore, a queen variable can take a value between <code>1</code> and <code>n</code>.
+These corresponds to constraints of the form <code>x1 &gt;= 0 /\ x1 &lt;= n</code>, which translates in OCaml as:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+(** [var_in_dom l u x] ensures that `x &gt;= l` and `x &lt;= u`. *)
+let var_in_dom l u x =
+  [Cmp(Var x, GEQ, Cst(Bound_rat.of_int l, Int));
+   Cmp(Var x, LEQ, Cst(Bound_rat.of_int u, Int))]
+
+(** [vars_in_dom l u vars] ensures that all variables in `vars` are in the interval [l..u]. *)
+let rec vars_in_dom l u = function
+  | [] -&gt; []
+  | x::vars -&gt; (var_in_dom l u x)@(vars_in_dom l u vars)
+#}</code></pre></pre>
+<p>Finally, we need to ensure that two queens cannot attack each other.
+For instance, to check that <code>xi</code> and <code>xj</code> do not attack each other, we need to fulfill the following constraints (<code>i &lt; j</code>):</p>
+<ul>
+<li><code>xi != xj</code>: <code>xi</code> and <code>xj</code> are not on the same column.</li>
+<li><code>qi + i != qj + j</code>: <code>xi</code> and <code>xj</code> are not on a same ascending diagonal.</li>
+<li><code>qi - i != qj - j</code>: <code>xi</code> and <code>xj</code> are not on a same descending diagonal.</li>
+</ul>
+<p>This translates into OCaml as follows:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let noattack vars i j =
+  let qi, qj = List.nth vars i, List.nth vars j in
+  let ci = Cst(Bound_rat.of_int i, Int) in
+  let cj = Cst(Bound_rat.of_int j, Int) in
+  [Cmp(Var qi, NEQ, Var qj);
+   Cmp(Binary(Var qi, ADD, ci), NEQ, Binary(Var qj, ADD, cj));
+   Cmp(Binary(Var qi, SUB, ci), NEQ, Binary(Var qj, SUB, cj))]
+
+let rec noattack_i vars i j =
+  if j &gt;= List.length vars then []
+  else (noattack vars i j)@(noattack_i vars i (j+1))
+
+let noattack_all vars =
+  let rec aux i =
+    if i &gt;= List.length vars then []
+    else (noattack_i vars i (i+1))@(aux (i+1)) in
+  aux 0
+#}</code></pre></pre>
+<p>By assembling all these constraints, we can design the full formula for the n-queens problem:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let make_nqueens n =
+  let vars = List.rev (make_vars n) in
+  let domains = List.rev (vars_in_dom 1 n vars) in
+  let constraints = List.rev (noattack_all vars) in
+  let rec make_formula = function
+    | [] -&gt; QFFormula (conjunction (domains@constraints))
+    | x::vars -&gt; Exists(x, Concrete Int, make_formula vars) in
+  make_formula vars
+#}</code></pre></pre>
+<p>It generates a conjunctive formula with variables existentially quantified, for instance: <code>Ǝx1.Ǝx2...Ǝxn.x1 &gt;= 1 /\ ... /\ x7 - 6 &lt;&gt; x8 - 7</code>.</p>
+<a class="header" href="learn-absolute.html#an-abstract-domain-for-the-n-queens-problem" id="an-abstract-domain-for-the-n-queens-problem"><h2>An abstract domain for the N-Queens problem</h2></a>
+<p>AbSolute is designed to be modular, thus you can craft your own constraint solver accordingly to your problem.
+We design an abstract domain one supporting integer arithmetic constraints:</p>
+<pre><code>module Box = Box.Make(Bound_int)(Itv.Itv)(Box_split.First_fail_LB)
+module PC = Propagator_completion(Box.Vardom)(Box)
+module E = Event_loop(Event_atom(PC))
+module A = Direct_product(
+  Prod_cons(Box)(
+  Prod_cons(PC)(
+  Prod_atom(E))))
+
+let box_uid = 1
+let pc_uid = 2
+let event_uid = 3
+
+let init () : A.t =
+  let box = ref (Box.empty box_uid) in
+  let pc = ref (PC.init PC.I.{uid=pc_uid; a=box}) in
+  let event = ref (E.init event_uid pc) in
+  A.init 0 (Owned box, (Owned pc, Owned event))
+</code></pre>
+<p>The <code>Box</code> abstract domain supports variables defined on interval domain (e.g. <code>x &gt;= 1 /\ x &lt;= 10</code>).
+The propagator completion <code>PC</code> equips <code>Box</code> with arbitrary arithmetic constraints (e.g. <code>x * x + y - 2 &gt; 0</code>).
+The domain <code>Event_loop</code> is a meta abstract domain, not supporting any constraint, but useful to compute efficiently the fixpoint of the closure operator of <code>PC</code>.
+These three domains are next assembled together in a direct product <code>A</code>.
+<code>A</code> is only the type of the abstract domain, thus we need to create an element of <code>A</code>, which is realized by the function <code>init</code>.
+Each abstract element has a dedicated unique identifier (UID), that is useful in the next section.</p>
+<a class="header" href="learn-absolute.html#type-the-formula-in-the-abstract-domain" id="type-the-formula-in-the-abstract-domain"><h2>Type the formula in the abstract domain</h2></a>
+<p>We now have the formula on one side, and the abstract domain on the other side.
+The remaining step is to assign each part of the formula to the UID of an abstract element.
+We call this process <em>typing</em>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+(** Given a formula, we assign each of its variables and constraints to an abstract domain.
+   For the abstract domain `A`, all the variables and interval constraint go into `Box`, and the rest go into `PC`. *)
+let type_formula formula =
+  let rec aux' = function
+    (* Domain constraint go into `Box`. *)
+    | Cmp (Var x, LEQ, Cst (i,ty)) -&gt; box_uid, TCmp(Var x, LEQ, Cst (i,ty))
+    | Cmp (Var x, GEQ, Cst (i,ty)) -&gt; box_uid, TCmp(Var x, GEQ, Cst (i,ty))
+    (* Other constraint go into `PC`. *)
+    | Cmp c -&gt; pc_uid, TCmp c
+    | And (f1,f2) -&gt; pc_uid, TAnd(aux' f1, aux' f2)
+    (* All other constraint are not supported in this abstract domain. *)
+    | _ -&gt; raise (Wrong_modelling &quot;Constraint not supported by the current abstract domain.&quot;) in
+  let rec aux = function
+    | Exists(name, ty, qf) -&gt; TExists({name; ty; uid=box_uid}, aux qf)
+    | QFFormula f -&gt; TQFFormula (aux' f) in
+  aux formula
+#}</code></pre></pre>
+<p>The unary constraint of the variable are directly typed into <code>box_uid</code>, while the others are typed into <code>pc_uid</code>.
+The abstract domain <code>A</code> does support any constraint (for instance disjunction), thus we throw an error if we encounter an unsupported constraint.</p>
+<a class="header" href="learn-absolute.html#finding-a-solution" id="finding-a-solution"><h2>Finding a solution</h2></a>
+<p>Now that we have a typed formula, the remaining and most important step is to find a solution to this formula.
+A solution is an assignment of the variable such that all constraints are satisfied.
+We first instantiate the solver with the created abstract domain.</p>
+<pre><code>module Solver = Fixpoint.Solver.Make(A)
+module T = Solver.T
+</code></pre>
+<p>The next function is the main and last one, it assembles all the previous step and call the solver on the formula:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+let _ =
+  let nqueens = 8 in
+  try
+    (* (1) Merge the three previous steps. *)
+    let qformula = make_nqueens nqueens in
+    let a = init () in
+    let tf = type_formula qformula in
+    (* (1b) Print the typed formula (optional). *)
+    print_tformula a tf;
+    (* (2) Interpret the typed formula into the abstract element. *)
+    let a, cs = A.interpret a Exact tf in
+    (* (3) Add the interpreted constraints into the abstract element. *)
+    let a = List.fold_left A.weak_incremental_closure a cs in
+    (* (4) Create the solver. *)
+    let bound_sol = T.BoundSolutions 1 in
+    let transformer = T.init a [bound_sol] in
+    (* (5) Run the solver. *)
+    let (gs,_) =
+      try Solver.solve transformer
+      with Solver.T.StopSearch t -&gt; t in
+    if T.(gs.stats.sols) &gt; 0 then
+      print_solution nqueens gs
+    else
+      Printf.printf &quot;No solution found.&quot;
+  with e -&gt;
+    Printf.printf &quot;Exception: %s\n&quot; (Printexc.to_string e)
+
+#}</code></pre></pre>
+<p>The project can be compiled and run as follows:</p>
+<pre><code>git clone https://github.com/ptal/absolute-demo.git
+cd absolute-demo
+make
+./_build/install/default/bin/nqueens
+</code></pre>
+<p>You can change the variable <code>nqueens</code> to decrease or increase the size of the chess board.
+Check for instance with <code>nqueens = 3</code> and <code>nqueens = 4</code>, and verify the solution on paper.</p>
+<p>Many other features are available, and you can explore them in the <a href="ptal.github.io/doc">developer documentation</a></p>
 
                     </main>
 
