@@ -170,7 +170,7 @@ Each abstract domain is parametrized by a bound type <code>Z</code>, <code>F</co
 <tr><td> <code>Direct_product(A1,..,An)</code> </td><td> Union of <code>A1</code>,...,<code>An</code>. </td><td> Component-wise propagation of each subdomains. </td><td> In addition to the classical direct product of abstract interpretation, it has some facilities for transformers that shares subdomains. </td></tr>
 <tr><td> <code>Logic_completion(A)</code> </td><td> Quantifier-free logic formula where predicates are constraints in <code>A</code> </td><td> Based on the entailment of constraint in <code>A</code>. </td><td> Equip an abstract domain <code>A</code> with logical formula. Also called &quot;natural domain SMT&quot;. </td></tr>
 <tr><td> <code>Propagator_completion(A)</code> </td><td> Arithmetic constraints, functions (<code>sin</code>, <code>cos</code>, <code>sqrt</code>,...). </td><td>  HC4 algorithm </td><td> Equip an abstract domain <code>A</code> with propagators (functions implementing arithmetic constraints). </td></tr>
-<tr><td> <code>Cascade_product(A,B)</code> </td><td> Union of <code>A</code> and <code>B</code>. </td><td> Transfer over-approximation <code>A</code>-constraints into <code>B</code>, and then an exact approximation whenever the constraint is instantiated enough. </td><td> Can be used to transfer non-linear constraints to a linear solver whenever the non-linear variables are instantiated. </td></tr>
+<tr><td> <code>Delayed_product(A,B)</code> </td><td> Union of <code>A</code> and <code>B</code>. </td><td> Transfer over-approximation <code>A</code>-constraints into <code>B</code>, and then an exact approximation whenever the constraint is instantiated enough. </td><td> Can be used to transfer non-linear constraints to a linear solver whenever the non-linear variables are instantiated. </td></tr>
 <tr><td> <code>Event_loop(A1,...,An)</code> </td><td> None </td><td> Propagation loop of the propagators in <code>A1</code>,...,<code>An</code> </td><td> Meta abstract domain, computing the closure of <code>A1</code>...<code>An</code> more efficiently than <code>Direct_product</code>. <code>Ai</code> closure must be decomposable into propagators (i.e. sub-closure operators). </td></tr>
 </tbody></table>
 <p>In addition, each domain is equipped with numerous splitting strategies that can impact the performance.</p>
@@ -840,7 +840,7 @@ This is especially useful when analyzing the results in <a href="https://github.
 <p>Version 0.9.1: Rewrite the <code>solve</code> function in CPS to avoid possible stack overflow.</p>
 <p>Version 0.9.0:</p>
 <ul>
-<li>Add the domain product <code>Cascade_product</code> which transfers a constraint to a more specialized domain when instantiated enough.</li>
+<li>Add the domain product <code>Delayed_product</code> which transfers a constraint to a more specialized domain when instantiated enough.</li>
 <li><code>Propagator_completion</code> now automatically exchanges equalities over its sub-domains.</li>
 <li>Add a minimalist search strategy language.</li>
 </ul>
