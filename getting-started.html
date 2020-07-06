@@ -154,17 +154,21 @@
 <ul>
 <li>An ANSI C compiler</li>
 <li><a href="http://ocaml.org/">OCaml</a> &gt;= 4.09.0</li>
+<li><a href="https://gmplib.org/">GMP library</a></li>
+<li><a href="https://www.mpfr.org/">MPFR library</a></li>
 </ul>
 <a class="header" href="getting-started.html#installation" id="installation"><h2>Installation</h2></a>
 <p>We install OCaml and AbSolute through the OCaml package manager <a href="http://opam.ocaml.org/">opam</a>.
-First, <a href="http://opam.ocaml.org/doc/Install.html">install opam</a> with your package manager and initialize it:</p>
-<pre><code class="language-sh">apt-get install opam # on Debian, see opam documentation for other distributions.
+First, <a href="http://opam.ocaml.org/doc/Install.html">install opam</a> and the necessary libraries with your package manager and initialize opam:</p>
+<pre><code class="language-sh">sudo apt-get install libgmp3-dev
+sudo apt-get install libmpfr-dev
+sudo apt-get install opam # on Debian, see opam documentation for other distributions.
 opam init --comp 4.09.0+flambda # Initialize ~/.opam with a freshly compiled OCaml 4.07.1
 </code></pre>
 <p>The next step is to download and build AbSolute.
 If you intent to modify the source code and possibly contribute to the project, jump to the <a href="contributing.html">contributing chapter</a>.
 Otherwise, you can install it from <code>opam</code>:</p>
-<pre><code class="language-sh">opam repo add solvers git@github.com:ptal/solvers-opam.git
+<pre><code class="language-sh">opam repo add solvers https://github.com/ptal/solvers-opam.git
 opam install absolute
 </code></pre>
 <p><code>AbSolute</code> is currently only a library project, so it must be used in an OCaml project, which we explain in the <a href="learn-absolute.html">next chapter</a>.</p>
