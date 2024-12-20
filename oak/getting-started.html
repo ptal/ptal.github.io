@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <title>Getting Started</title>
+
+    <link rel="stylesheet" type="text/css" href="rustbook.css">
+
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+                <div id="nav">
+                    <button id="toggle-nav">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </button>
+                </div>
+<div id='toc' class='mobile-hidden'>
+<ul class='chapter'>
+<li><a  href='README.html'><b>1.</b> Introduction</a>
+</li>
+<li><a class='active' href='getting-started.html'><b>2.</b> Getting Started</a>
+</li>
+<li><a  href='learn-oak.html'><b>3.</b> Learn Oak</a>
+</li>
+<li><a  href='full-calc-grammar.html'><b>4.</b> Full Calc Grammar</a>
+</li>
+<li><a  href='typing-expression.html'><b>5.</b> Typing Expression</a>
+</li>
+<li><a  href='related-work.html'><b>6.</b> Related Work</a>
+</li>
+<li><a  href='contributing.html'><b>7.</b> Contributing</a>
+</li>
+</ul>
+</div>
+<div id='page-wrapper'>
+<div id='page'>
+
+
+    <h1 class="title">Getting Started</h1>
+    <p>Before starting playing with Oak, let&#39;s install the nightly compiler and create a skeleton project. We are using the <a href="https://doc.rust-lang.org/book/compiler-plugins.html">compiler plugins</a> extension which is only available in nightly build of Rust. We advise to use the tool <a href="http://www.rustup.rs">rustup</a> for installing, updating and switching between stable, beta and nightly channels of Rust. The Rust packages manager <a href="http://doc.crates.io/">Cargo</a> will also be installed with the compiler.</p>
+
+<pre><code class="language-sh">$ curl https://sh.rustup.rs -sSf | sh
+# Switch to nightly build of Rust.
+$ rustup default nightly
+# Update Rust compiler and Cargo.
+$ rustup update
+# Switch to stable.
+$ rustup default stable
+</code></pre>
+
+<p>For avoiding all compatibility troubles between Oak and the Rust compiler, you should use the version of the Rust compiler matching the one used for compiling Oak. This is done by using <code>rustup override add &lt;nightly version&gt;</code> command available in the <a href="https://github.com/ptal/oak/">README</a>.</p>
+
+<p>Once both are installed, we can set up a project using Oak. Run the command <code>cargo new oak_skeleton</code> to create a new project. Modify the <code>Cargo.toml</code> file to add Oak dependencies:</p>
+
+<pre class="rust rust-example-rendered">
+[<span class="ident">package</span>]
+<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;oak_skeleton&quot;</span>
+<span class="ident">version</span> <span class="op">=</span> <span class="string">&quot;0.0.1&quot;</span>
+<span class="ident">authors</span> <span class="op">=</span> [<span class="string">&quot;Pierre Talbot &lt;ptalbot@hyc.io&gt;&quot;</span>]
+
+[<span class="ident">dependencies</span>]
+<span class="ident">oak</span> <span class="op">=</span> <span class="string">&quot;*&quot;</span>
+<span class="ident">oak_runtime</span> <span class="op">=</span> <span class="string">&quot;*&quot;</span><a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0A%5Bpackage%5D%0Aname%20%3D%20%22oak_skeleton%22%0Aversion%20%3D%20%220.0.1%22%0Aauthors%20%3D%20%5B%22Pierre%20Talbot%20%3Cptalbot%40hyc.io%3E%22%5D%0A%0A%5Bdependencies%5D%0Aoak%20%3D%20%22*%22%0Aoak_runtime%20%3D%20%22*%22%0A%7D">Run</a></pre>
+
+<p>The <code>[package]</code> section describe the usual information about your project, here named <em>oak_skeleton</em> and the <code>[dependencies]</code> section lists the libraries available on <a href="http://crates.io/">crates.io</a> that you depend on. You can also directly depend on the git repository:</p>
+
+<pre class="rust rust-example-rendered">
+[<span class="ident">dependencies</span>.<span class="ident">oak</span>]
+<span class="ident">git</span> <span class="op">=</span> <span class="string">&quot;https://github.com/ptal/oak.git&quot;</span>
+
+[<span class="ident">dependencies</span>.<span class="ident">oak_runtime</span>]
+<span class="ident">git</span> <span class="op">=</span> <span class="string">&quot;https://github.com/ptal/oak.git&quot;</span>
+<span class="ident">path</span> <span class="op">=</span> <span class="string">&quot;runtime&quot;</span><a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0A%5Bdependencies.oak%5D%0Agit%20%3D%20%22https%3A%2F%2Fgithub.com%2Fptal%2Foak.git%22%0A%0A%5Bdependencies.oak_runtime%5D%0Agit%20%3D%20%22https%3A%2F%2Fgithub.com%2Fptal%2Foak.git%22%0Apath%20%3D%20%22runtime%22%0A%7D">Run</a></pre>
+
+<p>Oak is now usable from your <code>src/main.rs</code>:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="attribute">#<span class="op">!</span>[<span class="ident">feature</span>(<span class="ident">plugin</span>)]</span>
+<span class="attribute">#<span class="op">!</span>[<span class="ident">plugin</span>(<span class="ident">oak</span>)]</span>
+
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">oak_runtime</span>;
+<span class="kw">use</span> <span class="ident">oak_runtime</span>::<span class="kw-2">*</span>;
+
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">sum</span>{
+  <span class="attribute">#<span class="op">!</span>[<span class="ident">show_api</span>]</span>
+
+  <span class="ident">sum</span> <span class="op">=</span> <span class="ident">number</span> (<span class="string">&quot;+&quot;</span> <span class="ident">number</span>)<span class="op">*</span> <span class="op">&gt;</span> <span class="ident">add</span>
+  <span class="ident">number</span> <span class="op">=</span> [<span class="string">&quot;0-9&quot;</span>]<span class="op">+</span> <span class="op">&gt;</span> <span class="ident">to_number</span>
+
+  <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">FromStr</span>;
+
+  <span class="kw">fn</span> <span class="ident">add</span>(<span class="ident">x</span>: <span class="ident">u32</span>, <span class="ident">rest</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+    <span class="ident">rest</span>.<span class="ident">iter</span>().<span class="ident">fold</span>(<span class="ident">x</span>, <span class="op">|</span><span class="ident">x</span>,<span class="ident">y</span><span class="op">|</span> <span class="ident">x</span><span class="op">+</span><span class="ident">y</span>)
+  }
+
+  <span class="kw">fn</span> <span class="ident">to_number</span>(<span class="ident">raw_text</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">let</span> <span class="ident">text</span>: <span class="ident">String</span> <span class="op">=</span> <span class="ident">raw_text</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>();
+    <span class="ident">u32</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">text</span>).<span class="ident">unwrap</span>()
+  }
+}
+
+<span class="kw">fn</span> <span class="ident">main</span>() {
+  <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">sum</span>::<span class="ident">parse_sum</span>(<span class="string">&quot;7+2+1&quot;</span>.<span class="ident">into_state</span>());
+  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">state</span>.<span class="ident">unwrap_data</span>(), <span class="number">10</span>);
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=%23!%5Bfeature(plugin)%5D%0A%23!%5Bplugin(oak)%5D%0A%0Aextern%20crate%20oak_runtime%3B%0Ause%20oak_runtime%3A%3A*%3B%0A%0Agrammar!%20sum%7B%0A%20%20%23!%5Bshow_api%5D%0A%0A%20%20sum%20%3D%20number%20(%22%2B%22%20number)*%20%3E%20add%0A%20%20number%20%3D%20%5B%220-9%22%5D%2B%20%3E%20to_number%0A%0A%20%20use%20std%3A%3Astr%3A%3AFromStr%3B%0A%0A%20%20fn%20add(x%3A%20u32%2C%20rest%3A%20Vec%3Cu32%3E)%20-%3E%20u32%20%7B%0A%20%20%20%20rest.iter().fold(x%2C%20%7Cx%2Cy%7C%20x%2By)%0A%20%20%7D%0A%0A%20%20fn%20to_number(raw_text%3A%20Vec%3Cchar%3E)%20-%3E%20u32%20%7B%0A%20%20%20%20let%20text%3A%20String%20%3D%20raw_text.into_iter().collect()%3B%0A%20%20%20%20u32%3A%3Afrom_str(%26*text).unwrap()%0A%20%20%7D%0A%7D%0A%0Afn%20main()%20%7B%0A%20%20let%20state%20%3D%20sum%3A%3Aparse_sum(%227%2B2%2B1%22.into_state())%3B%0A%20%20assert_eq!(state.unwrap_data()%2C%2010)%3B%0A%7D%0A&amp;version=nightly">Run</a></pre>
+
+<p>We organized the library into two packages: <code>oak</code> and <code>oak_runtime</code>. The <code>oak</code> dependency is the syntax extension compiling your grammar description into Rust code, the attribute <code>#![plugin(oak)]</code> exposes the macro <code>grammar!</code> which is the only thing you will use from <code>oak</code>. The generated code depends on the library <code>oak_runtime</code>, it also contains structures that you will have to use such as <code>ParseState</code>. The attribute <code>#![feature(plugin)]</code> tells the Rust compiler that we are using unstable features, and that&#39;s why we need to use the nightly channel. Keep reading to learn more about the language used in the macro <code>grammar!</code>.</p>
+
+    <script src='rustbook.js'></script>
+<script src='playpen.js'></script>
+</div></div>
+
+
+</body>
+</html>

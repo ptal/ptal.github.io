@@ -1,254 +1,333 @@
-<!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible">
-    <head>
-        <!-- Book generated using mdBook -->
-        <meta charset="UTF-8">
-        <title>Introduction - AbSolute Book</title>
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <!-- Site Properties -->
+  <title>Pierre Talbot</title>
+
+  <link rel="stylesheet" type="text/css" class="ui" href="library/semantic/dist/semantic.min.css">
+
+  <style type="text/css">
+    .hidden.menu {
+      display: none;
+    }
+    .masthead.segment {
+      min-height: 100px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 3em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+    .ui.vertical.stripe {
+      padding: 8em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+    .divider {
+      padding-top: 1.5em;
+      padding-bottom: 1.5em;
+    }
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+    .footer.segment {
+      padding: 5em 0em;
+    }
+    .secondary.pointing.menu .toc.item {
+      display: none;
+    }
+    @media only screen and (max-width: 700px) {
+      .ui.fixed.menu {
+        display: none !important;
+      }
+      .secondary.pointing.menu .item,
+      .secondary.pointing.menu .menu {
+        display: none;
+      }
+      .secondary.pointing.menu .toc.item {
+        display: block;
+      }
+      .masthead.segment {
+        min-height: 350px;
+      }
+      .masthead h1.ui.header {
+        font-size: 2em;
+        margin-top: 1.5em;
+      }
+      .masthead h2 {
+        margin-top: 0.5em;
+        font-size: 1.5em;
+      }
+    }
+    .figure-container {
+        display: flex;
+        justify-content: center; /* centers the figures horizontally */
+    }
+    figure {
+        text-align: center; /* centers the text under the image */
+    }
+  </style>
+
+  <script src="library/jquery.min.js"></script>
+  <script src="library/semantic/dist/semantic.js"></script>
+
+  <script>
+  $(document)
+    .ready(function() {
+      // fix menu when passed
+      $('.masthead')
+        .visibility({
+          once: false,
+          onBottomPassed: function() {
+            $('.fixed.menu').transition('fade in');
+          },
+          onBottomPassedReverse: function() {
+            $('.fixed.menu').transition('fade out');
+          }
+        })
+      ;
+      // create sidebar and attach to menu open
+      $('.ui.sidebar')
+        .sidebar('attach events', '.toc.item')
+      ;
+    })
+  ;
+  </script>
+  <script language='javascript'>
+             $(document).ready(function(){
+                $('.ui.accordion').accordion();
+             });
+  </script>
+</head>
+<body>
+
+<!-- Following Menu -->
+<div class="ui large top fixed hidden menu">
+  <div class="ui container">
+    <a class="active item"  href="index.html">Home</a>
+    <a class="item" href="research.html">Research</a>
+    <a class="item" href="teaching.html">Teaching</a>
+    <a class="item" href="contact.html">Contact</a>
+  </div>
+</div>
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+  <a class="active item"  href="index.html">Home</a>
+  <a class="item" href="research.html">Research</a>
+  <a class="item" href="teaching.html">Teaching</a>
+  <a class="item" href="contact.html">Contact</a>
+</div>
 
 
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+<!-- Page Contents -->
+<div class="pusher">
+<!-- masthead -->
+  <div class="ui vertical center aligned segment">
 
-        <link rel="shortcut icon" href="favicon.png">
+    <div class="ui container">
+      <div class="ui large secondary pointing menu">
+        <a class="toc item">
+          <i class="sidebar icon"></i>
+        </a>
+        <a class="active item" href="index.html">Home</a>
+        <a class="item" href="research.html">Research</a>
+        <a class="item" href="teaching.html">Teaching</a>
+        <a class="item" href="contact.html">Contact</a>
+      </div>
+    </div>
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <div class="ui container">
+    <div class="ui vertical left aligned very padded segment">
+      <h1 class="ui header">Welcome!</h1>
+      <p>This is the website of Pierre Talbot. I'm a research scientist at the University of Luxembourg. I'm working on new theories of <i>constraint reasoning</i> and <i>parallel programming</i>. I'm also the co-director of the <a href="https://www.uni.lu/fstm-en/study-programs/master-in-high-performance-computing/">Master in High Performance Computing</a>.</p>
+      <div class="ui horizontal divider"><h3>News</h3></div>
+      <ul>
+        <li>🎉22-30 October 2024: We were selected to participate in the <a href="https://www.openhackathons.org/s/siteevent/a0C5e000009W8MqEAK/se000307?p=4OVal7qBAY6%2FFLWHyETbkwh66SClhyelBl79%2FR1tID1ERZR9ly9oZEseBU%2B%2FQOAe%2B1PJ%2BAdY%2F%2F62bDJM0SlZYg%3D%3D">Poland Open Hackathon</a> in collaboration with mentors from Nvidia to optimize Turbo! More about our adventure and results <a href="https://lattice-land.github.io/9-turbo.html">here</a>.</li>
+        <li>1 October 2024: Welcome to Angelica Rings, Bachelor student, who joins us to develop a video game for the Researcher's Days in the context of the project COMOC.</li>
+        <li>15 September 2024: Welcome to Francesca Guffanti, Ph.D. in mathematics, who joins us for a postdoc to strengthen the mathematical foundation of our parallel model of computation in the project COMOC.</li>
+        <li>🎉9 September 2024: Hedieh Haddad got her paper <i>Selecting Search Strategy in Constraint Solvers using Bayesian Optimization</i> accepted to <a href="https://ictai.computer.org/2024/">ICTAI-24</a> [<a href="http://hyc.io/research.html">more info</a>].</li>
+        <li>🎉10 July 2024: Hedieh Haddad got her paper <i>Comparison of Hyperparameter Optimization Methods for Selecting Search Strategy of Constraint Programming Solvers</i> accepted to <a href="https://freuder.wordpress.com/progress-towards-the-holy-grail-workshops/pthg-24-the-seventh-workshop-on-progress-towards-the-holy-grail/">PTHG-24</a> [<a href="http://hyc.io/research.html">more info</a>].</li>
+        <li>17 June 2024: We organize the new <a href="https://lattice-land.github.io/abstract-week.html">Abstract Interpretation Workshop 2024</a>, feel free to join :-)</li>
+        <li>26 April 2024: Our proposal with Angelica Rings <i>A Musical Game to Understand the Challenge of Collaboration in Computing</i> for the <a href="https://researchersdays.science.lu/">Researchers' Days</a> (28-30 November 2024) has been accepted. </li>
+        <li>23 April 2024: I gave a seminar to the <a href="https://www.uni.lu/snt-en/research-groups/PCOG/">parallel and combinatorial optimization group (PCOG)</a> on an <i>introduction to abstract interpretation</i>, <a href="papers/pcog2024-slides.pdf">slides</a>.</li>
+      </ul>
+      <div class="ui horizontal divider"><h3>Abstract Satisfaction</h3></div>
+      <i>Can abstract interpretation be the backbone theory to unify constraint reasoning approaches?</i><br/>
+      <ul>
+        <li><b>Goal I</b>: Combine constraint solvers (by reduced products) to more efficiently solve combinatorial problems.</li>
+        <li><b>Goal II</b>: Generalize reasoning procedures (e.g., propagation, multiobjective algorithms, clause learning) to monotone functions working over any abstract domains.</li>
+      </ul>
+      We are working on a new theory of combinatorial optimization called <i>abstract satisfaction</i>, first introduced by <a href="https://dl.acm.org/doi/pdf/10.1145/2535838.2535868">D'Silva, Haller and Kroening</a>.
+      It relies on <a href="https://en.wikipedia.org/wiki/Lattice_(order)">lattice theory</a> and <a href="https://en.wikipedia.org/wiki/Abstract_interpretation">abstract interpretation</a> to unify the subfields of combinatorial optimization.<br/><br/>
 
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
-
-        <!-- Custom theme -->
-        
-
-        
-
-        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
-        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
-        <script>
-            if (typeof Clipboard == 'undefined') {
-                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
-            }
-        </script>
-
-        <noscript>
-            <style type="text/css">
-                .javascript-only {
-                    display: none;
-                }
-            </style>
-        </noscript>
-
-    </head>
-    <body class="light">
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
-
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
-        <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme;
-        </script>
-
-        <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
-            }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
-        </script>
-
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li><li><a href="sat-data.html"><strong aria-hidden="true">4.4.</strong> SAT Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li><li><a href="changelog.html"><strong aria-hidden="true">7.</strong> Changelog</a></li></ol>
-        </nav>
-
-        <div id="page-wrapper" class="page-wrapper">
-
-            <div class="page">
-                
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons javascript-only">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
-
-                        <h1 class="menu-title">AbSolute Book</h1> 
-
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div id="searchbar-outer" class="searchbar-outer">
-                    <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                </div>
-                <div id="searchresults-outer" class="searchresults-outer">
-                    <div class="searchresults-header" id="searchresults-header"></div>
-                    <ul id="searchresults">
-                    </ul>
-                </div>
-                
-
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
-
-                <div id="content" class="content">
-                    <main>
-                        <a class="header" href="README.html#introduction" id="introduction"><h1>Introduction</h1></a>
-<p>Hello! You reached the <code>AbSolute</code> book.
-<code>AbSolute</code> is a constraint solver written in OCaml for research purposes, but we hope that it can be used outside of research as well!
-The main originality of this solver is to be based on <em>abstract interpretation</em>, which is a field studying static analysis of programs.
-We and others have discovered similitudes between constraint programming and abstract interpretation at the theoretical level, and this solver is a practical experimentation of these findings.
-In this book, you will learn how to <a href="getting-started.html">install AbSolute</a> and how to <a href="learn-absolute.html">solve your own constraint problems</a>.
-We also include a <a href="benchmarking.html">guide to kobe</a> which is a benchmarking tool with support for AbSolute and other solvers.
-For adventurous users, we provide a <a href="contributing.html">guide for contributing</a> to Absolute, as well as some notes <a href="research.html">about the research</a> relevant to this project.</p>
-<p>This project is available on <a href="https://github.com/ptal/absolute/">github</a>.</p>
-<a class="header" href="README.html#highlight-of-absolute-features" id="highlight-of-absolute-features"><h2>Highlight of AbSolute features</h2></a>
-<p>An abstract domain encapsulates a solver for a specific constraint language.
-We summarize the supported abstract domains in the table below (<code>c1,c2</code> are constraints, <code>X,Y</code> variables and <code>a,b</code> constants).
-Each abstract domain is parametrized by a bound type <code>Z</code>, <code>F</code> or <code>Q</code> if it contains variables over integers, floating point numbers or rational.</p>
-<table><thead><tr><th> Abstract domain </th><th> Constraint language </th><th> Propagation </th><th> Description </th></tr></thead><tbody>
-<tr><td> <code>Box(V)</code>        </td><td> Interval constraints (<code>X &lt;= a</code>, <code>X &gt;= b</code>) </td><td> None </td><td> Simple Cartesian product of variable domains. <code>Box</code> is parametric in a variable domain <code>V</code> (interval, open/close interval, or BDD). </td></tr>
-<tr><td> <code>SAT</code>    </td><td> Propositional formula (<code>(X \/ Y) /\ (true \/ Z)</code>) </td><td> Conflict driven clause learning </td><td> Based on Minisat. This domain is experimental (and probably bugged!). </td></tr>
-<tr><td> <code>Octagon(B)</code>    </td><td> Logic difference constraints (<code>X - Y &lt;= a</code>) </td><td> Incremental Floyd-Warshall algorithm </td><td> <code>B</code> is the bound type. </td></tr>
-</tbody></table>
-<p>In addition, new abstract domains can be derived from existing ones using <em>abstract transformers</em>.</p>
-<table><thead><tr><th> Abstract transformers </th><th> Constraint language </th><th> Propagation </th><th> Description </th></tr></thead><tbody>
-<tr><td> <code>Direct_product(A1,..,An)</code> </td><td> Union of <code>A1</code>,...,<code>An</code>. </td><td> Component-wise propagation of each subdomains. </td><td> In addition to the classical direct product of abstract interpretation, it has some facilities for transformers that shares subdomains. </td></tr>
-<tr><td> <code>Logic_completion(A)</code> </td><td> Quantifier-free logic formula where predicates are constraints in <code>A</code> </td><td> Based on the entailment of constraint in <code>A</code>. </td><td> Equip an abstract domain <code>A</code> with logical formula. Also called &quot;natural domain SMT&quot;. </td></tr>
-<tr><td> <code>Propagator_completion(A)</code> </td><td> Arithmetic constraints, functions (<code>sin</code>, <code>cos</code>, <code>sqrt</code>,...). </td><td>  HC4 algorithm </td><td> Equip an abstract domain <code>A</code> with propagators (functions implementing arithmetic constraints). </td></tr>
-<tr><td> <code>Delayed_product(A,B)</code> </td><td> Union of <code>A</code> and <code>B</code>. </td><td> Transfer over-approximation <code>A</code>-constraints into <code>B</code>, and then an exact approximation whenever the constraint is instantiated enough. </td><td> Can be used to transfer non-linear constraints to a linear solver whenever the non-linear variables are instantiated. </td></tr>
-<tr><td> <code>Event_loop(A1,...,An)</code> </td><td> None </td><td> Propagation loop of the propagators in <code>A1</code>,...,<code>An</code> </td><td> Meta abstract domain, computing the closure of <code>A1</code>...<code>An</code> more efficiently than <code>Direct_product</code>. <code>Ai</code> closure must be decomposable into propagators (i.e. sub-closure operators). </td></tr>
-</tbody></table>
-<p>In addition, each domain is equipped with numerous splitting strategies that can impact the performance.</p>
-<a class="header" href="README.html#what-to-expect-next" id="what-to-expect-next"><h2>What to expect next?</h2></a>
-<p>A linear programming solver such as VPL, or the one of Apron should be added.
-The next big step is to integrate ideas from <em>abstract conflict driven learning</em> (ACDL) to support conflicts learning.</p>
-<a class="header" href="README.html#absolute-ecosystem" id="absolute-ecosystem"><h2>AbSolute ecosystem</h2></a>
-<p>We have several projects relevant to AbSolute that are worth checking out:</p>
-<ul>
-<li><a href="https://github.com/ptal/kobe">kobe</a>: Constraint benchmarking tools suite.
-It is described in more depth in the <a href="benchmarking.md">benchmarking chapter</a>.</li>
-<li><a href="https://github.com/ptal/minisatml">minisatml</a>: SAT solver based on MiniSAT, note that this project is a library not directly executable.</li>
-<li><a href="https://github.com/ptal/ptal.github.io">ptal.github.io</a>: The repository hosting this book.</li>
-<li><a href="https://github.com/ptal/solvers-opam">solvers-opam</a>: The OPAM packages repository containing libraries and executables surrounding constraint solving.</li>
-</ul>
-
-                    </main>
-
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                        
-
-                        
-                            <a rel="next" href="getting-started.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        
-
-                        <div style="clear: both"></div>
-                    </nav>
-                </div>
-            </div>
-
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-
-                
-                    <a href="getting-started.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
-                
-            </nav>
-
+      <b>Highlights:</b>
+        <ul>
+          <li>The <a href="https://github.com/lattice-land">lattice land project</a> is a collection of C++ libraries implementing abstract domains such as intervals, octagons and new ones such as propagator completion.</li>
+          <li><a href="papers/iclp2020.pdf">Our TPLP journal paper (2020)</a> introduces the propagator completion and new a product of abstract domains.</li>
+        </ul>
+      <div class="ui horizontal divider"><h3>Parallel Lattice Programming</h3></div>
+      <i>Can lattice theory be the backbone of a safe model of parallel programming?</i>
+      <ul>
+        <li><b>Goal I</b>: Make parallel programs correct-by-construction.</li>
+        <li><b>Goal II</b>: Take advantage of specialized hardware (e.g., GPUs, FPGAs, quantum architectures)</li>
+      </ul>
+      The foundation of this language is the same than for abstract constraint reasoning: lattice theory.
+      In short: data are lattices, programs are monotone functions and the execution is the computation of a fixpoint.
+      Our primary focus and application is to accelerate the algorithms developed for <i>abstract constraint reasoning</i> on parallel architectures.<br/><br/>
+      <b>Highlights:</b>
+        <ul>
+          <li><a href="https://github.com/ptal/turbo">Turbo</a> is an abstract constraint solver fully executing on the GPU.</li>
+          <li><a href="https://github.com/lattice-land/cuda-battery">cuda-battery</a> provides C++ data structures working on both the CPU and GPU (CUDA).</li>
+          <li><a href="papers/aaai2022.pdf">Our AAAI2022 paper</a> describes the foundation of this parallel model of computation.</li>
+          <li><a href="https://www.fnr.lu/results-2021-core-call/">FNR CORE Grant COMOC 2022-2025</a> to explore this strand of research (PI: P. Talbot, 384k€).</li>
+        </ul>
+      <div class="ui horizontal divider"><h3>Team</h3></div>
+      <p>
+        I have the pleasure to co-supervise and work with several Ph.D. students and postdocs.<br/><br/>
+        <div class="figure-container">
+        <figure>
+          <img src="images/pierre.jpg" width="140" style="border-radius: 50%;"/>
+          <figcaption>Pierre Talbot</figcaption>
+        </figure>
+        <figure>
+          <img src="images/thibault.jpg" width="140" style="border-radius: 50%;"/>
+          <figcaption>Thibault Falque</figcaption>
+        </figure>
+        <figure>
+          <img src="images/francesca.jpg" width="140" style="border-radius: 50%;"/>
+          <figcaption>Francesca Guffanti</figcaption>
+        </figure>
+        <figure>
+          <img src="images/hedieh.jpg" width="140" style="border-radius: 50%;"/>
+          <figcaption>Hedieh Haddad</figcaption>
+        </figure>
+      </div><br/>
+      <div class="figure-container">
+        <figure>
+          <img src="images/manuel.jpg" width="140" style="border-radius: 50%;"/>
+          <figcaption>Manuel Combarro</figcaption>
+        </figure>
+        <figure>
+          <img src="images/yinung.jpg" width="140" style="border-radius: 50%;"/>
+          <figcaption>Yi-Nung Tsao</figcaption>
+        </figure>
+        <figure>
+          <img src="images/tobias.jpg" width="140" style="border-radius: 50%;"/>
+          <figcaption>Tobias Fischerbach</figcaption>
+        </figure>
+        <figure>
+          <img src="images/angelica.png" width="100" style="border-radius: 50%;"/>
+          <figcaption>Angelica Rings</figcaption>
+        </figure>
         </div>
+      </p>
+      <ul>
+        <li>Thibault Falque, postdoctoral researcher on the project COMOC, 2024-2025.</li>
+        <li>Francesca Guffanti, postdoctoral researcher on the project COMOC, 2024-2025.</li>
+        <li>Hedieh Haddad, Ph.D. candidate, <i>Hyperparameter Optimization of Constraint Solver</i>, 2023-2025.</li>
+        <li>Manuel Combarro, Ph.D. candidate, <i>Multiobjective Constraint Programming</i>, 2023-2025.</li>
+        <li>Yi-Nung Tsao, Ph.D. candidate, <i>Verification of Neural Networks by Abstract Interpretation</i>, 2023-2026.</li>
+        <li>Tobias Fischerbach, Ph.D. candidate, <i>Optimization of Quantum Circuits</i>, 2023-2026.</li>
+        <li>Angelica Rings, Bachelor student, <i>A Musical Game to Understand the Challenge of Collaboration in Computing</i>, 2024.</li>
+      </ul>
+      <div class="ui horizontal divider"><h3>Previously...</h3></div>
+      <div class="ui styled accordion center">
+        <div class="title">
+          <i class="dropdown icon"></i>
+           A lattice-based approach for GPU programming (Postdoc 2020-2023)
+        </div>
+        <div class="content">
+          <p class="transition hidden">
+          I am a postdoc researcher at the <a href="http://www.uni.lu/">University of Luxembourg</a> in the team <a href="http://pcog.uni.lu/">PCOG of the SnT laboratory</a>.
+          In collaboration with Frédéric Pinel, we design a new parallel model of computation based on lattices as data structures and extensive functions as programs.
+          We rely on the strong theoretical fondation of lattice theory to program over massively parallel architecture, and in particular GPU.
+          The key insight is that a lattice structure naturally supports concurrent computations without the hassles of nondeterminism in classical system.
+          The primary applications will be to develop a constraint solver on GPU in this language.
+          This <a href="videos/aaai2022.mp4">presentation</a> gives a gentle introduction to our research.
+          </p>
+        </div>
+        <div class="title">
+          <i class="dropdown icon"></i>
+          Abstract domains for constraint programming (Postdoc 2018-2019)
+        </div>
+        <div class="content">
+          <p class="transition hidden">
+          I am a postdoc researcher at the <a href="http://www.univ-nantes.fr/english-version/">University of Nantes</a> in the team <a href="https://www.ls2n.fr/equipe/tasc/">TASC of the LS2N laboratory</a>.
+          The long term goal of this project is to combine concepts from the fields of constraint programming and abstract interpretation.
+          Constraint programming is mostly used on finite domains, although many problems are also defined on continuous domains.
+          Abstract interpretation provides a nice way to combine finite and continuous domains with its notion of abstract domains.
+          In this context, my project is to integrate integer abstract domains (such as octagons) in the constraint solver <a href="https://github.com/ptal/AbSolute">AbSolute</a>, and to contribute to the underlying theory merging both fields.
+          </p>
+        </div>
+        <div class="title">
+          <i class="dropdown icon"></i>
+          Spacetime Programming: A Synchronous Language for Constraint Search (Ph.D. 2014-2018)
+        </div>
+        <div class="content">
+          <p class="transition hidden">
+            I am a Ph.D. candidate at the <a href="http://www.ircam.fr">Institute for Research and Coordination in Acoustics/Music</a> (IRCAM) and the <a href="http://www.upmc.fr/en/">Pierre et Marie Curie University</a> (UPMC).
+            <a href="thesis.html">My thesis</a> investigates the design of a paradigm to explore a state space with a search strategy.
+            This paradigm is called spacetime programming and is based on the synchronous paradigm and logic programming.
+            The first and major application is to enable an easy programming of search strategies in constraint solvers.
+            We use it to provide an interactive music composition software based on constraints.
+            Finally, we also explore this paradigm in the field of model checking.
+            My long-term research project is to unify language paradigms both on the theoretical and practical grounds.</br></br>
 
+            I am sharing the code developed during this thesis through several projects available on Github, check them out!
+            <ul>
+            <li><a href="bonsai/index.html">bonsai</a> is a language implementing the spacetime paradigm for Java.</li>
+            <li><a href="pcp/index.html">pcp</a> is a library for constraint solving written in the language Rust.</li>
+            <li><a href="oak/index.html">oak</a> is a PEG parser investigating the notion of AST inference.</li>
+            </ul>
+          </p>
+        </div>
+      </div>
+    </div>
+    </div>
 
-        <!-- Local fallback for Font Awesome -->
-        <script>
-            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
-                var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.type = 'text/css';
-                link.href = '_FontAwesome/css/font-awesome.css';
-                document.head.insertBefore(link, document.head.firstChild)
-            }
-        </script>
+    <div class="ui inverted vertical footer segment">
+      <div class="ui container">
+        <div class="ui inverted">Copyright &copy; 2017&mdash;<a href="mailto:pierre.talbot@uni.lu">Pierre Talbot</a></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        
-
-        
-
-        
-
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
-        
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
-
-        
-
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
-
-        <!-- Custom JS script -->
-        
-
-    </body>
+</body>
 </html>

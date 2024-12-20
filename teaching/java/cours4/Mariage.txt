@@ -1,0 +1,47 @@
+package upmc.java;
+
+class A {
+  void m(A x, B y){System.out.println ("1");}
+  void m(B x, A y){System.out.println ("2");}
+}
+
+class B extends A {
+  void m(B x, B y){System.out.println ("3");}
+}
+
+class C extends B {
+  void m(B x, B y){System.out.println ("4");}
+  void m(C x, C y){System.out.println ("5");}
+  void m(B x, A y){System.out.println ("6");}
+}
+
+public class Mariage 
+{
+  public static void main( String[] args )
+  {
+    A a1 = new A();
+    B b1 = new B();
+    C c1 = new C();
+    A a2 = b1;
+    A a3 = c1;
+    B b2 = c1;
+
+    a1.m(b1,c1);
+    b1.m(b1,c1);
+    c1.m(b1,c1);
+    a1.m(a1,a1);
+
+    a2.m(b1,c1);
+    a3.m(b1,c1);
+    b2.m(b1,c1);
+    
+    a1.m(b2,a3);
+    a2.m(b2,a3);
+    a3.m(b2,a3);
+
+    a1.m(c1,b1);
+    b1.m(c1,b1);
+    b2.m(c1,b1);
+    c1.m(c1,b1);
+  }
+}

@@ -1,245 +1,746 @@
-<!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible">
-    <head>
-        <!-- Book generated using mdBook -->
-        <meta charset="UTF-8">
-        <title>Guide for Researchers - AbSolute Book</title>
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-        <base href="">
+  <!-- Site Properties -->
+  <title>Pierre Talbot</title>
+  <link rel="stylesheet" type="text/css" class="ui" href="library/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="library/prism.css"/>
 
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    .hidden.menu {
+      display: none;
+    }
+    .masthead.segment {
+      min-height: 700px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 3em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+    .ui.vertical.stripe {
+      padding: 8em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+    .footer.segment {
+      padding: 5em 0em;
+    }
+    .secondary.pointing.menu .toc.item {
+      display: none;
+    }
+    @media only screen and (max-width: 700px) {
+      .ui.fixed.menu {
+        display: none !important;
+      }
+      .secondary.pointing.menu .item,
+      .secondary.pointing.menu .menu {
+        display: none;
+      }
+      .secondary.pointing.menu .toc.item {
+        display: block;
+      }
+      .masthead.segment {
+        min-height: 350px;
+      }
+      .masthead h1.ui.header {
+        font-size: 2em;
+        margin-top: 1.5em;
+      }
+      .masthead h2 {
+        margin-top: 0.5em;
+        font-size: 1.5em;
+      }
+    }
+  </style>
 
-        <link rel="shortcut icon" href="favicon.png">
+  <script src="library/jquery.min.js"></script>
+  <script src="library/semantic/dist/semantic.js"></script>
+  <script src="library/prism.js"></script>
+  <script>
+  $(document)
+    .ready(function() {
+      // fix menu when passed
+      $('.masthead')
+        .visibility({
+          once: false,
+          onBottomPassed: function() {
+            $('.fixed.menu').transition('fade in');
+          },
+          onBottomPassedReverse: function() {
+            $('.fixed.menu').transition('fade out');
+          }
+        })
+      ;
+      // create sidebar and attach to menu open
+      $('.ui.sidebar')
+        .sidebar('attach events', '.toc.item')
+      ;
+    })
+  ;
+  </script>
+</head>
+<body>
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<!-- ICTAI-24 -->
 
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+<div class="ui modal ictai-2024">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/ictai2024.pdf"><button class="ui button">.pdf</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This is a follow-up paper of the workshop paper at PTHG-2024 (in which we compared 3 HPO methods) by Hedieh Haddad, Ph.D. candidate. Here, we focus on the most successful HPO method: Bayesian optimization. The approach is evaluated in detail and despite its simplicity, we do better than the default search and universal search strategies such as CACD and PICK3 with Choco and ACE solvers. A surprising result is that spending up to 50% of the time to look for a good search strategy can pay off. Perhaps in constraint programming we have the bad habit of not doing enough preprocessing and parameters-tuning...</p>
+  </div>
 
-        <!-- Custom theme -->
-        
+<div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{ICTAI-2024,
+  author = {Haddad, Hedieh and Talbot, Pierre and Bouvry, Pascal},
+  title = {{Selecting Search Strategy in Constraint Solvers using Bayesian Optimization}},
+  booktitle = {{36th IEEE International Conference on Tools with Artificial Intelligence (ICTAI 2024)}},
+  year = {2024}
+}</code></pre></div></div>
 
-        
+<!-- PTHG-24 -->
 
-        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
-        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
-        <script>
-            if (typeof Clipboard == 'undefined') {
-                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
-            }
-        </script>
+<div class="ui modal pthg-2024">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/pthg2024.pdf"><button class="ui button">.pdf</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is the work of Hedieh Haddad, Ph.D. candidate, to explore the usage of hyperparameter optimization (HPO) in constraint solvers, and more particularly to guess which search strategy to use.
+    More specifically, this paper compares 3 HPO methods (random search, hyperband and Bayesian optimisation) to choose the search strategy.</p>
+  </div>
 
-        <noscript>
-            <style type="text/css">
-                .javascript-only {
-                    display: none;
-                }
-            </style>
-        </noscript>
+<div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{PTHG-2024,
+  author =  {Hedieh Haddad, Pierre Talbot, Pascal Bouvry},
+  title = {{Comparison of Hyperparameter Optimization Methods for Selecting Search Strategy of Constraint Programming Solvers}},
+  booktitle = {PTHG-24: The Seventh Workshop on Progress Towards the Holy Grail},
+  year =  {2024},
+  URL =   {https://freuder.wordpress.com/progress-towards-the-holy-grail-workshops/pthg-24-the-seventh-workshop-on-progress-towards-the-holy-grail/}
+}</code></pre></div></div>
 
-    </head>
-    <body class="light">
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+<!-- Constraints -->
 
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
+<div class="ui modal constraints2023">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/constraints2023.pdf"><button class="ui button">.pdf</button></a>
+      <a href="https://github.com/ptal/bonsai"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is an abstract of my Ph.D. thesis published in the Constraints journal.</p>
+  </div>
 
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
+<div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@article{constraints-2023,
+  title = {Spacetime programming: a synchronous language for constraint search},
+  volume = {28},
+  issn = {1383-7133, 1572-9354},
+  shorttitle = {Spacetime programming},
+  url = {https://link.springer.com/10.1007/s10601-023-09356-1},
+  doi = {10.1007/s10601-023-09356-1},
+  language = {en},
+  number = {3},
+  urldate = {2024-06-03},
+  journal = {Constraints},
+  author = {Talbot, Pierre},
+  month = sep,
+  year = {2023},
+  pages = {516--517}
+}</code></pre></div></div>
 
-        <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme;
-        </script>
+<!-- CP23 (2) -->
 
-        <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
-            }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
-        </script>
+<div class="ui modal cp2023-2">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/cp2023-2.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/cp2023-2-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/mancs20/mosaic_image_combination/tree/cp2023"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is mainly a collaboration with my student Manuel who defined and solved a new combinatorial problem for satellite imaging.
+    He was relying on heuristics or greedy algorithm, and I helped him to use a constraint programming model and solver.
+    It is also a multiobjective optimization problem and we compute the whole Pareto front, which is quite unusual in constraint programming.</p>
+  </div>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-absolute.html"><strong aria-hidden="true">3.</strong> Learn AbSolute</a></li><li><a href="benchmarking.html"><strong aria-hidden="true">4.</strong> Benchmarking</a></li><li><ol class="section"><li><a href="benchmarking-tutorial.html"><strong aria-hidden="true">4.1.</strong> Tutorial</a></li><li><a href="minizinc-benchmarking.html"><strong aria-hidden="true">4.2.</strong> MiniZinc Benchmarking</a></li><li><a href="scheduling-data.html"><strong aria-hidden="true">4.3.</strong> Scheduling Data Sets</a></li><li><a href="sat-data.html"><strong aria-hidden="true">4.4.</strong> SAT Data Sets</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">5.</strong> Guide for Contributors</a></li><li><a href="research.html" class="active"><strong aria-hidden="true">6.</strong> Guide for Researchers</a></li><li><a href="changelog.html"><strong aria-hidden="true">7.</strong> Changelog</a></li></ol>
-        </nav>
+<div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{CP2023-2-Combarro,
+  author =  {Combarro Sim\'{o}n, Manuel and Talbot, Pierre and Danoy, Gr\'{e}goire and Musial, Jedrzej and Alswaitti, Mohammed and Bouvry, Pascal},
+  title = {{Constraint Model for the Satellite Image Mosaic Selection Problem}},
+  booktitle = {29th International Conference on Principles and Practice of Constraint Programming (CP 2023)},
+  pages = {44:1--44:15},
+  series =  {Leibniz International Proceedings in Informatics (LIPIcs)},
+  ISBN =  {978-3-95977-300-3},
+  ISSN =  {1868-8969},
+  year =  {2023},
+  volume =  {280},
+  editor =  {Yap, Roland H. C.},
+  publisher = {Schloss Dagstuhl -- Leibniz-Zentrum f{\"u}r Informatik},
+  address = {Dagstuhl, Germany},
+  URL =   {https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.CP.2023.44},
+  doi =   {10.4230/LIPIcs.CP.2023.44}
+}</code></pre></div></div>
 
-        <div id="page-wrapper" class="page-wrapper">
+<!-- CP23 (1) -->
 
-            <div class="page">
-                
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons javascript-only">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+<div class="ui modal cp2023-1">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/cp2023-1.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/cp2023-1-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/ptal/automotive-network-cp/tree/cp2023"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is a collaboration with Tingting Hu and Nicolas Navet.
+      They work in the field of automotive networks.
+      The problem tackled is to allocate services on processors in a car such that we do not exceed the capacity constraints of the network and processors.
+      The particularity is that our algorithm calls an external worst-case traversal time analysis program during the solving.
+      We have proved the soundness of our approach using concepts from abstract interpretation.</p>
+  </div>
 
-                        <h1 class="menu-title">AbSolute Book</h1> 
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{CP2023-1-Talbot,
+  author =  {Talbot, Pierre and Hu, Tingting and Navet, Nicolas},
+  title = {{Constraint Programming with External Worst-Case Traversal Time Analysis}},
+  booktitle = {29th International Conference on Principles and Practice of Constraint Programming (CP 2023)},
+  pages = {34:1--34:20},
+  series =  {Leibniz International Proceedings in Informatics (LIPIcs)},
+  ISBN =  {978-3-95977-300-3},
+  ISSN =  {1868-8969},
+  year =  {2023},
+  volume =  {280},
+  editor =  {Yap, Roland H. C.},
+  publisher = {Schloss Dagstuhl -- Leibniz-Zentrum f{\"u}r Informatik},
+  address = {Dagstuhl, Germany},
+  URL =   {https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.CP.2023.34},
+  doi =   {10.4230/LIPIcs.CP.2023.34}
+}</code></pre></div></div>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+<!-- AAAI22 -->
 
-                
-                <div id="searchbar-outer" class="searchbar-outer">
-                    <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                </div>
-                <div id="searchresults-outer" class="searchresults-outer">
-                    <div class="searchresults-header" id="searchresults-header"></div>
-                    <ul id="searchresults">
-                    </ul>
-                </div>
-                
+<div class="ui modal aaai2022">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/aaai2022.pdf"><button class="ui button">.pdf</button></a>
+      <a href="videos/aaai2022.mp4"><button class="ui button">talk (video)</button></a>
+      <a href="https://github.com/ptal/turbo/tree/aaai2022"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+  </div>
 
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{AAAI2022-Talbot,
+  author={Talbot, Pierre and Pinel, Fr\'{e}d\'{e}ric and Bouvry, Pascal},
+  title = {{A Variant of Concurrent Constraint Programming on GPU}},
+  booktitle={{Proceedings of the AAAI Conference on Artificial Intelligence}},
+  year = {2022},
+  volume={36},
+  number={4},
+  doi={10.1609/aaai.v36i4.20298},
+  month={Jun.},
+  pages={3830-3839}
+}</code></pre></div></div>
 
-                <div id="content" class="content">
-                    <main>
-                        <a class="header" href="research.html#research" id="research"><h1>Research</h1></a>
-<p>AbSolute has generated several research papers.
-Currently, the most general one to cite is:</p>
-<pre><code class="language-bibtex">@inproceedings{DBLP:conf/vmcai/PelleauMTB13,
-  author    = {Marie Pelleau and
-               Antoine Min{\'{e}} and
-               Charlotte Truchet and
-               Fr{\'{e}}d{\'{e}}ric Benhamou},
-  title     = {A Constraint Solver Based on Abstract Domains},
-  booktitle = {Verification, Model Checking, and Abstract Interpretation, 14th International
-               Conference, {VMCAI} 2013, Rome, Italy, January 20-22, 2013. Proceedings},
-  pages     = {434--454},
-  year      = {2013},
-  crossref  = {DBLP:conf/vmcai/2013},
-  url       = {https://doi.org/10.1007/978-3-642-35873-9\_26},
-  doi       = {10.1007/978-3-642-35873-9\_26},
-  timestamp = {Wed, 24 May 2017 08:30:31 +0200},
-  biburl    = {https://dblp.org/rec/bib/conf/vmcai/PelleauMTB13},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+<!-- TPLP20 -->
+
+<div class="ui modal iclp2020">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/iclp2020.pdf"><button class="ui button">.pdf</button></a>
+      <a href="videos/iclp2020.mp4"><button class="ui button">talk (video)</button></a>
+      <a href="papers/iclp2020-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/ptal/AbSolute/tree/iclp2020"><button class="ui button">code</button></a>
+      <a href="https://ptal.github.io"><button class="ui button">manual</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>Note: this paper was presented at the ICLP 2020 conference, and published in the journal Theory and Practice of Logic Programming.</p>
+
+    <p>This paper was implemented during my postdoc in Nantes, and follows our <a class="ui" onclick="$('.ui.modal.ictai2019').modal('show');">ICTAI 2019 paper</a>.
+      The overarching goal of the project is to explore the theory of <i>abstract interpretation</i> for constraint reasoning.
+      Why is that so? Because abstract interpretation seems to provide clean foundation for diverse solving methods such as constraint programming, temporal reasoning and mixed integer programming.
+      We believe the crux of the matter is to combine these methods in order to take the best from each world.
+      Combination among solvers is also studied in <i>satisfiability modulo theories</i>, but on a more logical level: which combination of logical languages preserves some properties?
+      We think the Nelson-Oppen combination provides little details on how the theories are actually combined in practice.
+      We would like to close the gap between theory and practice.
+      Abstract interpretation provides a nice theory to define constraint solvers as abstract domains, which are ordered structures with some operators.
+      The definition of these abstract domains is very close to how they are actually implemented, a property we find very interesting.</p>
+
+    <p>Product of abstract domains, and thus their combinations, is also part of the theory of abstract interpretation, and this is a reason why this theory is so interesting.
+      In general terms, we call <i>domain transformers</i> the abstract domains which are parametrized by one or more abstract domains.
+      Hence a product is a domain transformer too.
+      In <a class="ui" onclick="$('.ui.modal.ictai2019').modal('show');">ICTAI 2019 paper</a>, we introduced a simple domain transformer in which two abstract domains are combined logically.
+      For instance, consider <code>x + y < 4 /\ 2 * z + 4 * w < 3 * a</code>.
+      The first part <code>x + y < 4</code> is efficiently treated in the octagon abstract domain, whilst the second part is better treated in polyhedron, an abstract domain encapsulating a linear programming solver.
+      The shortcoming of the logical product (of ICTAI 2019) is that two constraints in two different abstract domains cannot share variables.
+      This paper remedies to this issue and propose two domain transformers able to share information among abstract domains sharing variables.
+      In addition, we show how to add in modular way, new domain transformers to an existing product of abstract domains.
+      In other terms, the cooperation scheme among solvers is not fixed inside the solver, but can be modularly defined as an abstract domain itself.
+      You will find various examples illustrating the introduced domain transformers in the paper.</p>
+
+    <p>Future work include the formalization of conflicts learning inside this framework, possibly trying to simplify what has been achieved with ACDCL (see D'Silva et al., POPL '13, 2013), and the study of other techniques such as cuts in linear programming.</p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@article{TPLP2020-Talbot,
+  author={Talbot, Pierre and Monfroy, \'{E}ric and Truchet, Charlotte},
+  title = {{Modular Constraint Solver Cooperation via Abstract Interpretation}},
+  journal = {{Theory and Practice of Logic Programming}},
+  year = {2020},
+  volume={20},
+  doi={10.1017/S1471068420000162},
+  number={6},
+  publisher={{Cambridge University Press}},
+  pages={848--863}
+}</code></pre></div></div>
+
+<!-- ICTAI19 -->
+
+<div class="ui modal ictai2019">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/ictai2019.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/ictai2019-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/ptal/AbSolute/tree/ictai2019"><button class="ui button">code</button></a>
+      <a href="https://ptal.github.io"><button class="ui button">manual</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is a first step of my postdoc in the university of Nantes.
+       This work started with the idea that we could use the decomposition of global constraints into primitive constraints to treat groups of similar constraints with suited abstract domains (such as octagon for difference constraints).
+       This is why I experimented on a scheduling problem (RCPSP) with the decomposition of the cumulative global constraint.
+       Although the experimentations do not show improvement on the solving time, I think the formal framework is very neat as it encapsulates a traditional constraint solver in an abstract domain, which is then composed via equivalence constraints with a difference logic solver (octagon domain).</p>
+     <p>The next step is to integrate a conflict learning in this framework, and hopefully it will lead to better speed-up on RCPSP and other problems.</p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{ICTAI19-Talbot,
+  author={Talbot, Pierre and Cachera, David and Monfroy, \'{E}ric and Truchet, Charlotte},
+  booktitle={{31st IEEE International Conference on Tools with Artificial Intelligence (ICTAI 2019)}},
+  title={{Combining Constraint Languages via Abstract Interpretation}},
+  year={2019},
+  pages={50--58},
+  doi={10.1109/ICTAI.2019.00016},
+  ISBN={978-1-7281-3798-8 },
+  address = {Portland, USA},
+  month={4--6 November}
+}</code></pre></div></div>
+
+<!-- PPDP19 -->
+
+<div class="ui modal ppdp2019">
+  <div class="ui very padded segment">
+    <div class="ui right icon green small buttons">
+      <a href="papers/ppdp2019-extended.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/ppdp2019-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/ptal/bonsai/tree/PPDP19"><button class="ui button">code</button></a>
+      <a href="http://hyc.io/spacetime/PPDP19.html"><button class="ui button">manual</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper summarizes and extends the chapters 3 and 4 of my <a class="ui" onclick="$('.ui.modal.thesis2018').modal('show');">dissertation</a>.
+       In comparison to the conference version, the provided extended version gives the proofs and additional contents in appendix, with minor corrections on the definitions of lattices (Section 3).
+       I present the syntax and semantics of the programming language "spacetime" which merges several paradigms:</p>
+       <ul>
+        <li><p><i>Concurrent constraint programming</i> (CCP) which was introduced some 30 years ago by Saraswat et al.
+        I think CCP is really beautiful because every syntactically correct programs already have good semantical properties (closure operator).
+        However, it never really had a practical implementation, although languages such as Oz took some ideas from it.
+        Spacetime incorporates the ideas of processes exchanging information through ordered structures (lattices in spacetime) and the "ask and tell" operators of CCP.</p></li>
+        <li><p><i>Synchronous programming</i>, more precisely Esterel introduced by Berry and others some 30 years ago too.
+        This paradigm is not very well-known neither although its core idea is very useful for programming: it forces the processes in a program to obey a global clock.
+        In each instant of the clock, the processes can only perform a limited number of actions, so we can check at compile-time that they do not generate race conditions (for example if two processes would write contradictory information on a variable).
+        I believe that time is one of the most important concept when programming concurrent systems, and I think synchronous programming should be more well-known!</p>
+        <li><p><i>Constraint programming</i> is a declarative paradigm to solve constraint satisfaction problems (CSP).
+        Operationally, constraint solvers explore finite combinatorial state space using a backtracking algorithm.</p>
+       </ul>
+       <p>
+         These paradigms do not seem to have much in common, but spacetime is actually a merge of the two first paradigms, which is applied to CSP solving.
+         You can imagine spacetime as a concurrent Prolog with a time abstraction to synchronize the unfolding of nondeterministic predicates.
+         The main idea is that in each instant of the program, we explore one node of the state space (usually a tree-shaped structure).
+         This way, the processes are forced to cooperate as everybody must finish to explore one node before the next is explored.
+         In the paper, we present the CSP state space, and various search strategies and their compositions (key point: a search strategy is a process, therefore we can compose them like we compose processes!).
+        </p>
+
+    <p>
+      Spacetime differs substantially from known paradigms, since it merges paradigms that are not themselves mainstream and well-known.
+      Nevertheless, I think the language can be improved and simplified.
+      I wish to make the spacetime environment easy to use, and to write tutorial explaining how it functions.
+    </p>
+
+    <p>
+      My next work on spacetime is to add an additional feature called "universe", which are first-class state space.
+      It is actually very useful to program so called "restart-based search strategy" and nested search.
+      I improved a lot the ideas that were sketched in the dissertation, but I still need to experiment and finish the implementation.
+
+      Another work I really would like to attempt is to use spacetime as a target to compile various languages such as Esterel, Prolog and CHR.
+    </p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{PPDP19-Talbot,
+ author = {Talbot, Pierre},
+ title = {{Spacetime Programming: A Synchronous Language for Composable Search Strategies}},
+ booktitle = {{Proceedings of the 21st International Symposium on Principles and Practice of Declarative Programming (PPDP 2019)}},
+ year = {2019},
+ month = {7--9 October},
+ isbn = {978-1-4503-7249-7},
+ location = {Porto, Portugal},
+ pages = {18:1--18:16},
+ articleno = {18},
+ numpages = {16},
+ url = {http://doi.acm.org/10.1145/3354166.3354183},
+ doi = {10.1145/3354166.3354183},
+ acmid = {3354183},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {concurrent constraint programming, constraint satisfaction problem, search strategy, synchronous programming},
+}</code></pre></div></div>
+
+<!-- JFPC19 -->
+
+<div class="ui modal jfpc2019">
+  <div class="ui very padded segment">
+    <div class="ui right icon green small buttons">
+      <a href="papers/jfpc2019.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/jfpc2019-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/ptal/AbSolute/tree/jfpc2019"><button class="ui button">code</button></a>
+      <a href="https://ptal.github.io"><button class="ui button">manual</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is a draft of the <a class="ui" onclick="$('.ui.modal.ictai2019').modal('show');">ICTAI 2019 paper</a>, so please read and cite the ICTAI version.</p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{JFPC19-Talbot,
+  address = {Albi, France},
+  title = {Octogones entiers pour le probl\`{e}me {RCPSP}},
+  booktitle = {{Quinzi\`{e}mes Journ\'{e}es Francophones de Programmation par Contraintes (JFPC 2019)}},
+  author = {Talbot, Pierre and Cachera, David and Monfroy, \'{E}ric and Truchet, Charlotte},
+  month = {12--14 June},
+  year = {2019},
+  pages = {33--42},
+}</code></pre></div></div>
+
+<!-- Dissertation -->
+
+<div class="ui modal thesis2018">
+  <div class="ui very padded segment">
+    <div class="ui right icon green small buttons">
+      <a href="papers/dissertation-talbot.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/defense-talbot.pdf"><button class="ui button">slides</button></a>
+      <a href="https://medias.ircam.fr/xf0f25c"><button class="ui button"><i class="ui video icon"></i></button></a>
+      <a href="thesis.html"><button class="ui button">more</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this dissertation</h3>
+    <p>This dissertation presents two things: a formalism of constraint programming based on lattice theory, and a programming language called spacetime.
+       Both parts are linked because spacetime is defined on lattice structures, and is used to write search strategy exploring constraint problems.
+       For a summary and improved version of a fragment (chapters 3 and 4) of spacetime, please see <a class="ui" onclick="$('.ui.modal.ppdp2019').modal('show');">PPDP 2019 paper</a>.</p>
+    <p>Currently, I am writing a survey with Kazunori Ueda and Peter Van Roy which improves and summarizes the two first chapters of this dissertation.
+       I think the result will be more digest and precise, but work remained to be done; I hope to finish this up before 2020.</p>
+
+    <p>Chapter 7 was explained in the <a class="ui" onclick="$('.ui.modal.icmc2017').modal('show');">ICMC 2017 paper</a> and should be cited if you refer to the musical application of spacetime (rather than the language).</p>
+
+    <p>Chapter 8 is basically a translation of the <a class="ui" onclick="$('.ui.modal.jfpc2017').modal('show');">JFPC 2017 paper</a>.</p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@phdthesis{dissertation-talbot,
+  author = {Pierre Talbot},
+  title = {{Spacetime Programming: A Synchronous Language for Constraint Search}},
+  school = {Sorbonne University},
+  year = {2018},
+}</code></pre></div></div>
+
+<!-- ICMC17 -->
+
+<div class="ui modal icmc2017">
+  <div class="ui very padded segment">
+    <div class="ui right icon green small buttons">
+      <a href="papers/icmc2017.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/icmc2017-slides.pdf"><button class="ui button">slides</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>The starting point of this work is to observe that constraint programming and music should share a lot in common since they are both manipulating <i>relations</i>.
+      However this is not the case in practice, and I believe it is because constraint programming is not very interactive: we state the problem and then wait for the solver to give us a solution.
+      In this work, I sketch a system that allows the composer to interact dynamically with the solving process, so she knows <i>why</i> a solution is choosen.
+      The composer can also interact with the process by dynamically adding new constraints.</p>
+    <p>This work is essentially a first step towards constraint-based computer-aided composition system.
+       I think there is much to be done in this area, but current constraint solver are too static to be completely usable in this context.
+       Perhaps when spacetime will be completely done, I will return to this application and explore it further!</p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{ICMC17-Talbot,
+  author = {Talbot, Pierre and Agon, Carlos and Esling, Philippe},
+  title = {{Interactive computer-aided composition with constraints}},
+  booktitle = {Proceedings of the 2017 International Computer Music Conference (ICMC 2017)},
+  address = {Shanghai, China},
+  pages = {265--270},
+  year =   {2017},
+  month =    {16--20 October},
+  address = {Shanghai, China},
+  publisher = {Shanghai Conservatory of Music},
+}</code></pre></div></div>
+
+<!-- JFPC 2017 -->
+
+<div class="ui modal jfpc2017">
+  <div class="ui very padded segment">
+    <div class="ui right icon green small buttons">
+      <a href="papers/jfpc2017.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/jfpc2017-slides.pdf"><button class="ui button">slides</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is a collaboration with Clément Poncelet on using spacetime for model checking with constraints.
+       I do hope we find the time to pursue this work, but I first need to integrate the novel version of universe into the compiler of spacetime.
+    </p>
+    <p>This work was translated in English and slightly improved in my <a class="ui" onclick="$('.ui.modal.thesis2018').modal('show');">dissertation.</a></p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{JFPC17-Talbot,
+  author = {Talbot, Pierre and Poncelet, Cl\'{e}ment},
+  title =  {{Langage pour la v\'{e}rification de mod\`{e}les par contraintes}},
+  booktitle = {{Treizi\`{e}mes journ\'{e}es Francophones de Programmation par Contraintes (JFPC 2017)}},
+  address = {Montreuil sur Mer, France},
+  year = {2017},
+  month = {13--15 June},
+  pages = {201--211}
 }
-</code></pre>
+</code></pre></div></div>
 
-                    </main>
+<!-- IJCAI-DP 2017 -->
 
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                        
-                            <a rel="prev" href="contributing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                        
+<div class="ui modal ijcai-dp2017">
+  <div class="ui very padded segment">
+    <div class="ui right icon green small buttons">
+      <a href="papers/ijcai-dp2017.pdf"><button class="ui button">.pdf</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper was my first paper on the language spacetime that I wrote for the doctoral program of IJCAI 2017.
+       It has been totally subsumed by my <a class="ui" onclick="$('.ui.modal.ppdp2019').modal('show');">PPDP 2019 paper</a>.</p>
 
-                        
-                            <a rel="next" href="changelog.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        
+    <p>It stays here for completeness, but please cite PPDP 2019 instead.</p>
+  </div>
 
-                        <div style="clear: both"></div>
-                    </nav>
-                </div>
-            </div>
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{IJCAI17-Talbot,
+  author    = {Pierre Talbot},
+  title     = {Search Strategies as Synchronous Processes (Extended Abstract)},
+  booktitle = {Proceedings of the Twenty-Sixth International Joint Conference on
+               Artificial Intelligence, {IJCAI} 2017, Melbourne, Australia, August
+               19-26, 2017},
+  pages     = {5213--5214},
+  year      = {2017},
+  doi       = {10.24963/ijcai.2017/766},
+  url       = { https://doi.org/10.24963/ijcai.2017/766},
+}</code></pre></div></div>
 
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a href="contributing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
-                    </a>
-                
+<!-- Following Menu -->
+<div class="ui large top fixed hidden menu">
+  <div class="ui container">
+    <a class="item" ref="index.html">Home</a>
+    <a class="active item" href="research.html">Research</a>
+    <a class="item" href="teaching.html">Teaching</a>
+    <a class="item" href="contact.html">Contact</a>
+  </div>
+</div>
 
-                
-                    <a href="changelog.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
-                
-            </nav>
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+  <a class="item" href="index.html">Home</a>
+  <a class="active item" href="research.html">Research</a>
+  <a class="item" href="teaching.html">Teaching</a>
+  <a class="item" href="contact.html">Contact</a>
+</div>
 
-        </div>
 
+<!-- Page Contents -->
+<div class="pusher">
+<!-- masthead -->
+  <div class="ui vertical center aligned segment">
 
-        <!-- Local fallback for Font Awesome -->
-        <script>
-            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
-                var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.type = 'text/css';
-                link.href = '_FontAwesome/css/font-awesome.css';
-                document.head.insertBefore(link, document.head.firstChild)
-            }
-        </script>
+    <div class="ui container">
+      <div class="ui large secondary pointing menu">
+        <a class="toc item">
+          <i class="sidebar icon"></i>
+        </a>
+        <a class="item" href="index.html">Home</a>
+        <a class="active item" href="research.html">Research</a>
+        <a class="item" href="teaching.html">Teaching</a>
+        <a class="item" href="contact.html">Contact</a>
+      </div>
+    </div>
 
-        
+    <div class="ui container">
+      <div class="ui vertical left aligned very padded segment">
+      <div class="ui small images">
+      <a href="https://www.researchgate.net/profile/Pierre_Talbot2/research">
+        <img src="images/research-gate-logo.png" style="padding-right: 30px;" class="ui image"/>
+      </a>
+      <a href="https://scholar.google.fr/citations?user=truhwvAAAAAJ">
+        <img src="images/google-scholar-logo.png" class="ui image"/>
+      </a>
+      </div>
+      </div>
+    <div class="ui vertical left aligned very padded segment">
+      <p>Bibtex, PDF, recorded presentation, slides, and story of the paper are available by clicking on the title of a research paper.</p>
+      <p><b>Replicate</b>: The code is linked to the version of the project that was used in the paper.</p>
+      <ol>
+      <div class="ui horizontal divider">2024</div>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.ictai-2024').modal('show');">Selecting Search Strategy in Constraint Solvers using Bayesian Optimization</a></br>
+        Hedieh Haddad, Pierre Talbot, Pascal Bouvry</br>
+        36th IEEE International Conference on Tools with Artificial Intelligence (ICTAI 2024)</br>
+      </li>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.pthg-2024').modal('show');">Comparison of Hyperparameter Optimization Methods for Selecting Search Strategy of Constraint Programming Solvers</a></br>
+        Hedieh Haddad, Pierre Talbot, Pascal Bouvry</br>
+        The Seventh Workshop on Progress Towards the Holy Grail (PTHG-24)</br>
+      </li>
+      <div class="ui horizontal divider">2023</div>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.constraints2023').modal('show');">Spacetime programming: a synchronous language for constraint search</a></br>
+        Pierre Talbot</br>
+        Constraints</br>
+      </li>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.cp2023-2').modal('show');">Constraint Model for the Satellite Image Mosaic Selection Problem</a></br>
+        Manuel Combarro Simòn, Pierre Talbot, Grégoire Danoy, Jedrzej Musial, Mohammed Alswaitti and Pascal Bouvry</br>
+        29th International Conference on Principles and Practice of Constraint Programming (CP 2023)</br>
+      </li>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.cp2023-1').modal('show');">Constraint Programming with External Worst-Case Traversal Time Analysis</a></br>
+        Pierre Talbot, Tingting Hu and Nicolas Navet</br>
+        29th International Conference on Principles and Practice of Constraint Programming (CP 2023)</br>
+      </li>
+      <div class="ui horizontal divider">2022</div>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.aaai2022').modal('show');">A Variant of Concurrent Constraint Programming on GPU</a></br>
+        Pierre Talbot, Frédéric Pinel, Pascal Bouvry</br>
+        36th AAAI Conference on Artificial Intelligence (AAAI 2022)</br>
+      </li>
+      <div class="ui horizontal divider">2020</div>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.iclp2020').modal('show');">Modular Constraint Solver Cooperation via Abstract Interpretation</a></br>
+        Pierre Talbot, Éric Monfroy and Charlotte Truchet</br>
+        Theory and Practice of Logic Programming</br>
+      </li>
+      <div class="ui horizontal divider">2019</div>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.ictai2019').modal('show');">Combining Constraint Languages via Abstract Interpretation</a></br>
+        Pierre Talbot, David Cachera, Éric Monfroy and Charlotte Truchet</br>
+        31st IEEE International Conference on Tools with Artificial Intelligence (ICTAI 2019)</br>
+      </li>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.ppdp2019').modal('show');">Spacetime Programming: A Synchronous Language for Composable Search Strategies</a></br>
+        Pierre Talbot</br>
+        21st International Symposium on Principles and Practice of Declarative Programming (PPDP 2019)</br>
+      </li>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.jfpc2019').modal('show');">Octogones entiers pour le problème RCPSP</a></br>
+        Pierre Talbot, David Cachera, Éric Monfroy and Charlotte Truchet</br>
+        Quinzièmes Journées Francophones de Programmation par Contraintes (JFPC 2019)
+      </li>
+      <div class="ui horizontal divider">2018</div>
+      <li>
+      <a  class="ui" onclick="$('.ui.modal.thesis2018').modal('show');">Spacetime Programming: A Synchronous Language for Constraint Search</a></br>
+      Pierre Talbot</br>
+      Doctoral dissertation, Sorbonne University, Paris, 2018.
+      </li>
+      <div class="ui horizontal divider">2017</div>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.icmc2017').modal('show');">Interactive computer-aided composition with constraints</a></br>
+        Pierre Talbot, Carlos Agon, and Philippe Esling</br>
+        Proceedings of the 2017 International Computer Music Conference (ICMC 2017)</br>
+      </li>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.jfpc2017').modal('show');">Langage pour la vérification de modèles par contraintes</a></br>
+        Pierre Talbot and Clément Poncelet</br>
+        Treizièmes Journées Francophones de Programmation par Contraintes (JFPC 2017)</br>
+      </li>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.ijcai-dp2017').modal('show');">Search strategies as synchronous processes (extended abstract)</a></br>
+        Pierre Talbot</br>
+        Doctoral Program of the International Joint Conference on Artificial Intelligence (IJCAI 2017)</br>
+      </li>
+      </ol>
+    </div>
+    </div>
 
-        
+    <div class="ui inverted vertical footer segment">
+      <div class="ui container">
+        <div class="ui inverted">Copyright &copy; 2017&mdash;<a href="mailto:pierre.talbot@uni.lu">Pierre Talbot</a></div>
+      </div>
+    </div>
 
-        
-
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
-        
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
-
-        
-
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
-
-        <!-- Custom JS script -->
-        
-
-    </body>
+  </div>
+</div>
+</body>
 </html>

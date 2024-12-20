@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <!-- Site Properties -->
+  <title>Programmation fonctionnelle</title>
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/reset.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/site.css">
+
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/container.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/grid.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/header.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/image.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/menu.css">
+
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/divider.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/dropdown.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/segment.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/button.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/list.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/icon.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/sidebar.css">
+  <link rel="stylesheet" type="text/css" href="../library/semantic/dist/components/transition.css">
+
+  <style type="text/css">
+    .hidden.menu {
+      display: none;
+    }
+    .masthead.segment {
+      min-height: 700px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 3em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+    .ui.vertical.stripe {
+      padding: 8em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+    .footer.segment {
+      padding: 5em 0em;
+    }
+    .secondary.pointing.menu .toc.item {
+      display: none;
+    }
+    @media only screen and (max-width: 700px) {
+      .ui.fixed.menu {
+        display: none !important;
+      }
+      .secondary.pointing.menu .item,
+      .secondary.pointing.menu .menu {
+        display: none;
+      }
+      .secondary.pointing.menu .toc.item {
+        display: block;
+      }
+      .masthead.segment {
+        min-height: 350px;
+      }
+      .masthead h1.ui.header {
+        font-size: 2em;
+        margin-top: 1.5em;
+      }
+      .masthead h2 {
+        margin-top: 0.5em;
+        font-size: 1.5em;
+      }
+    }
+  </style>
+
+  <script src="../library/jquery.min.js"></script>
+  <script src="../library/semantic/dist/components/visibility.js"></script>
+  <script src="../library/semantic/dist/components/sidebar.js"></script>
+  <script src="../library/semantic/dist/components/transition.js"></script>
+  <script>
+  $(document)
+    .ready(function() {
+      // fix menu when passed
+      $('.masthead')
+        .visibility({
+          once: false,
+          onBottomPassed: function() {
+            $('.fixed.menu').transition('fade in');
+          },
+          onBottomPassedReverse: function() {
+            $('.fixed.menu').transition('fade out');
+          }
+        })
+      ;
+      // create sidebar and attach to menu open
+      $('.ui.sidebar')
+        .sidebar('attach events', '.toc.item')
+      ;
+    })
+  ;
+  </script>
+</head>
+<body>
+
+<!-- Following Menu -->
+<div class="ui large top fixed hidden menu">
+  <div class="ui container">
+    <a class="item" href="../index.html">Home</a>
+    <a class="item" href="../research.html">Research</a>
+    <a class="active item" href="../teaching.html">Teaching</a>
+    <a class="item" href="../contact.html">Contact</a>
+  </div>
+</div>
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+  <a class="item" href="../index.html">Home</a>
+  <a class="item" href="../research.html">Research</a>
+  <a class="active item" href="../teaching.html">Teaching</a>
+  <a class="item" href="../contact.html">Contact</a>
+</div>
+
+<!-- Page Contents -->
+<div class="pusher">
+<!-- masthead -->
+  <div class="ui vertical center aligned segment">
+
+    <div class="ui container">
+      <div class="ui large secondary pointing menu">
+        <a class="toc item">
+          <i class="sidebar icon"></i>
+        </a>
+        <a class="item" href="../index.html">Home</a>
+        <a class="item" href="../research.html">Research</a>
+        <a class="active item" href="../teaching.html">Teaching</a>
+        <a class="item" href="../contact.html">Contact</a>
+      </div>
+    </div>
+
+    <div class="ui container">
+    <div class="ui vertical left aligned very padded segment">
+      <h2>Programmation fonctionnelle</h2>
+
+      <h4>Ressources générales</h4>
+      <ul>
+      <li><a href="https://groups.google.com/d/forum/ocaml-insta">Groupe d'entraide mailing list Google</a></li>
+      <li>La documentation indispensable : <a href="https://caml.inria.fr/pub/docs/manual-ocaml/">Xavier Leroy et al. The OCaml system : documentation and user’s manual Inria, 2018.</a></li>
+      <li>Emmanuel Chailloux, Pascal Manoury et Bruno Pagano. <a href="http://caml.inria.fr/pub/docs/oreilly-book/">Développement d’Applications avec Objective Caml.</a> O’Reilly, 2000.</li>
+      <li>Pascal Manoury. <a href="https://www.paracamplus.com/?page=livre&isbn=978-2-916466-06-4">Programmation de droite à gauche, et vice-versa.</a> Paracamplus, 2012.</li>
+      <li>Sylvain Conchon et Jean-Christophe Filliâtre. <a href="http://programmer-avec-ocaml.lri.fr/">Apprendre à programmer avec OCaml</a>. Eyrolles, 2013.</li>
+      <li>Yaron Minsky, Anil Madhavapeddy, Jason Hickey - <a href="https://realworldocaml.org/">Real World OCaml</a> - O’Reilly - 2013</li>
+      <li><a href="https://www.fun-mooc.fr/courses/parisdiderot/56002/session01/about#">MOOC OCaml</a></li>
+      </ul>
+      <h4>Liste des cours et TDs</h4>
+      <ul>
+        <li><a href="ocaml/day1/cours1.pdf">Cours 1</a> et <a href="ocaml/day1/td1.pdf">TD 1</a> : Introduction à la programmation fonctionnelle<br/>
+          <ul>
+            <li>Ressources : <a href="ocaml/day1/correction-td1.zip">Corrections TD1</a></li>
+          </ul>
+        <li><a href="ocaml/day2/cours2.pdf">Cours 2</a> et <a href="ocaml/day2/td2.pdf">TD 2</a> : Types algébriques<br/>
+          <ul>
+            <li>Ressources : <a href="ocaml/day2/correction-td2.zip">Corrections TD2</a></li>
+          </ul>
+        <li><a href="ocaml/day3/cours3.pdf">Cours 3</a> et <a href="ocaml/day3/td3.pdf">TD 3</a> : Traits impératifs<br/>
+        <li><a href="ocaml/day4/cours4.pdf">Cours 4</a> et <a href="ocaml/day4/td4.pdf">TD 4</a> : Programmation modulaire<br/>
+            <ul>
+              <li>Ressources : <a href="ocaml/day4/correction-td4.zip">Corrections TD4</a></li>
+            </ul>
+      </ul>
+      <h4>Corrections évaluation</h4>
+        <ul>
+          <li><a href="ocaml/correction-eval1.ml">Correction Evaluation 1</a></li>
+          <li><a href="ocaml/correction-eval2.ml">Correction Evaluation 2</a></li>
+        </ul>
+      <h4>Projet programmation OCaml</h4>
+      <p><a href="ocaml/projet-ocaml.pdf">Le sujet est disponible ici.</a></p>
+      <p><a href="ocaml/projet-template.zip">Template du projet compilable avec Dune.</a></p>
+    </div>
+    </div>
+
+    <div class="ui inverted vertical footer segment">
+      <div class="ui container">
+        <div class="ui inverted">Copyright &copy; 2018&mdash;<a href="mailto:pierre.talbot@uni.lu">Pierre Talbot</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

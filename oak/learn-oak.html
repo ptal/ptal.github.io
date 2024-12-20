@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <title>Learn Oak</title>
+
+    <link rel="stylesheet" type="text/css" href="rustbook.css">
+
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+                <div id="nav">
+                    <button id="toggle-nav">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </button>
+                </div>
+<div id='toc' class='mobile-hidden'>
+<ul class='chapter'>
+<li><a  href='README.html'><b>1.</b> Introduction</a>
+</li>
+<li><a  href='getting-started.html'><b>2.</b> Getting Started</a>
+</li>
+<li><a class='active' href='learn-oak.html'><b>3.</b> Learn Oak</a>
+</li>
+<li><a  href='full-calc-grammar.html'><b>4.</b> Full Calc Grammar</a>
+</li>
+<li><a  href='typing-expression.html'><b>5.</b> Typing Expression</a>
+</li>
+<li><a  href='related-work.html'><b>6.</b> Related Work</a>
+</li>
+<li><a  href='contributing.html'><b>7.</b> Contributing</a>
+</li>
+</ul>
+</div>
+<div id='page-wrapper'>
+<div id='page'>
+
+
+    <h1 class="title">Learn Oak</h1>
+    <p>This section is devoted to introduce smoothly the different PEG combinators through a tutorial presenting <code>Calc</code>: a small language with arithmetic expressions and variable bindings. If you want to test the code while reading this tutorial, a skeleton project is available in the chapter <a href="getting-started.html">Getting Started</a>. This tutorial is split into several sections:</p>
+
+<ul>
+<li><a href="learn-oak.html#what-is-parsing?">What is parsing?</a></li>
+<li><a href="learn-oak.html#syntactic-atoms-of-calc">Syntactic atoms of <code>Calc</code></a></li>
+<li><a href="learn-oak.html#generated-code-and-runtime">Generated code and runtime</a></li>
+<li><a href="learn-oak.html#semantic-action">Semantic action</a></li>
+<li><a href="learn-oak.html#choice-combinator">Choice combinator</a></li>
+<li><a href="learn-oak.html#sequence-combinator">Sequence combinator</a></li>
+<li><a href="learn-oak.html#operator-precedence">Operator precedence</a></li>
+<li><a href="learn-oak.html#syntactic-predicates">Syntactic predicates</a></li>
+<li><a href="learn-oak.html#spacing">Spacing</a></li>
+<li><a href="learn-oak.html#identifier-and-keyword">Identifier and keyword</a></li>
+<li><a href="learn-oak.html#operator-associativity">Operator associativity</a></li>
+<li><a href="learn-oak.html#conclusion">Conclusion</a></li>
+<li><a href="learn-oak.html#exercises">Exercises</a></li>
+</ul>
+
+<p>Before diving into the details, we present a program written in <code>Calc</code>:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="kw">let</span> <span class="ident">a</span> <span class="op">=</span> <span class="number">10</span> <span class="op">-</span> <span class="number">2</span> <span class="kw">in</span>
+<span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">a</span> <span class="op">/</span> <span class="number">2</span> <span class="kw">in</span>
+<span class="ident">b</span><span class="op">^</span><span class="number">2</span> <span class="op">+</span> <span class="number">2</span> <span class="op">*</span> (<span class="number">1</span> <span class="op">-</span> <span class="ident">a</span>)<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Alet%20a%20%3D%2010%20-%202%20in%0Alet%20b%20%3D%20a%20%2F%202%20in%0Ab%5E2%20%2B%202%20*%20(1%20-%20a)%0A%7D">Run</a></pre>
+
+<p>It declares two local variables <code>a</code> and <code>b</code> initialized with arithmetic expressions and usable within the scope of the let-binding, which is everything after the <code>in</code>. Let-bindings can be composed in cascade but must terminate with an arithmetic expression, such as <code>b^2 + 2 * (1 - a)</code> in our example.</p>
+
+<h3 id='what-is-parsing' class='section-header'><a href='#what-is-parsing'>What is parsing?</a></h3>
+<p>A parser is a bridge between meaning-less sequence of characters and structured representation of data. It tries to give meanings to raw characters by constructing an <em>Abstract Syntax Tree</em> (AST) that will be processed by subsequent compilation phases. We expect a parser to transform <code>7 - 1</code> into a structure such as <code>Subtraction(i32, i32)</code>. As a side note, you should avoid to compute the actual result of <code>7 - 1</code> in the parsing step, it works for simple language but tends to entangle syntactic and semantic analysis later. Invalid programs such as <code>let a = 8 in a * b</code> should be correctly parsed while the semantic analysis will be responsible for detecting that <code>b</code> is undeclared.</p>
+
+<p>This tutorial will not cover the semantic analysis part and we will only describe the grammar used for parsing <code>Calc</code>. Our parser will thus produce an AST but without evaluating the expression.</p>
+
+<h3 id='syntactic-atoms-of-calc' class='section-header'><a href='#syntactic-atoms-of-calc'>Syntactic atoms of <code>Calc</code></a></h3>
+<p>When it comes to elaborate a grammar, we usually start by identifying atoms of the language, e.g. syntactic constructions that can not be divided into smaller ones. These atoms are called <em>tokens</em> and are often processed during a <em>lexical analysis</em> happening before the parsing. Oak is based on <em>Parsing Expression Grammar</em> (PEG) and works directly on a stream of characters instead of a stream of tokens. An advantage is to have a unique and coherent grammar syntax which is helpful for composing grammars that do not necessarily expect the same set of tokens. Before continuing reading, try to find out what are the atoms of <code>Calc</code>.</p>
+
+<p>The keywords <code>let</code> and <code>in</code>, the binding operator <code>=</code>, parenthesis <code>()</code> and arithmetic operators <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code> form the <em>unvalued atoms</em> of the language. <code>Calc</code> has two <em>valued atoms</em> which are identifiers and numbers. Unvalued atoms give a shape to the AST but they do not carry any specific data retrieved from the stream of characters. The following grammar parses the atoms of <code>Calc</code>:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="attribute">#<span class="op">!</span>[<span class="ident">show_api</span>]</span>
+
+  <span class="ident">let_kw</span> <span class="op">=</span> <span class="string">&quot;let&quot;</span>
+  <span class="ident">in_kw</span> <span class="op">=</span> <span class="string">&quot;in&quot;</span>
+  <span class="ident">bind_op</span> <span class="op">=</span> <span class="string">&quot;=&quot;</span>
+  <span class="ident">add_op</span> <span class="op">=</span> <span class="string">&quot;+&quot;</span>
+  <span class="ident">sub_op</span> <span class="op">=</span> <span class="string">&quot;-&quot;</span>
+  <span class="ident">mul_op</span> <span class="op">=</span> <span class="string">&quot;*&quot;</span>
+  <span class="ident">div_op</span> <span class="op">=</span> <span class="string">&quot;/&quot;</span>
+  <span class="ident">exp_op</span> <span class="op">=</span> <span class="string">&quot;^&quot;</span>
+  <span class="ident">lparen</span> <span class="op">=</span> <span class="string">&quot;(&quot;</span>
+  <span class="ident">rparen</span> <span class="op">=</span> <span class="string">&quot;)&quot;</span>
+
+  <span class="ident">identifier</span> <span class="op">=</span> [<span class="string">&quot;a-zA-Z0-9_&quot;</span>]<span class="op">+</span>
+  <span class="ident">number</span> <span class="op">=</span> [<span class="string">&quot;0-9&quot;</span>]<span class="op">+</span>
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%23!%5Bshow_api%5D%0A%0A%20%20let_kw%20%3D%20%22let%22%0A%20%20in_kw%20%3D%20%22in%22%0A%20%20bind_op%20%3D%20%22%3D%22%0A%20%20add_op%20%3D%20%22%2B%22%0A%20%20sub_op%20%3D%20%22-%22%0A%20%20mul_op%20%3D%20%22*%22%0A%20%20div_op%20%3D%20%22%2F%22%0A%20%20exp_op%20%3D%20%22%5E%22%0A%20%20lparen%20%3D%20%22(%22%0A%20%20rparen%20%3D%20%22)%22%0A%0A%20%20identifier%20%3D%20%5B%22a-zA-Z0-9_%22%5D%2B%0A%20%20number%20%3D%20%5B%220-9%22%5D%2B%0A%7D%0A%7D">Run</a></pre>
+
+<p>A grammar is introduced with the macro <code>grammar! &lt;name&gt;</code> where <code>&lt;name&gt;</code> is the name of the grammar but also the name of the module in which generated functions will lie. A grammar is a set of rules of the form <code>&lt;name&gt; = &lt;expr&gt;</code> where <code>&lt;name&gt;</code> is the rule name and <code>&lt;expr&gt;</code> a parsing expression.</p>
+
+<p>The rules describing keywords and operators use <em>string literals</em> expressions of the form <code>&quot;&lt;literal&gt;&quot;</code>, it expects the input to match exactly the sequence of characters given.</p>
+
+<p>Identifiers and numbers are recognized with <em>character classes</em> where a class is a single character or a character range. A range <code>r</code> has the form <code>&lt;char&gt;-&lt;char&gt;</code> inside a set <code>[&quot;r1r2..rN&quot;]</code>. Since <code>-</code> is used to denote a range, it must be placed before or after all the ranges such as in <code>[&quot;-a-z&quot;]</code> to be recognized as an accepted character. Character classes will succeed and &quot;eat&quot; <em>one</em> character if it is present in the set, so <code>b</code>, <code>8</code>, <code>_</code> are all accepted by <code>[&quot;a-zA-Z0-9_&quot;]</code> but <code>é</code>, <code>-</code> or <code>]</code> are not.</p>
+
+<p>For both string literals and character classes, any Unicode characters are interpreted following the same requirements as <a href="https://doc.rust-lang.org/reference.html#string-literals">string literals</a> in the Rust specification. The only other parsing expression consuming a character is the expression <code>.</code> (a simple dot), it consumes any character and can only fail if we reached the end of input.</p>
+
+<p>The remaining parsing expressions are combinators, they must be composed with sub-expressions. Identifiers and numbers are sequences of one or more characters and we use the combinator <code>e+</code> to repeat <code>e</code> while it succeeds. For example <code>identifier</code> matches &quot;x_1&quot; from the input &quot;x_1 x_2&quot; by successively applying <code>[&quot;a-zA-Z0-9_&quot;]</code> to the input; it parses <code>x</code>, <code>_</code> and <code>1</code> and then fails on the space character. It however succeeds, even if the match is partial, and <code>identifier</code> returns the remaining input &quot; x_2&quot; and the data read. A requirement of <code>e+</code> is that <code>e</code> must be repeated <em>at least once</em>. The <code>e*</code> expression does not impose this constraint and allows <code>e</code> to be repeated <em>zero or more times</em>. The last combinator in this category is <code>e?</code>, it consumes <code>e</code> <em>zero or one time</em>. The combinators <code>e*</code>, <code>e+</code> and <code>e?</code> will consume as much input as they can and are said to be <em>greedy operators</em>.</p>
+
+<h3 id='generated-code-and-runtime' class='section-header'><a href='#generated-code-and-runtime'>Generated code and runtime</a></h3>
+<p>Before explaining the others combinators, we get a glimpse at the generated code and how to use it. Oak will generate two functions per rule, a <em>recognizer</em> and a <em>parser</em>. A recognizer only matches the input against a specific rule and does not build any value from it. A parser matches and builds the corresponding AST (possibly with the help of user-specific functions called <em>semantic actions</em>). For example, the functions <code>parse_identifier</code> and <code>recognize_identifier</code> will be generated for rule <code>identifier</code>. The <code>#![show_api]</code> attribute tells Oak to output, as a compilation note, the signatures of all the generated functions. We obtain the following from the <code>Calc</code> grammar:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="comment">// `ParseState` and `CharStream` should be prefixed by `oak_runtime::`.</span>
+<span class="comment">// It is removed from this snippet for clarity.</span>
+<span class="ident">note</span>: <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">calc</span> {
+  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">recognize_let_kw</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">state</span>: <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">S</span>, ()<span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">S</span>, ()<span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">S</span>: <span class="ident">CharStream</span>;
+  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_let_kw</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">state</span>: <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">S</span>, ()<span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">S</span>, ()<span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">S</span>: <span class="ident">CharStream</span>;
+
+  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">recognize_identifier</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">state</span>: <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">S</span>, ()<span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">S</span>, ()<span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">S</span>: <span class="ident">CharStream</span>;
+  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_identifier</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">state</span>: <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">S</span>, ()<span class="op">&gt;</span>)
+    <span class="op">-&gt;</span> <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;&gt;</span> <span class="kw">where</span>
+    <span class="ident">S</span>: <span class="ident">CharStream</span>;
+
+  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_number</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">state</span>: <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">S</span>, ()<span class="op">&gt;</span>)
+    <span class="op">-&gt;</span> <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;&gt;</span> <span class="kw">where</span>
+    <span class="ident">S</span>: <span class="ident">CharStream</span>;
+
+  <span class="comment">// ...</span>
+  <span class="comment">// Rest of the output truncated for the tutorial.</span>
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0A%2F%2F%20%60ParseState%60%20and%20%60CharStream%60%20should%20be%20prefixed%20by%20%60oak_runtime%3A%3A%60.%0A%2F%2F%20It%20is%20removed%20from%20this%20snippet%20for%20clarity.%0Anote%3A%20pub%20mod%20calc%20%7B%0A%20%20pub%20fn%20recognize_let_kw%3CS%3E(state%3A%20ParseState%3CS%2C%20()%3E)%20-%3E%20ParseState%3CS%2C%20()%3E%0A%20%20%20%20where%20S%3A%20CharStream%3B%0A%20%20pub%20fn%20parse_let_kw%3CS%3E(state%3A%20ParseState%3CS%2C%20()%3E)%20-%3E%20ParseState%3CS%2C%20()%3E%0A%20%20%20%20where%20S%3A%20CharStream%3B%0A%0A%20%20pub%20fn%20recognize_identifier%3CS%3E(state%3A%20ParseState%3CS%2C%20()%3E)%20-%3E%20ParseState%3CS%2C%20()%3E%0A%20%20%20%20where%20S%3A%20CharStream%3B%0A%20%20pub%20fn%20parse_identifier%3CS%3E(state%3A%20ParseState%3CS%2C%20()%3E)%0A%20%20%20%20-%3E%20ParseState%3CS%2C%20Vec%3Cchar%3E%3E%20where%0A%20%20%20%20S%3A%20CharStream%3B%0A%0A%20%20pub%20fn%20parse_number%3CS%3E(mut%20state%3A%20ParseState%3CS%2C%20()%3E)%0A%20%20%20%20-%3E%20ParseState%3CS%2C%20Vec%3Cchar%3E%3E%20where%0A%20%20%20%20S%3A%20CharStream%3B%0A%0A%20%20%2F%2F%20...%0A%20%20%2F%2F%20Rest%20of%20the%20output%20truncated%20for%20the%20tutorial.%0A%7D%0A%7D">Run</a></pre>
+
+<p>We can already use these functions in our main:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="kw">fn</span> <span class="ident">main</span>() {
+  <span class="kw">let</span> <span class="ident">let_kw</span> <span class="op">=</span> <span class="string">&quot;let&quot;</span>;
+  <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">calc</span>::<span class="ident">recognize_let_kw</span>(<span class="ident">let_kw</span>.<span class="ident">into_state</span>());
+  <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">state</span>.<span class="ident">is_successful</span>());
+
+  <span class="kw">let</span> <span class="ident">ten</span> <span class="op">=</span> <span class="string">&quot;10&quot;</span>;
+  <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">calc</span>::<span class="ident">parse_number</span>(<span class="ident">ten</span>.<span class="ident">into_state</span>());
+  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">state</span>.<span class="ident">unwrap_data</span>(), <span class="macro">vec</span><span class="macro">!</span>[<span class="string">&#39;1&#39;</span>, <span class="string">&#39;0&#39;</span>]);
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0A%20%20let%20let_kw%20%3D%20%22let%22%3B%0A%20%20let%20state%20%3D%20calc%3A%3Arecognize_let_kw(let_kw.into_state())%3B%0A%20%20assert!(state.is_successful())%3B%0A%0A%20%20let%20ten%20%3D%20%2210%22%3B%0A%20%20let%20state%20%3D%20calc%3A%3Aparse_number(ten.into_state())%3B%0A%20%20assert_eq!(state.unwrap_data()%2C%20vec!%5B'1'%2C%20'0'%5D)%3B%0A%7D%0A">Run</a></pre>
+
+<p>Before continuing, you should know that a <a href="http://hyc.io/oak_runtime">documentation of the runtime</a> is available, however be aware that it also contains functions and structures used by the generated code that you will probably not need.</p>
+
+<p>Parsing functions transforms a parsing state into a new one according to the parsing specification. A state can be retrieved from type implementing <code>IntoState</code> with the method <code>into_state()</code>; it is provided for all types implementing the trait <code>Stream</code> used to retrieve a stream: a kind of iterator with special parsing capabilities. For example, <code>IntoState</code> is implemented for the type <code>&amp;&#39;a str</code> and we can directly pass the result of <code>into_state()</code> to the parsing function, as in:</p>
+
+<p><code>calc::recognize_let_kw(let_kw.into_state())</code></p>
+
+<p>Basically, a stream must implement several operations described by the <code>CharStream</code> trait, it is generally implemented as an iterator that keeps a reference to the underlying data traversed. You can find a list of all types implementing <code>Stream</code> in the <a href="http://hyc.io/rust-lib/oak/oak_runtime/stream/trait.Stream.html">implementors list of <code>Stream</code></a>, it is also possible to implement <code>Stream</code> for your own type.</p>
+
+<p>By looking at the signatures of <code>parse_identifier</code> and <code>recognize_identifier</code> we see that a value of type <code>ParseState&lt;S, T&gt;</code> is returned. <code>T</code> is the type of the data extracted during parsing. It is always equal to <code>()</code> in case of a recognizer since it does not produce data, and hence a recognizer is a particular case of parser where the AST has type <code>()</code>. In the rest of this tutorial and when not specified, we consider the term <em>parser</em> to also include recognizer.</p>
+
+<p>A state indicates if the parsing was successful, partial or erroneous. It carries information about which item was expected next and the AST built from the data read. Convenient functions such as <code>unwrap_data()</code> or <code>is_successful()</code> are available directly from <a href="http://hyc.io/rust-lib/oak/oak_runtime/parse_state/struct.ParseState.html">ParseState</a>. A more complete function is <code>into_result()</code> which transforms the state into a type <a href="http://hyc.io/rust-lib/oak/oak_runtime/parse_state/struct.ParseResult.html">ParseResult</a> that can be pattern matched. Here a full example:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="kw">fn</span> <span class="ident">analyse_state</span>(<span class="ident">state</span>: <span class="ident">ParseState</span><span class="op">&lt;</span><span class="ident">StrStream</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;&gt;</span>) {
+  <span class="kw">use</span> <span class="ident">oak_runtime</span>::<span class="ident">parse_state</span>::<span class="ident">ParseResult</span>::<span class="kw-2">*</span>;
+  <span class="kw">match</span> <span class="ident">state</span>.<span class="ident">into_result</span>() {
+    <span class="ident">Success</span>(<span class="ident">data</span>) <span class="op">=&gt;</span> <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Full match: {:?}&quot;</span>, <span class="ident">data</span>),
+    <span class="ident">Partial</span>(<span class="ident">data</span>, <span class="ident">expectation</span>) <span class="op">=&gt;</span> {
+      <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Partial match: {:?} because: {:?}&quot;</span>, <span class="ident">data</span>, <span class="ident">expectation</span>);
+    }
+    <span class="ident">Failure</span>(<span class="ident">expectation</span>) <span class="op">=&gt;</span> {
+      <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Failure: {:?}&quot;</span>, <span class="ident">expectation</span>);
+    }
+  }
+}
+
+<span class="kw">fn</span> <span class="ident">main</span>() {
+  <span class="ident">analyse_state</span>(<span class="ident">calc</span>::<span class="ident">parse_number</span>(<span class="string">&quot;10&quot;</span>.<span class="ident">into_state</span>())); <span class="comment">// complete</span>
+  <span class="ident">analyse_state</span>(<span class="ident">calc</span>::<span class="ident">parse_number</span>(<span class="string">&quot;10a&quot;</span>.<span class="ident">into_state</span>())); <span class="comment">// partial</span>
+  <span class="ident">analyse_state</span>(<span class="ident">calc</span>::<span class="ident">parse_number</span>(<span class="string">&quot;a&quot;</span>.<span class="ident">into_state</span>())); <span class="comment">// erroneous</span>
+}
+
+<span class="comment">// Result:</span>
+
+<span class="comment">// Full match: [&#39;1&#39;, &#39;0&#39;]</span>
+<span class="comment">// Partial match: [&#39;1&#39;, &#39;0&#39;] because: 1:3: unexpected `a`, expecting `[&quot;0-9&quot;]`.</span>
+<span class="comment">// Failure: 1:1: unexpected `a`, expecting `[&quot;0-9&quot;]`.</span><a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20analyse_state(state%3A%20ParseState%3CStrStream%2C%20Vec%3Cchar%3E%3E)%20%7B%0A%20%20use%20oak_runtime%3A%3Aparse_state%3A%3AParseResult%3A%3A*%3B%0A%20%20match%20state.into_result()%20%7B%0A%20%20%20%20Success(data)%20%3D%3E%20println!(%22Full%20match%3A%20%7B%3A%3F%7D%22%2C%20data)%2C%0A%20%20%20%20Partial(data%2C%20expectation)%20%3D%3E%20%7B%0A%20%20%20%20%20%20println!(%22Partial%20match%3A%20%7B%3A%3F%7D%20because%3A%20%7B%3A%3F%7D%22%2C%20data%2C%20expectation)%3B%0A%20%20%20%20%7D%0A%20%20%20%20Failure(expectation)%20%3D%3E%20%7B%0A%20%20%20%20%20%20println!(%22Failure%3A%20%7B%3A%3F%7D%22%2C%20expectation)%3B%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A%0Afn%20main()%20%7B%0A%20%20analyse_state(calc%3A%3Aparse_number(%2210%22.into_state()))%3B%20%2F%2F%20complete%0A%20%20analyse_state(calc%3A%3Aparse_number(%2210a%22.into_state()))%3B%20%2F%2F%20partial%0A%20%20analyse_state(calc%3A%3Aparse_number(%22a%22.into_state()))%3B%20%2F%2F%20erroneous%0A%7D%0A%0A%2F%2F%20Result%3A%0A%0A%2F%2F%20Full%20match%3A%20%5B'1'%2C%20'0'%5D%0A%2F%2F%20Partial%20match%3A%20%5B'1'%2C%20'0'%5D%20because%3A%201%3A3%3A%20unexpected%20%60a%60%2C%20expecting%20%60%5B%220-9%22%5D%60.%0A%2F%2F%20Failure%3A%201%3A1%3A%20unexpected%20%60a%60%2C%20expecting%20%60%5B%220-9%22%5D%60.%0A">Run</a></pre>
+
+<p><code>analyse_state</code> shows how to examine the result of a state, however if you just need to debug the result, <code>ParseResult</code> implements <code>Debug</code> so you can use the more generic <code>println(&quot;{:?}&quot;, state.into_result())</code> statement to obtain a similar result. You are now able to efficiently use the code generated by Oak.</p>
+
+<h3 id='semantic-action' class='section-header'><a href='#semantic-action'>Semantic action</a></h3>
+<p>As you probably noticed, the rule <code>number</code> produces a value of type <code>Vec&lt;char&gt;</code> which is not a usable representation of a number. We must transform this value into a better type such as <code>u32</code>. To achieve this goal, we use a <em>semantic action</em> which gives meaning to the characters read. A semantic action is a Rust function taking the value produced by an expression and returning another one more suited for further processing. The grammar becomes:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="comment">// ... previous rules truncated.</span>
+
+  <span class="ident">identifier</span> <span class="op">=</span> [<span class="string">&quot;a-zA-Z0-9_&quot;</span>]<span class="op">+</span> <span class="op">&gt;</span> <span class="ident">to_string</span>
+  <span class="ident">number</span> <span class="op">=</span> [<span class="string">&quot;0-9&quot;</span>]<span class="op">+</span> <span class="op">&gt;</span> <span class="ident">to_number</span>
+
+  <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">FromStr</span>;
+
+  <span class="kw">fn</span> <span class="ident">to_string</span>(<span class="ident">raw_text</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+    <span class="ident">raw_text</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()
+  }
+
+  <span class="kw">fn</span> <span class="ident">to_number</span>(<span class="ident">raw_text</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">u32</span> {
+    <span class="ident">u32</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">to_string</span>(<span class="ident">raw_text</span>)).<span class="ident">unwrap</span>()
+  }
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%2F%2F%20...%20previous%20rules%20truncated.%0A%0A%20%20identifier%20%3D%20%5B%22a-zA-Z0-9_%22%5D%2B%20%3E%20to_string%0A%20%20number%20%3D%20%5B%220-9%22%5D%2B%20%3E%20to_number%0A%0A%20%20use%20std%3A%3Astr%3A%3AFromStr%3B%0A%0A%20%20fn%20to_string(raw_text%3A%20Vec%3Cchar%3E)%20-%3E%20String%20%7B%0A%20%20%20%20raw_text.into_iter().collect()%0A%20%20%7D%0A%0A%20%20fn%20to_number(raw_text%3A%20Vec%3Cchar%3E)%20-%3E%20u32%20%7B%0A%20%20%20%20u32%3A%3Afrom_str(%26*to_string(raw_text)).unwrap()%0A%20%20%7D%0A%7D%0A%7D">Run</a></pre>
+
+<p>The combinator <code>e &gt; f</code> expects a parsing expression on the left and a function name on the right, it works like a &quot;reverse function call operator&quot; in the sense that <code>f</code> is called with the result value of <code>e</code>. Semantic actions must be Rust functions declared inside the <code>grammar!</code> so Oak can examine its return type. You can call function from other modules or crates by wrapping it up inside a function local to the grammar. Any Rust code is accepted, here we added a <code>use</code> statement for importing the <code>from_str</code> function.</p>
+
+<p>Oak gives a type to any parsing expression to help you constructing your AST more easily. Next chapters explain how Oak gives a type to expressions and how you can help Oak to infer better types. For the moment, when you want to know the type of an expression, just creates a rule <code>r = e</code>, activates the attribute <code>#[show_api]</code> and consults the return type of the generated function from the compiler output. Note that a tuple type such as <code>(T, U)</code> is automatically unpacked into two function arguments, so we expect the function to be of type <code>f(T, U)</code> and not <code>f((T, U))</code>.</p>
+
+<p>Note that semantic actions have the property of not being called inside recognizers since they do not build an AST.</p>
+
+<h3 id='choice-combinator' class='section-header'><a href='#choice-combinator'>Choice combinator</a></h3>
+<p>We can now build another part of our language: a simple arithmetic calculator where operands can be numbers, variables or a parenthesized expression. We extend the grammar with a <code>factor</code> rule:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="comment">// ... previous rules and code truncated.</span>
+
+  <span class="ident">factor</span>
+    <span class="op">=</span> <span class="ident">number</span> <span class="op">&gt;</span> <span class="ident">number_expr</span>
+    <span class="op">/</span> <span class="ident">identifier</span> <span class="op">&gt;</span> <span class="ident">variable_expr</span>
+
+  <span class="kw">use</span> <span class="self">self</span>::<span class="ident">Expression</span>::<span class="kw-2">*</span>;
+
+  <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">PExpr</span> <span class="op">=</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expression</span><span class="op">&gt;</span>;
+
+  <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Expression</span> {
+    <span class="ident">Variable</span>(<span class="ident">String</span>),
+    <span class="ident">Number</span>(<span class="ident">u32</span>)
+  }
+
+  <span class="kw">fn</span> <span class="ident">number_expr</span>(<span class="ident">value</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">PExpr</span> {
+    <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Number</span>(<span class="ident">value</span>))
+  }
+
+  <span class="kw">fn</span> <span class="ident">variable_expr</span>(<span class="ident">ident</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="ident">PExpr</span> {
+    <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">Variable</span>(<span class="ident">ident</span>))
+  }
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%2F%2F%20...%20previous%20rules%20and%20code%20truncated.%0A%0A%20%20factor%0A%20%20%20%20%3D%20number%20%3E%20number_expr%0A%20%20%20%20%2F%20identifier%20%3E%20variable_expr%0A%0A%20%20use%20self%3A%3AExpression%3A%3A*%3B%0A%0A%20%20pub%20type%20PExpr%20%3D%20Box%3CExpression%3E%3B%0A%0A%20%20pub%20enum%20Expression%20%7B%0A%20%20%20%20Variable(String)%2C%0A%20%20%20%20Number(u32)%0A%20%20%7D%0A%0A%20%20fn%20number_expr(value%3A%20u32)%20-%3E%20PExpr%20%7B%0A%20%20%20%20Box%3A%3Anew(Number(value))%0A%20%20%7D%0A%0A%20%20fn%20variable_expr(ident%3A%20String)%20-%3E%20PExpr%20%7B%0A%20%20%20%20Box%3A%3Anew(Variable(ident))%0A%20%20%7D%0A%7D%0A%7D">Run</a></pre>
+
+<p>A new combinator appeared! Indeed, an operand can be a <code>number</code> or an <code>identifier</code> (for variables) and these alternatives are expressed with the <em>choice combinator</em> of the form <code>e1 / e2 / ... / eN</code>. It tries the expression <code>e1</code> and if it fails, it restarts with <code>e2</code>, etc. It fails if the last expression <code>eN</code> fails. An important point is that <em>order matters</em>, hence the grammar is unambiguous, for each input, only one parse tree is possible. It&#39;s worth mentioning that this prioritized choice can leads to unexpected, but however easy to detect, wrong behaviour. For example, if you consider <code>identifier / number</code> which reverses the order of the factors, <code>number</code> will never be reached because <code>identifier</code> accepts a super-set of the language recognized by <code>number</code>. Choice combinators naturally map to an enumeration type in Rust, in our example we declared <code>Expression</code> within the macro and is accessible from outside with <code>calc::Expression</code>. We build the variants of the enumeration with our own functions. Note that types can be declared outside the macro, you just need to add the corresponding <code>use</code> statements.</p>
+
+<h3 id='sequence-combinator' class='section-header'><a href='#sequence-combinator'>Sequence combinator</a></h3>
+<p>We have all the pieces to parse our first arithmetic expression. We start with <code>+</code> and <code>-</code> because they have the same precedence, we will next add <code>*</code> and <code>/</code>. The sequence combinator is required to parse a sequence of two or more PEGs and is denoted as <code>e1 e2 ... eN</code>. If <code>e1</code> succeeds, then <code>e2</code> is called and so on until <code>eN</code> succeeds. It fails if any <code>e</code> fails, this is the main difference with the choice combinator which fails only if the last expression fails. Let&#39;s give a look to the new grammar:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="comment">// ... previous rules and code truncated.</span>
+
+  <span class="ident">expression</span>
+    <span class="op">=</span> <span class="ident">factor</span> (<span class="ident">term_op</span> <span class="ident">factor</span>)<span class="op">*</span> <span class="op">&gt;</span> <span class="ident">fold_left</span>
+
+  <span class="ident">term_op</span>
+    <span class="op">=</span> <span class="ident">add_op</span> <span class="op">&gt;</span> <span class="ident">add_bin_op</span>
+    <span class="op">/</span> <span class="ident">sub_op</span> <span class="op">&gt;</span> <span class="ident">sub_bin_op</span>
+
+  <span class="kw">use</span> <span class="self">self</span>::<span class="ident">Expression</span>::<span class="kw-2">*</span>;
+  <span class="kw">use</span> <span class="self">self</span>::<span class="ident">BinOp</span>::<span class="kw-2">*</span>;
+
+  <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">PExpr</span> <span class="op">=</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expression</span><span class="op">&gt;</span>;
+
+  <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Expression</span> {
+    <span class="ident">Variable</span>(<span class="ident">String</span>),
+    <span class="ident">Number</span>(<span class="ident">u32</span>),
+    <span class="ident">BinaryExpr</span>(<span class="ident">BinOp</span>, <span class="ident">PExpr</span>, <span class="ident">PExpr</span>)
+  }
+
+  <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BinOp</span> {
+    <span class="ident">Add</span>, <span class="ident">Sub</span>
+  }
+
+  <span class="kw">fn</span> <span class="ident">fold_left</span>(<span class="ident">head</span>: <span class="ident">PExpr</span>, <span class="ident">rest</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">BinOp</span>, <span class="ident">PExpr</span>)<span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">PExpr</span> {
+    <span class="ident">rest</span>.<span class="ident">into_iter</span>().<span class="ident">fold</span>(<span class="ident">head</span>,
+      <span class="op">|</span><span class="ident">accu</span>, (<span class="ident">op</span>, <span class="ident">expr</span>)<span class="op">|</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">BinaryExpr</span>(<span class="ident">op</span>, <span class="ident">accu</span>, <span class="ident">expr</span>)))
+  }
+
+  <span class="kw">fn</span> <span class="ident">add_bin_op</span>() <span class="op">-&gt;</span> <span class="ident">BinOp</span> { <span class="ident">Add</span> }
+  <span class="kw">fn</span> <span class="ident">sub_bin_op</span>() <span class="op">-&gt;</span> <span class="ident">BinOp</span> { <span class="ident">Sub</span> }
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%2F%2F%20...%20previous%20rules%20and%20code%20truncated.%0A%0A%20%20expression%0A%20%20%20%20%3D%20factor%20(term_op%20factor)*%20%3E%20fold_left%0A%0A%20%20term_op%0A%20%20%20%20%3D%20add_op%20%3E%20add_bin_op%0A%20%20%20%20%2F%20sub_op%20%3E%20sub_bin_op%0A%0A%20%20use%20self%3A%3AExpression%3A%3A*%3B%0A%20%20use%20self%3A%3ABinOp%3A%3A*%3B%0A%0A%20%20pub%20type%20PExpr%20%3D%20Box%3CExpression%3E%3B%0A%0A%20%20pub%20enum%20Expression%20%7B%0A%20%20%20%20Variable(String)%2C%0A%20%20%20%20Number(u32)%2C%0A%20%20%20%20BinaryExpr(BinOp%2C%20PExpr%2C%20PExpr)%0A%20%20%7D%0A%0A%20%20pub%20enum%20BinOp%20%7B%0A%20%20%20%20Add%2C%20Sub%0A%20%20%7D%0A%0A%20%20fn%20fold_left(head%3A%20PExpr%2C%20rest%3A%20Vec%3C(BinOp%2C%20PExpr)%3E)%20-%3E%20PExpr%20%7B%0A%20%20%20%20rest.into_iter().fold(head%2C%0A%20%20%20%20%20%20%7Caccu%2C%20(op%2C%20expr)%7C%20Box%3A%3Anew(BinaryExpr(op%2C%20accu%2C%20expr)))%0A%20%20%7D%0A%0A%20%20fn%20add_bin_op()%20-%3E%20BinOp%20%7B%20Add%20%7D%0A%20%20fn%20sub_bin_op()%20-%3E%20BinOp%20%7B%20Sub%20%7D%0A%7D%0A%7D">Run</a></pre>
+
+<p>Parsing rules for arithmetic expression are usually written with <em>left recursion</em> which would give us a rule such as:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="ident">expression</span>
+  <span class="op">=</span> <span class="ident">factor</span>
+  <span class="op">/</span> <span class="ident">expression</span> <span class="ident">term_op</span> <span class="ident">factor</span><a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Aexpression%0A%20%20%3D%20factor%0A%20%20%2F%20expression%20term_op%20factor%0A%7D">Run</a></pre>
+
+<p>PEG descriptions are closer to the generated code than are context-free language specifications, for example the choice combinator is prioritized, which is similar to nested <em>if-then-else</em> statements in hand-written recursive descent parser. This is why left recursion often leads to infinite loops (and eventually to stack overflow) in PEG implementation while it is nicely handled in other parser generator. Oak does not support left recursion yet so the grammar above will generate invalid code. However, we wrote the first <code>expression</code> rule without left recursion which is made possible with the repetition combinator <code>e*</code> expression instead of recursive rules.</p>
+
+<p>Due to the lack of left recursion, the resulting AST is flatten into a type <code>(PExpr, Vec&lt;(BinOp, PExpr)&gt;)</code> which is not convenient to manipulate during subsequent compilation phases. A problem with this representation is that operator associativity is not directly encoded inside the AST and is later given by the semantic analysis, which is error-prone because it must be considered for every analysis traversing the AST. This is why we use the function <code>fold_left</code> to create a binary tree from this list.</p>
+
+<h3 id='operator-precedence' class='section-header'><a href='#operator-precedence'>Operator precedence</a></h3>
+<p>Generally, a programming language has multiple operators that do not share the same precedence. It is the case for a simple arithmetic expression where <code>*</code> and <code>/</code> take precedence over <code>+</code> and <code>-</code>. We show the grammar for <code>Calc</code> basic arithmetic expressions and then expose how to write such rules in the general case.</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="comment">// ... previous rules and code truncated.</span>
+
+  <span class="ident">expression</span>
+    <span class="op">=</span> <span class="ident">term</span> (<span class="ident">term_op</span> <span class="ident">term</span>)<span class="op">*</span> <span class="op">&gt;</span> <span class="ident">fold_left</span>
+
+  <span class="ident">term</span>
+    <span class="op">=</span> <span class="ident">factor</span> (<span class="ident">factor_op</span> <span class="ident">factor</span>)<span class="op">*</span> <span class="op">&gt;</span> <span class="ident">fold_left</span>
+
+  <span class="ident">factor_op</span>
+    <span class="op">=</span> <span class="ident">mul_op</span> <span class="op">&gt;</span> <span class="ident">mul_bin_op</span>
+    <span class="op">/</span> <span class="ident">div_op</span> <span class="op">&gt;</span> <span class="ident">div_bin_op</span>
+
+  <span class="kw">use</span> <span class="self">self</span>::<span class="ident">Expression</span>::<span class="kw-2">*</span>;
+  <span class="kw">use</span> <span class="self">self</span>::<span class="ident">BinOp</span>::<span class="kw-2">*</span>;
+
+  <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">PExpr</span> <span class="op">=</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">Expression</span><span class="op">&gt;</span>;
+
+  <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Expression</span> {
+    <span class="ident">Variable</span>(<span class="ident">String</span>),
+    <span class="ident">Number</span>(<span class="ident">u32</span>),
+    <span class="ident">BinaryExpr</span>(<span class="ident">BinOp</span>, <span class="ident">PExpr</span>, <span class="ident">PExpr</span>)
+  }
+
+  <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BinOp</span> {
+    <span class="ident">Add</span>, <span class="ident">Sub</span>, <span class="ident">Mul</span>, <span class="ident">Div</span>
+  }
+
+  <span class="kw">fn</span> <span class="ident">mul_bin_op</span>() <span class="op">-&gt;</span> <span class="ident">BinOp</span> { <span class="ident">Mul</span> }
+  <span class="kw">fn</span> <span class="ident">div_bin_op</span>() <span class="op">-&gt;</span> <span class="ident">BinOp</span> { <span class="ident">Div</span> }
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%2F%2F%20...%20previous%20rules%20and%20code%20truncated.%0A%0A%20%20expression%0A%20%20%20%20%3D%20term%20(term_op%20term)*%20%3E%20fold_left%0A%0A%20%20term%0A%20%20%20%20%3D%20factor%20(factor_op%20factor)*%20%3E%20fold_left%0A%0A%20%20factor_op%0A%20%20%20%20%3D%20mul_op%20%3E%20mul_bin_op%0A%20%20%20%20%2F%20div_op%20%3E%20div_bin_op%0A%0A%20%20use%20self%3A%3AExpression%3A%3A*%3B%0A%20%20use%20self%3A%3ABinOp%3A%3A*%3B%0A%0A%20%20pub%20type%20PExpr%20%3D%20Box%3CExpression%3E%3B%0A%0A%20%20pub%20enum%20Expression%20%7B%0A%20%20%20%20Variable(String)%2C%0A%20%20%20%20Number(u32)%2C%0A%20%20%20%20BinaryExpr(BinOp%2C%20PExpr%2C%20PExpr)%0A%20%20%7D%0A%0A%20%20pub%20enum%20BinOp%20%7B%0A%20%20%20%20Add%2C%20Sub%2C%20Mul%2C%20Div%0A%20%20%7D%0A%0A%20%20fn%20mul_bin_op()%20-%3E%20BinOp%20%7B%20Mul%20%7D%0A%20%20fn%20div_bin_op()%20-%3E%20BinOp%20%7B%20Div%20%7D%0A%7D%0A%7D">Run</a></pre>
+
+<p>We added support for multiplication and division with the <code>term</code> rule separating factors by <code>*</code> or <code>/</code>. Note that we re-use the same function <code>fold_left</code> for transforming the expression list into a binary tree. We show how precedence is encoded into these rules by computing step by step the parsing of the <code>Calc</code> program <code>8-2/2</code>.</p>
+
+<ol>
+<li>We enter <code>expression</code> and directly call <code>term</code> which in turn call <code>factor</code>.</li>
+<li>We enter <code>factor</code> and try the rule <code>number</code> which succeeds. <code>factor</code> returns <code>Number(8)</code>.</li>
+<li>We go back in <code>term</code> and try <code>(factor_op factor)*</code> but <code>factor_op</code> does not match <code>-</code> so <code>e*</code> produces an empty <code>Vec</code> and <code>fold_left</code> returns the first and unchanged value <code>Number(8)</code>.</li>
+<li>We go back in <code>expression</code> and try <code>(term_op term)*</code>, <code>term_op</code> matches <code>-</code> and returns <code>Sub</code>.</li>
+<li>We re-enter <code>term</code> and since the remaining input is <code>2/2</code>, it exactly matches the expression <code>factor factor_op factor</code> and returns <code>BinaryExpr(Div, Number(2), Number(2))</code>.</li>
+<li>We go back in <code>expression</code> and build the final expression <code>BinaryExpr(Sub, Number(8), BinaryExpr(Div, Number(2), Number(2)))</code>.</li>
+</ol>
+
+<p>This expression well-respect the precedence of arithmetic operators. A general technique to build a PEG supporting any level of precedence is to nest rules in the invert order of precedence. For example in <code>Calc</code>, numbers and variables have the highest precedence; note that this is always the case for atoms. Addition and subtraction have the lowest precedence and it implies that, for <code>e1+e2</code>, both sub-expressions will first be considered to be terms or factors before trying to parse them as expressions. We suggest that you first group operators by precedence levels and than write the expression rules:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="ident">operators_lvl_1</span> <span class="op">=</span> <span class="string">&quot;+&quot;</span> <span class="op">/</span> <span class="string">&quot;-&quot;</span>
+<span class="ident">operators_lvl_2</span> <span class="op">=</span> <span class="string">&quot;*&quot;</span> <span class="op">/</span> <span class="string">&quot;/&quot;</span>
+<span class="comment">// ...</span>
+<span class="ident">operators_lvl_n</span> <span class="op">=</span> <span class="string">&quot;-&quot;</span> <span class="comment">// unary minus operator</span>
+
+<span class="ident">expr_lvl_1</span> <span class="op">=</span> <span class="ident">expr_lvl_2</span> (<span class="ident">operators_lvl_1</span> <span class="ident">expr_lvl_2</span>)<span class="op">*</span>
+<span class="ident">expr_lvl_2</span> <span class="op">=</span> <span class="ident">expr_lvl_3</span> (<span class="ident">operators_lvl_2</span> <span class="ident">expr_lvl_3</span>)<span class="op">*</span>
+<span class="comment">// ...</span>
+<span class="ident">expr_lvl_n</span> <span class="op">=</span> <span class="ident">operators_lvl_n</span> <span class="ident">atom</span><a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Aoperators_lvl_1%20%3D%20%22%2B%22%20%2F%20%22-%22%0Aoperators_lvl_2%20%3D%20%22*%22%20%2F%20%22%2F%22%0A%2F%2F%20...%0Aoperators_lvl_n%20%3D%20%22-%22%20%2F%2F%20unary%20minus%20operator%0A%0Aexpr_lvl_1%20%3D%20expr_lvl_2%20(operators_lvl_1%20expr_lvl_2)*%0Aexpr_lvl_2%20%3D%20expr_lvl_3%20(operators_lvl_2%20expr_lvl_3)*%0A%2F%2F%20...%0Aexpr_lvl_n%20%3D%20operators_lvl_n%20atom%0A%7D">Run</a></pre>
+
+<p>You can freely adapt this template for any level of precedence in your grammar and add the corresponding semantic actions.</p>
+
+<h3 id='syntactic-predicates' class='section-header'><a href='#syntactic-predicates'>Syntactic predicates</a></h3>
+<p>Our grammar already parse simple arithmetic expression, we now improve the rule for identifiers. For the moment, <code>98a</code> is a valid identifier because we stated that identifiers are parsed with <code>[&quot;a-zA-Z0-9_&quot;]+</code>, as in classic programming language we would like to forbid a digit to start an identifier. We can achieve that with the combinators we already seen:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="comment">// ... previous rules and code truncated.</span>
+
+  <span class="ident">identifier</span> <span class="op">=</span> [<span class="string">&quot;a-zA-Z_&quot;</span>] [<span class="string">&quot;a-zA-Z0-9_&quot;</span>]<span class="op">*</span> <span class="op">&gt;</span> <span class="ident">to_string_2</span>
+
+  <span class="kw">fn</span> <span class="ident">to_string_2</span>(<span class="ident">head</span>: <span class="ident">char</span>, <span class="kw-2">mut</span> <span class="ident">raw_text</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+    <span class="ident">raw_text</span>.<span class="ident">push</span>(<span class="ident">head</span>);
+    <span class="ident">to_string</span>(<span class="ident">raw_text</span>)
+  }
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%2F%2F%20...%20previous%20rules%20and%20code%20truncated.%0A%0A%20%20identifier%20%3D%20%5B%22a-zA-Z_%22%5D%20%5B%22a-zA-Z0-9_%22%5D*%20%3E%20to_string_2%0A%0A%20%20fn%20to_string_2(head%3A%20char%2C%20mut%20raw_text%3A%20Vec%3Cchar%3E)%20-%3E%20String%20%7B%0A%20%20%20%20raw_text.push(head)%3B%0A%20%20%20%20to_string(raw_text)%0A%20%20%7D%0A%7D%0A%7D">Run</a></pre>
+
+<p>It works but seems redundant and does not expressed very well the intention of the grammar writer, it is not clear at a first sight that <code>&quot;0-9&quot;</code> is missing in the first character class. Also, the value produced is split into a 2-tuple with the first argument being a <code>char</code>, which is less comfortable to be used in the semantic action. We want to indicate that the input must not start with a digit and it can be written with a syntactic predicate:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="comment">// ... previous rules and code truncated.</span>
+
+  <span class="ident">identifier</span> <span class="op">=</span> <span class="op">!</span><span class="ident">digit</span> [<span class="string">&quot;a-zA-Z0-9_&quot;</span>]<span class="op">+</span> <span class="op">&gt;</span> <span class="ident">to_string</span>
+  <span class="ident">number</span> <span class="op">=</span> <span class="ident">digit</span><span class="op">+</span> <span class="op">&gt;</span> <span class="ident">to_number</span>
+  <span class="ident">digit</span> <span class="op">=</span> [<span class="string">&quot;0-9&quot;</span>]
+
+  <span class="kw">fn</span> <span class="ident">to_string</span>(<span class="ident">raw_text</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
+    <span class="ident">raw_text</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()
+  }<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%2F%2F%20...%20previous%20rules%20and%20code%20truncated.%0A%0A%20%20identifier%20%3D%20!digit%20%5B%22a-zA-Z0-9_%22%5D%2B%20%3E%20to_string%0A%20%20number%20%3D%20digit%2B%20%3E%20to_number%0A%20%20digit%20%3D%20%5B%220-9%22%5D%0A%0A%20%20fn%20to_string(raw_text%3A%20Vec%3Cchar%3E)%20-%3E%20String%20%7B%0A%20%20%20%20raw_text.into_iter().collect()%0A%20%20%7D%0A%7D">Run</a></pre>
+
+<p>The syntactic predicate <code>!e</code> succeeds if <code>e</code> fails and in any cases <em>it does not consume input</em>. Its dual combinator is <code>&amp;e</code> which succeeds if <code>e</code> succeeds and is a short-cut for <code>!!e</code>. It can be thought as a <code>if</code> statement which executes the next combinator only if the condition <code>!e</code> or <code>e</code> is true. It is very useful to look-ahead in the buffer without consuming it. For example, we can use the expression <code>!.</code> to check that we are at the end of file, remember that <code>.</code> succeeds if it consumes any single character. It is useful to forbid partial matching directly in the grammar specification instead of consulting the result value.</p>
+
+<h3 id='spacing' class='section-header'><a href='#spacing'>Spacing</a></h3>
+<p>Spacing is traditionally processed by a lexer (executed before the parsing phase) which transform a character stream into a token stream where blank characters are removed. As said before, PEG works directly on the character stream so we must manage spaces ourself. The following grammar is equipped with spacing.</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="comment">// ... previous rules and code truncated.</span>
+
+  <span class="ident">program</span> <span class="op">=</span> <span class="ident">spacing</span> <span class="ident">expression</span>
+
+  <span class="ident">identifier</span> <span class="op">=</span> <span class="op">!</span><span class="ident">digit</span> [<span class="string">&quot;a-zA-Z0-9_&quot;</span>]<span class="op">+</span> <span class="ident">spacing</span> <span class="op">&gt;</span> <span class="ident">to_string</span>
+  <span class="ident">number</span> <span class="op">=</span> <span class="ident">digit</span><span class="op">+</span> <span class="ident">spacing</span> <span class="op">&gt;</span> <span class="ident">to_number</span>
+
+  <span class="ident">spacing</span> <span class="op">=</span> [<span class="string">&quot; \n\r\t&quot;</span>]<span class="op">*</span> <span class="op">-&gt;</span> (<span class="op">^</span>)
+
+  <span class="ident">let_kw</span> <span class="op">=</span> <span class="string">&quot;let&quot;</span> <span class="ident">spacing</span>
+  <span class="ident">in_kw</span> <span class="op">=</span> <span class="string">&quot;in&quot;</span> <span class="ident">spacing</span>
+  <span class="ident">bind_op</span> <span class="op">=</span> <span class="string">&quot;=&quot;</span> <span class="ident">spacing</span>
+  <span class="ident">add_op</span> <span class="op">=</span> <span class="string">&quot;+&quot;</span> <span class="ident">spacing</span>
+  <span class="ident">sub_op</span> <span class="op">=</span> <span class="string">&quot;-&quot;</span> <span class="ident">spacing</span>
+  <span class="ident">mul_op</span> <span class="op">=</span> <span class="string">&quot;*&quot;</span> <span class="ident">spacing</span>
+  <span class="ident">div_op</span> <span class="op">=</span> <span class="string">&quot;/&quot;</span> <span class="ident">spacing</span>
+  <span class="ident">exp_op</span> <span class="op">=</span> <span class="string">&quot;^&quot;</span> <span class="ident">spacing</span>
+  <span class="ident">lparen</span> <span class="op">=</span> <span class="string">&quot;(&quot;</span> <span class="ident">spacing</span>
+  <span class="ident">rparen</span> <span class="op">=</span> <span class="string">&quot;)&quot;</span> <span class="ident">spacing</span>
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%2F%2F%20...%20previous%20rules%20and%20code%20truncated.%0A%0A%20%20program%20%3D%20spacing%20expression%0A%0A%20%20identifier%20%3D%20!digit%20%5B%22a-zA-Z0-9_%22%5D%2B%20spacing%20%3E%20to_string%0A%20%20number%20%3D%20digit%2B%20spacing%20%3E%20to_number%0A%0A%20%20spacing%20%3D%20%5B%22%20%5Cn%5Cr%5Ct%22%5D*%20-%3E%20(%5E)%0A%0A%20%20let_kw%20%3D%20%22let%22%20spacing%0A%20%20in_kw%20%3D%20%22in%22%20spacing%0A%20%20bind_op%20%3D%20%22%3D%22%20spacing%0A%20%20add_op%20%3D%20%22%2B%22%20spacing%0A%20%20sub_op%20%3D%20%22-%22%20spacing%0A%20%20mul_op%20%3D%20%22*%22%20spacing%0A%20%20div_op%20%3D%20%22%2F%22%20spacing%0A%20%20exp_op%20%3D%20%22%5E%22%20spacing%0A%20%20lparen%20%3D%20%22(%22%20spacing%0A%20%20rparen%20%3D%20%22)%22%20spacing%0A%7D%0A%7D">Run</a></pre>
+
+<p>The idea is to make sure that blank characters are consumed before the parsing of an atom (such as <code>&quot;let&quot;</code> or <code>[&quot;a-zA-Z0-9_&quot;]</code>). Since only atoms can consume the stream, we need to surround them with the <code>spacing</code> rule such as in <code>spacing &quot;let&quot; spacing</code>. However, for two atoms <code>a1 a2</code>, the <code>spacing</code> rule will be called twice between <code>a1</code> and <code>a2</code>. We can do better with a new rule <code>program</code> that first call <code>spacing</code> and then <code>expression</code>, it guarantees that the very first blank characters will be consumed. It implies that atoms only need to consume trailing blank characters.</p>
+
+<p>In <code>spacing</code>, the expression <code>[&quot; \n\t&quot;]*</code> has type <code>Vec&lt;char&gt;</code>, but we do not really care about this value. This is why Oak proposes a type annotation combinator <code>e -&gt; (^)</code> to indicate that we do not care about the value of an expression and should be &quot;invisible&quot; in the AST. Oak will automatically propagate <code>(^)</code> in calling site, for example, tuple like <code>((^), char)</code> are automatically reduced to <code>char</code>. There is much more to say about types but since it is not part of PEG itself, we will discuss about it in the <a href="typing-expression.html">typing expression</a> chapter.</p>
+
+<h3 id='identifier-and-keyword' class='section-header'><a href='#identifier-and-keyword'>Identifier and keyword</a></h3>
+<p>Now we have a grammar for arithmetic expressions, we continue by adding the let-in construction for declaring new variables. It has the form <code>let &lt;ident&gt; = &lt;expression&gt; in &lt;expression&gt;</code> and is parsed by the following grammar.</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="comment">// ... previous rules and code truncated.</span>
+
+  <span class="ident">factor</span>
+    <span class="op">=</span> <span class="ident">number</span> <span class="op">&gt;</span> <span class="ident">number_expr</span>
+    <span class="op">/</span> <span class="ident">identifier</span> <span class="op">&gt;</span> <span class="ident">variable_expr</span>
+    <span class="op">/</span> <span class="ident">let_expr</span> <span class="op">&gt;</span> <span class="ident">let_in_expr</span>
+    <span class="op">/</span> <span class="ident">lparen</span> <span class="ident">expression</span> <span class="ident">rparen</span>
+
+  <span class="ident">let_expr</span> <span class="op">=</span> <span class="ident">let_kw</span> <span class="ident">let_binding</span> <span class="ident">in_kw</span> <span class="ident">expression</span>
+  <span class="ident">let_binding</span> <span class="op">=</span> <span class="ident">identifier</span> <span class="ident">bind_op</span> <span class="ident">expression</span>
+
+  <span class="kw">fn</span> <span class="ident">let_in_expr</span>(<span class="ident">var</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">PExpr</span>, <span class="ident">expr</span>: <span class="ident">PExpr</span>) <span class="op">-&gt;</span> <span class="ident">PExpr</span> {
+    <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">LetIn</span>(<span class="ident">var</span>, <span class="ident">value</span>, <span class="ident">expr</span>))
+  }
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%2F%2F%20...%20previous%20rules%20and%20code%20truncated.%0A%0A%20%20factor%0A%20%20%20%20%3D%20number%20%3E%20number_expr%0A%20%20%20%20%2F%20identifier%20%3E%20variable_expr%0A%20%20%20%20%2F%20let_expr%20%3E%20let_in_expr%0A%20%20%20%20%2F%20lparen%20expression%20rparen%0A%0A%20%20let_expr%20%3D%20let_kw%20let_binding%20in_kw%20expression%0A%20%20let_binding%20%3D%20identifier%20bind_op%20expression%0A%0A%20%20fn%20let_in_expr(var%3A%20String%2C%20value%3A%20PExpr%2C%20expr%3A%20PExpr)%20-%3E%20PExpr%20%7B%0A%20%20%20%20Box%3A%3Anew(LetIn(var%2C%20value%2C%20expr))%0A%20%20%7D%0A%7D%0A%7D">Run</a></pre>
+
+<p>There is no new concept in this grammar, we have already seen all the combinators used. However it does not work as expected for programs containing let-in expressions. For example, it partially matches <code>let x = 1 in x</code> and the data returned is <code>Variable(&quot;let&quot;)</code>. It does not work because <code>identifier</code> is parsed before <code>let_expr</code> in <code>factor</code>, so <code>&quot;let&quot;</code> is recognized as a valid identifier. There is clearly some overlapping between the language accepted by identifiers and keywords. It does not help to inverse the order of both rules because variables starting with <code>&quot;let&quot;</code> will be partially matched as the <code>let</code> keyword such as in <code>&quot;leti + 8&quot;</code>.</p>
+
+<p>This is a problem specific to PEG due to its combined lexical and parsing analysis. Disambiguation is usually done by the lexer with an ad-hoc keyword table; if an identifier is present in the table, the corresponding token is returned, otherwise it is considered as an identifier. In PEG, we encode this difference directly in the rules with syntactic predicates as follows:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="comment">// ... previous rules and code truncated.</span>
+
+  <span class="ident">identifier</span> <span class="op">=</span> <span class="op">!</span><span class="ident">digit</span> <span class="op">!</span><span class="ident">keyword</span> <span class="ident">ident_char</span><span class="op">+</span> <span class="ident">spacing</span> <span class="op">&gt;</span> <span class="ident">to_string</span>
+  <span class="ident">ident_char</span> <span class="op">=</span> [<span class="string">&quot;a-zA-Z0-9_&quot;</span>]
+
+  <span class="ident">kw_tail</span> <span class="op">=</span> <span class="op">!</span><span class="ident">ident_char</span> <span class="ident">spacing</span>
+
+  <span class="ident">keyword</span> <span class="op">=</span> <span class="ident">let_kw</span> <span class="op">/</span> <span class="ident">in_kw</span>
+  <span class="ident">let_kw</span> <span class="op">=</span> <span class="string">&quot;let&quot;</span> <span class="ident">kw_tail</span>
+  <span class="ident">in_kw</span> <span class="op">=</span> <span class="string">&quot;in&quot;</span> <span class="ident">kw_tail</span>
+}<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%2F%2F%20...%20previous%20rules%20and%20code%20truncated.%0A%0A%20%20identifier%20%3D%20!digit%20!keyword%20ident_char%2B%20spacing%20%3E%20to_string%0A%20%20ident_char%20%3D%20%5B%22a-zA-Z0-9_%22%5D%0A%0A%20%20kw_tail%20%3D%20!ident_char%20spacing%0A%0A%20%20keyword%20%3D%20let_kw%20%2F%20in_kw%0A%20%20let_kw%20%3D%20%22let%22%20kw_tail%0A%20%20in_kw%20%3D%20%22in%22%20kw_tail%0A%7D%0A%7D">Run</a></pre>
+
+<p>We ensure that a keyword rule never accept the beginning of a valid identifier and conversely, we forbid an identifier to be a valid keyword. The first is done with <code>kw_tail</code> which prevents a valid identifier character (<code>ident_char</code>) to follow a keyword. It must be appended to every keyword or, more generally, to atom using a subset of characters used by identifiers. Instead of the keyword table used in a lexer, we use the rule <code>keyword</code> accepting every keyword of the language and we explicitly prevent an identifier to start with a keyword (see <code>!keyword</code>).</p>
+
+<h3 id='operator-associativity' class='section-header'><a href='#operator-associativity'>Operator associativity</a></h3>
+<p>For now, <code>Calc</code> only contains left-associative operators and the corresponding AST is built with the <code>fold_left</code> function. It is pretty simple to transform an operator separated-list of expression to its right-associative version if we use a <code>fold_right</code> function. We extend the <code>Calc</code> grammar with the exponent operator <code>e1 ^ e2</code> which is right-associative and takes precedence over <code>term</code> expressions.</p>
+
+<pre class="rust rust-example-rendered">
+<span class="macro">grammar</span><span class="macro">!</span> <span class="ident">calc</span> {
+  <span class="comment">// ... previous rules and code truncated.</span>
+
+  <span class="ident">term</span>
+    <span class="op">=</span> <span class="ident">exponent</span> (<span class="ident">factor_op</span> <span class="ident">exponent</span>)<span class="op">*</span> <span class="op">&gt;</span> <span class="ident">fold_left</span>
+
+  <span class="ident">exponent</span>
+    <span class="op">=</span> (<span class="ident">factor</span> <span class="ident">exponent_op</span>)<span class="op">*</span> <span class="ident">factor</span> <span class="op">&gt;</span> <span class="ident">fold_right</span>
+
+  <span class="ident">exponent_op</span> <span class="op">=</span> <span class="ident">exp_op</span> <span class="op">&gt;</span> <span class="ident">exp_bin_op</span>
+
+  <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">BinOp</span> {
+    <span class="ident">Add</span>, <span class="ident">Sub</span>, <span class="ident">Mul</span>, <span class="ident">Div</span>, <span class="ident">Exp</span>
+  }
+
+  <span class="kw">fn</span> <span class="ident">fold_right</span>(<span class="ident">front</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">PExpr</span>, <span class="ident">BinOp</span>)<span class="op">&gt;</span>, <span class="ident">last</span>: <span class="ident">PExpr</span>) <span class="op">-&gt;</span> <span class="ident">PExpr</span> {
+    <span class="ident">front</span>.<span class="ident">into_iter</span>().<span class="ident">rev</span>().<span class="ident">fold</span>(<span class="ident">last</span>,
+      <span class="op">|</span><span class="ident">accu</span>, (<span class="ident">expr</span>, <span class="ident">op</span>)<span class="op">|</span> <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">BinaryExpr</span>(<span class="ident">op</span>, <span class="ident">expr</span>, <span class="ident">accu</span>)))
+  }<a class="test-arrow" target="_blank" href="https://play.rust-lang.org?code=fn%20main()%20%7B%0Agrammar!%20calc%20%7B%0A%20%20%2F%2F%20...%20previous%20rules%20and%20code%20truncated.%0A%0A%20%20term%0A%20%20%20%20%3D%20exponent%20(factor_op%20exponent)*%20%3E%20fold_left%0A%0A%20%20exponent%0A%20%20%20%20%3D%20(factor%20exponent_op)*%20factor%20%3E%20fold_right%0A%0A%20%20exponent_op%20%3D%20exp_op%20%3E%20exp_bin_op%0A%0A%20%20pub%20enum%20BinOp%20%7B%0A%20%20%20%20Add%2C%20Sub%2C%20Mul%2C%20Div%2C%20Exp%0A%20%20%7D%0A%0A%20%20fn%20fold_right(front%3A%20Vec%3C(PExpr%2C%20BinOp)%3E%2C%20last%3A%20PExpr)%20-%3E%20PExpr%20%7B%0A%20%20%20%20front.into_iter().rev().fold(last%2C%0A%20%20%20%20%20%20%7Caccu%2C%20(expr%2C%20op)%7C%20Box%3A%3Anew(BinaryExpr(op%2C%20expr%2C%20accu)))%0A%20%20%7D%0A%7D">Run</a></pre>
+
+<p>A simple trick for right-folding is to reverse the list and to left fold with the accumulator being the last element. It would be correct to write the rule <code>exponent</code> as <code>factor (exponent_op factor)*</code> but since we need the last element for right-folding, we would do unnecessary work in the semantic action. Therefore, it is better to directly write the rule in an adapted way for right-folding.</p>
+
+<p>To summarize, operator associativity is managed by the semantic actions and not directly in the parsing expressions. Generic left and right folding functions can be used to create a binary tree for expressions with left or right associative operators.</p>
+
+<h3 id='conclusion' class='section-header'><a href='#conclusion'>Conclusion</a></h3>
+<p>That&#39;s it! We built a complete grammar for a small language encompassing arithmetic expressions and variable bindings. This tutorial should have covered most of the useful techniques to write your own grammar. The full grammar and usage examples of the <code>Calc</code> language are available in the <a href="full-calc-grammar.html">next chapter</a>. If you want to use the most of Oak capabilities, please read-on and learn how Oak gives types to parsing expressions!</p>
+
+<h3 id='exercises' class='section-header'><a href='#exercises'>Exercises</a></h3>
+<ul>
+<li>Extend the grammar to support negative numbers.</li>
+<li>Extend the grammar to support declaration and function call.</li>
+</ul>
+
+    <script src='rustbook.js'></script>
+<script src='playpen.js'></script>
+</div></div>
+
+
+</body>
+</html>

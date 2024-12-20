@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <!-- Site Properties -->
+  <title>Informatique (ISUP)</title>
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/reset.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/site.css">
+
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/container.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/grid.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/header.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/image.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/menu.css">
+
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/divider.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/dropdown.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/segment.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/button.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/list.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/icon.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/sidebar.css">
+  <link rel="stylesheet" type="text/css" href="../../library/semantic/dist/components/transition.css">
+
+  <style type="text/css">
+    .hidden.menu {
+      display: none;
+    }
+    .masthead.segment {
+      min-height: 700px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 3em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+    .ui.vertical.stripe {
+      padding: 8em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+    .footer.segment {
+      padding: 5em 0em;
+    }
+    .secondary.pointing.menu .toc.item {
+      display: none;
+    }
+    @media only screen and (max-width: 700px) {
+      .ui.fixed.menu {
+        display: none !important;
+      }
+      .secondary.pointing.menu .item,
+      .secondary.pointing.menu .menu {
+        display: none;
+      }
+      .secondary.pointing.menu .toc.item {
+        display: block;
+      }
+      .masthead.segment {
+        min-height: 350px;
+      }
+      .masthead h1.ui.header {
+        font-size: 2em;
+        margin-top: 1.5em;
+      }
+      .masthead h2 {
+        margin-top: 0.5em;
+        font-size: 1.5em;
+      }
+    }
+  </style>
+
+  <script src="../../library/jquery.min.js"></script>
+  <script src="../../library/semantic/dist/components/visibility.js"></script>
+  <script src="../../library/semantic/dist/components/sidebar.js"></script>
+  <script src="../../library/semantic/dist/components/transition.js"></script>
+  <script>
+  $(document)
+    .ready(function() {
+      // fix menu when passed
+      $('.masthead')
+        .visibility({
+          once: false,
+          onBottomPassed: function() {
+            $('.fixed.menu').transition('fade in');
+          },
+          onBottomPassedReverse: function() {
+            $('.fixed.menu').transition('fade out');
+          }
+        })
+      ;
+      // create sidebar and attach to menu open
+      $('.ui.sidebar')
+        .sidebar('attach events', '.toc.item')
+      ;
+    })
+  ;
+  </script>
+</head>
+<body>
+
+<!-- Following Menu -->
+<div class="ui large top fixed hidden menu">
+  <div class="ui container">
+    <a class="item" href="../../index.html">Home</a>
+    <a class="item" href="../../research.html">Research</a>
+    <a class="active item" href="../../teaching.html">Teaching</a>
+    <a class="item" href="../../contact.html">Contact</a>
+  </div>
+</div>
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+  <a class="item" href="../../index.html">Home</a>
+  <a class="item" href="../../research.html">Research</a>
+  <a class="active item" href="../../teaching.html">Teaching</a>
+  <a class="item" href="../../contact.html">Contact</a>
+</div>
+
+<!-- Page Contents -->
+<div class="pusher">
+<!-- masthead -->
+  <div class="ui vertical center aligned segment">
+
+    <div class="ui container">
+      <div class="ui large secondary pointing menu">
+        <a class="toc item">
+          <i class="sidebar icon"></i>
+        </a>
+        <a class="item" href="../../index.html">Home</a>
+        <a class="item" href="../../research.html">Research</a>
+        <a class="active item" href="../../teaching.html">Teaching</a>
+        <a class="item" href="../../contact.html">Contact</a>
+      </div>
+    </div>
+
+    <div class="ui container">
+    <div class="ui vertical left aligned very padded segment">
+      <h2>Environnement de travail sous Windows</h2>
+      <p>On va préparer un environnement de travail sous Windows pour programmer en C.
+         Tout d'abord, il vous faudra télécharger les deux logiciels suivants :
+        <ul>
+          <li><a href="https://www.cygwin.com/">Cygwin</a> : Utiliser la console Linux sous Windows (et compiler vos programmes C).</li>
+          <li><a href="https://www.sublimetext.com/3">Sublime text</a> : Éditeur de texte pour programmer en n'importe quel langage.</li>
+        </ul>
+      </p>
+
+      <h3> Attention : Modifier le run.sh avec : </h3>
+      <pre>gcc $1.c -o $1 -ansi -pedantic -Wall -Werror -std=c99 && ./$1.exe</pre>
+      pour une utilisation dans Cygwin.
+
+      <h4>Étape 1 : Installer Cygwin avec gcc</h4>
+      <ul>
+        <li>Cliquez sur suivant plusieurs fois, jusqu'à obtenir l'écran suivant :<br/>
+        <img src="../../images/cygwin1.jpg" class="ui medium bordered image"/></li>
+        <li>Cygwin est un terminal Linux mais aucun programme n'est installé par défaut, donc pas de <b>gcc</b> non plus.<br/>
+            On doit donc lui dire d'installer <b>gcc</b>.
+            Pour cela, cliquez sur "Devel" (montrez à la capture d'écran précédente) et puis séléctionner les logiciels <b>gcc-core</b> et <b>gcc-g++</b> comme sur la capture d'écran suivante :<br/>
+            <img src="../../images/cygwin2.jpg" class="ui huge bordered image"/>
+        </li>
+        <li>Finalement, après avoir cliquer une centaine de fois sur "suivant" pour terminer l'installation, vous pouvez lancer le logiciel Cygwin, qui vous ouvrira un terminal.</li>
+        <li>Dernière chose, les dossiers et fichiers que vous manipulez dans ce répertoire se trouvent, dans l'explorateur de fichier Windows, dans <b>C:/cygwin64/home/</b> comme sur l'image suivante :
+        <img src="../../images/cygwin3.jpg" class="ui huge bordered image"/>
+        </li>
+      </ul>
+      <h4>Étape 2 : Configurer Sublime-text</h4>
+      Comme pour Gedit, il y a quelques modifications à faire dans Sublime-text.
+      <ul>
+        <li>Cliquer sur <b>Preferences</b> puis sur <b>Settings</b>, cela vous ouvre deux fichiers.</li>
+        <li>Dans celui qui s'appelle "Preferences.sublime-settings" (normalement à droite), vous ajoutez les lignes suivantes :
+        <pre>
+          "tab_size": 4,
+          "translate_tabs_to_spaces": true,
+          "trim_trailing_white_space_on_save": true,
+        </pre>
+        entre les accolades déjà présentes.
+      </ul>
+      <h4>Étape 3 : Programmer en C</h4>
+      <ul>
+        <li>Vous pouvez maintenant programmer jour et nuit pour finir les exercices demandés.</li>
+        <li>Vous écrivez votre code dans Sublime-text et compilez dans la console cygwin <b>avec le script run.sh</b></li>
+        <li>Bravo.</li>
+        <li>Un problème ?? <a href="mailto:talbot@ircam.fr">Le SAV par ici</a>.</li>
+      </ul>
+    </div>
+    </div>
+
+    <div class="ui inverted vertical footer segment">
+      <div class="ui container">
+        <div class="ui inverted">Copyright &copy; 2018&mdash;<a href="mailto:pierre.talbot@univ-nantes.fr">Pierre Talbot</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
