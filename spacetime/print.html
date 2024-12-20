@@ -1,0 +1,396 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Spacetime Programming</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <noscript>
+            <style type="text/css">
+                .javascript-only {
+                    display: none;
+                }
+            </style>
+        </noscript>
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme;
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-spacetime.html"><strong aria-hidden="true">3.</strong> Learn Spacetime</a></li><li><a href="universe.html"><strong aria-hidden="true">4.</strong> Universe</a></li><li><a href="application-composition.html"><strong aria-hidden="true">5.</strong> Application: Musical Composition</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Research</a></li><li><ol class="section"><li><a href="PPDP19.html"><strong aria-hidden="true">6.1.</strong> PPDP19</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">7.</strong> Contributing</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons javascript-only">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Spacetime Programming</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </div>
+                <div id="searchresults-outer" class="searchresults-outer">
+                    <div class="searchresults-header" id="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="print.html#spacetime-programming" id="spacetime-programming"><h1>Spacetime Programming</h1></a>
+<p>Spacetime programming is a programming language on top of Java to describe search strategy when exploring a state-space, for example in constraint satisfaction problems.
+Spacetime started as a research project and is formally described in <a href="http://hyc.io/papers/dissertation-talbot.pdf">this dissertation</a>.
+A Java project integrating spacetime code can be set up in 5 minutes with the Maven build system.</p>
+<p>Spacetime is based on two main paradigms: <a href="https://en.wikipedia.org/wiki/Synchronous_programming_language">synchronous programming</a> and <a href="https://en.wikipedia.org/wiki/Concurrent_constraint_logic_programming">concurrent constraint programming</a> (CCP).
+These two paradigms are not mainstream and it is very likely that you did not hear about these two paradigms before.
+In this tutorial, we walk you through the syntax and semantics of spacetime with various examples.
+Our goal is to keep the tutorial accessible to programmers and computer scientists, and to give you an idea of the kind of problems this language can solve.</p>
+<p>Independently of your background, a first step is to read the <a href="getting-started.html">Getting Started</a> chapter.
+We introduce the concepts of <a href="synchronous-programming.html">Synchronous Programming</a> and the syntax of spacetime through several small examples.
+We make sure the build system is working out for you.
+Secondly, we introduce some novelties of <a href="learn-spacetime.html">Spacetime Programming</a> with examples stemming from constraint satisfaction problems such as Sudoku.
+We next consider the more advanced concept of <a href="universe.html">Universe</a> which is useful to design restarting search strategies.
+Finally, we go through a full application of this language by designing a interactive search strategy for an <a href="application-composition.html">application of musical composition</a>.</p>
+<p>The code is available on <a href="https://github.com/ptal/bonsai">github</a>.</p>
+<p>Note that this tutorial is a work-in-progress.</p>
+<a class="header" href="print.html#syntax-cheat-sheet" id="syntax-cheat-sheet"><h3>Syntax cheat sheet</h3></a>
+<p><code>p</code> and <code>q</code> are statements, <code>e</code> is an expression, <code>x</code> a variable identifier and <code>st</code> is a spacetime attribute (either <code>single_space</code>, <code>single_time</code> and <code>world_line</code>).</p>
+<table><thead><tr><th> Statements      </th><th> Description </th></tr></thead><tbody>
+<tr><td> <code>st T x = e</code>    </td><td> Declares the variable <code>x</code> of type <code>T</code> with the spacetime <code>st</code>. </td></tr>
+<tr><td> <code>when e then p else q end</code> </td><td> Executes <code>p</code> if <code>e</code> is equal to <code>true</code>, otherwise <code>q</code>. </td></tr>
+<tr><td> <code>x &lt;- e</code>        </td><td> Joins the information of <code>e</code> into <code>x</code>. </td></tr>
+<tr><td> <code>o.m(x1,..,xn)</code> </td><td> Executes the Java method <code>m</code> on the object <code>o</code>. Variables must be annotated by <code>read</code>, <code>write</code> or <code>readwrite</code> (<code>read</code> by default). </td></tr>
+<tr><td> <code>pause</code>         </td><td> Delays the execution to the next instant. </td></tr>
+<tr><td> <code>pause up</code>      </td><td> Delays and gives the control back to the upper universe. </td></tr>
+<tr><td> <code>stop</code>          </td><td> Delays and gives the control back to the host language. </td></tr>
+<tr><td> <code>par p</code>||<code>q end</code></td><td> Executes concurrently <code>p</code> and <code>q</code>. Terminates when both terminate. </td></tr>
+<tr><td> <code>par p &lt;&gt; q end</code></td><td> Same as || but terminates in the next instant if one process terminates before the other (weak preemption). </td></tr>
+<tr><td> <code>p ; q</code>         </td><td> Executes <code>p</code>, when it terminates, executes <code>q</code>. </td></tr>
+<tr><td> <code>loop p end</code>    </td><td> Executes indefinitely <code>p</code>. When <code>p</code> terminates it is executed from its beginning again. </td></tr>
+<tr><td> <code>space p end</code>   </td><td> Creates a new branch. All world_line variables are copied and are modified by <code>p</code> when the node is popped. </td></tr>
+<tr><td> <code>prune</code>         </td><td> Indicates that a branch should be pruned. </td></tr>
+<tr><td> <code>abort when e in p end</code></td><td> Executes <code>p</code> unless <code>e</code> is <code>true</code>, in which case the statement terminates in the current instant. </td></tr>
+<tr><td> <code>suspend when e in p end</code></td><td> Executes <code>p</code> in every instant in which <code>e</code> is <code>false</code>. </td></tr>
+<tr><td> <code>universe with x in p end</code></td><td> Executes <code>p</code> in a universe with the queue <code>x</code>. </td></tr>
+</tbody></table>
+<a class="header" href="print.html#" id=""><h1></h1></a>
+<a class="header" href="print.html#getting-started" id="getting-started"><h1>Getting Started</h1></a>
+<p>The project is decomposed into two parts:</p>
+<ul>
+<li><em>Bonsai</em> is the compiler of the Java extension and is written in Rust.</li>
+<li><em>Bonsai runtime</em> is the Java runtime used by the code compiled by bonsai.</li>
+</ul>
+<p>We provide instructions to install both as well as their dependencies.</p>
+<a class="header" href="print.html#prerequisites" id="prerequisites"><h3>Prerequisites</h3></a>
+<ul>
+<li><a href="http://www.rustup.rs">rustup</a>: <code>curl https://sh.rustup.rs -sSf | sh</code> (do not forget to source your profile).</li>
+<li><a href="https://maven.apache.org">Maven</a>, it is usually available in the package manager of your distribution:
+<ol>
+<li>MacOSX: <code>sudo brew install maven</code></li>
+<li>Linux Ubuntu: <code>sudo apt-get install maven</code></li>
+</ol>
+</li>
+</ul>
+<a class="header" href="print.html#installation" id="installation"><h3>Installation</h3></a>
+<p>You need to install both the compiler and the runtime using the <code>setup.py</code> script.</p>
+<pre><code class="language-sh">git clone https://github.com/ptal/bonsai.git
+cd bonsai
+python3 setup.py
+</code></pre>
+<p>We provide a manual installation procedure below in case the script did not work.</p>
+<a class="header" href="print.html#update" id="update"><h3>Update</h3></a>
+<p>Update the compiler and runtime (without the external libraries such as Choco):</p>
+<pre><code class="language-sh">./update.sh
+</code></pre>
+<a class="header" href="print.html#uninstallation" id="uninstallation"><h3>Uninstallation</h3></a>
+<pre><code class="language-sh">cargo uninstall bonsai
+# Remove runtime in the Maven local database
+rm ~/.m2/repository/bonsai
+</code></pre>
+<a class="header" href="print.html#manual-installation" id="manual-installation"><h2>Manual installation</h2></a>
+<p>Step-by-step installation of the bonsai compiler and its runtime.
+Before attempting the manual installation, you should try the <code>setup.py</code> script as described above.</p>
+<ol>
+<li>Install prerequisites: same as above (<code>rustup</code> and <code>Maven</code>).</li>
+<li>Installing the bonsai compiler:</li>
+</ol>
+<pre><code class="language-sh">rustup override set nightly-2018-11-09
+cargo install
+</code></pre>
+<p>You can verify everything is working by running <code>bonsai --help</code> in your terminal.</p>
+<ol start="3">
+<li>Installing Bonsai standard library:
+The standard library provides several modules to ease the development of Bonsai application.</li>
+</ol>
+<pre><code class="language-sh">cd libstd # (inside the bonsai repository)
+./install.sh
+</code></pre>
+<ol start="4">
+<li>Installing the Bonsai runtime:
+The Bonsai runtime has a dependency on <a href="http://www.choco-solver.org">Choco</a> for constraint programming.
+Choco will be downloaded automatically from the Maven central repository.
+However, we need to install the Bonsai runtime in the local Maven database:</li>
+</ol>
+<pre><code class="language-sh">cd runtime/ # (inside the bonsai repository)
+./install.sh
+</code></pre>
+<p>That's it! You should be ready to go to the next section.</p>
+<a class="header" href="print.html#learn-spacetime" id="learn-spacetime"><h1>Learn Spacetime</h1></a>
+<p>Please <a href="getting-started.md">install spacetime</a> first to run the program of this section.</p>
+<a class="header" href="print.html#running-a-first-program" id="running-a-first-program"><h2>Running a first program</h2></a>
+<p>In this section, we compile a first spacetime program in a Java project.
+Go to the toy project available at <a href="https://github.com/ptal/bonsai/tree/master/examples/bonsai/HelloWorld">examples/bonsai/HelloWorld</a> and launch the following script:</p>
+<pre><code class="language-sh">./run.sh
+</code></pre>
+<p>It compiles and runs the code.
+It prints the message <code>HelloWorld</code> 5 times:</p>
+<pre><code>Hello world!
+1
+Hello world!
+2
+Hello world!
+3
+Hello world!
+4
+5
+</code></pre>
+<p>You can start from this code to modify it.
+The standard library of spacetime is usable and you can find different modules in the directory <a href="https://github.com/ptal/bonsai/tree/master/libstd/src/main/java/bonsai">libstd</a>.</p>
+<a class="header" href="print.html#universe" id="universe"><h1>Universe</h1></a>
+<a class="header" href="print.html#application-musical-composition" id="application-musical-composition"><h1>Application: Musical Composition</h1></a>
+<a class="header" href="print.html#companion-guides-to-research-papers" id="companion-guides-to-research-papers"><h1>Companion guides to research papers</h1></a>
+<p>For each paper written about spacetime, I maintain a companion guide in order to:</p>
+<ol>
+<li>Provide instructions to install the exact same version of the language than the one used in the paper.</li>
+<li>Help people who wants to execute the examples presented in the paper.</li>
+<li>Replicate the benchmarks with a single command.</li>
+</ol>
+<a class="header" href="print.html#companion-guide-ppdp19" id="companion-guide-ppdp19"><h1>Companion guide (PPDP19)</h1></a>
+<ul>
+<li>Reference: P. Talbot, “Spacetime Programming: A Synchronous Language for Composable Search Strategies,” in Proceedings of the 21st ACM International Symposium on Principles and Practice of Declarative Programming (PPDP 2019), Porto, Portugal, 2019.</li>
+<li>The paper is available <a href="http://hyc.io/papers/ppdp2019.pdf">here</a>.</li>
+<li>Tagged version of the language used in the paper on <a href="https://github.com/ptal/bonsai/tree/PPDP19">Github</a>.</li>
+</ul>
+<p>This supplementary material gives instructions to compile and run the examples and benchmarks presented in the paper.</p>
+<a class="header" href="print.html#prerequisites-1" id="prerequisites-1"><h3>Prerequisites</h3></a>
+<ul>
+<li><a href="http://www.rustup.rs">rustup</a>: <code>curl https://sh.rustup.rs -sSf | sh</code> (do not forget to source your profile or restart your terminal).</li>
+<li><a href="https://maven.apache.org">Maven</a>, it is usually available in the package manager of your distribution:
+<ol>
+<li>MacOSX: <code>sudo brew install maven</code></li>
+<li>Linux Ubuntu: <code>sudo apt-get install maven</code></li>
+</ol>
+</li>
+</ul>
+<a class="header" href="print.html#installing-bonsai-tag-ppdp19" id="installing-bonsai-tag-ppdp19"><h3>Installing Bonsai (tag PPDP19)</h3></a>
+<p>If you want to replicate any benchmark and running examples, first install the compiler and runtime as follows:</p>
+<pre><code>git clone https://github.com/ptal/bonsai.git
+cd bonsai
+git checkout PPDP19
+python3 setup.py
+</code></pre>
+<p>If you have any issue, please consult <a href="getting-started.html">Getting Started</a> for further instructions.</p>
+<a class="header" href="print.html#demo-of-the-examples-in-the-paper" id="demo-of-the-examples-in-the-paper"><h2>Demo of the examples in the paper</h2></a>
+<p>We provide a demonstration of the programs given in the paper in the directory <a href="https://github.com/ptal/bonsai/tree/PPDP19/examples/bonsai/PPDP19">PPDP19</a>.
+After installing spacetime, you can simply type:</p>
+<pre><code class="language-sh">cd examples/bonsai/PPDP19
+./run.sh
+</code></pre>
+<a class="header" href="print.html#additional-examples-of-strategies" id="additional-examples-of-strategies"><h2>Additional examples of strategies</h2></a>
+<p>Examples are provided in the <a href="https://github.com/ptal/bonsai/tree/master/libstd/src/main/java/bonsai">standard library</a> of spacetime.
+In particular, we have the following:</p>
+<ul>
+<li><a href="https://github.com/ptal/bonsai/blob/PPDP19/libstd/src/main/java/bonsai/strategies/DDS.bonsai.java">Depth-bounded discrepancy search (DDS)</a></li>
+<li><a href="https://github.com/ptal/bonsai/blob/PPDP19/libstd/src/main/java/bonsai/strategies/ILDS.bonsai.java">Improved Limited Discrepancy Search (ILDS)</a></li>
+<li>Highest and lowest discrepancy first variations of LDS can be obtained by changing the queueing strategy from <code>StackLR</code> to <code>StackRL</code>.</li>
+<li><a href="https://github.com/ptal/bonsai/blob/PPDP19/libstd/src/main/java/bonsai/cp/MaximizeBAB.bonsai.java">Branch and bound search (BAB)</a></li>
+</ul>
+<a class="header" href="print.html#how-to-run-the-benchmark" id="how-to-run-the-benchmark"><h2>How to run the benchmark</h2></a>
+<p>After installing spacetime, you can simply type:</p>
+<pre><code class="language-sh">cd benchmark
+./run.sh
+</code></pre>
+<p>The file <a href="https://github.com/ptal/bonsai/blob/master/benchmark/src/main/java/benchmark/Benchmark.java">Benchmark.java</a> contains some parameters that can be tweaked such as the size of the instances.</p>
+<a class="header" href="print.html#tests" id="tests"><h2>Tests</h2></a>
+<p>The compiler and runtime of spacetime are well tested, you can run the tests of the compiler with:</p>
+<pre><code class="language-sh">cargo test
+cd runtime
+mvn test
+</code></pre>
+<p>There are about 200 tests, ranging from the static analysis of the compiler (<a href="https://github.com/ptal/bonsai/tree/master/data/test/compile-fail">compile-fail</a> and <a href="https://github.com/ptal/bonsai/tree/master/data/test/compile-pass">compile-pass</a>), to the runtime behavior (<a href="https://github.com/ptal/bonsai/tree/master/data/test/run-pass">run-pass</a>), and the correctness of the lattice library.</p>
+<a class="header" href="print.html#contributing" id="contributing"><h1>Contributing</h1></a>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = '_FontAwesome/css/font-awesome.css';
+                document.head.insertBefore(link, document.head.firstChild)
+            }
+        </script>
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                window.print();
+            })
+        </script>
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

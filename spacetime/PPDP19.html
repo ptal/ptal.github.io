@@ -1,0 +1,277 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>PPDP19 - Spacetime Programming</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <noscript>
+            <style type="text/css">
+                .javascript-only {
+                    display: none;
+                }
+            </style>
+        </noscript>
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme;
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="README.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-spacetime.html"><strong aria-hidden="true">3.</strong> Learn Spacetime</a></li><li><a href="universe.html"><strong aria-hidden="true">4.</strong> Universe</a></li><li><a href="application-composition.html"><strong aria-hidden="true">5.</strong> Application: Musical Composition</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Research</a></li><li><ol class="section"><li><a href="PPDP19.html" class="active"><strong aria-hidden="true">6.1.</strong> PPDP19</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">7.</strong> Contributing</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons javascript-only">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Spacetime Programming</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </div>
+                <div id="searchresults-outer" class="searchresults-outer">
+                    <div class="searchresults-header" id="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="PPDP19.html#companion-guide-ppdp19" id="companion-guide-ppdp19"><h1>Companion guide (PPDP19)</h1></a>
+<ul>
+<li>Reference: P. Talbot, “Spacetime Programming: A Synchronous Language for Composable Search Strategies,” in Proceedings of the 21st ACM International Symposium on Principles and Practice of Declarative Programming (PPDP 2019), Porto, Portugal, 2019.</li>
+<li>The paper is available <a href="http://hyc.io/papers/ppdp2019.pdf">here</a>.</li>
+<li>Tagged version of the language used in the paper on <a href="https://github.com/ptal/bonsai/tree/PPDP19">Github</a>.</li>
+</ul>
+<p>This supplementary material gives instructions to compile and run the examples and benchmarks presented in the paper.</p>
+<a class="header" href="PPDP19.html#prerequisites" id="prerequisites"><h3>Prerequisites</h3></a>
+<ul>
+<li><a href="http://www.rustup.rs">rustup</a>: <code>curl https://sh.rustup.rs -sSf | sh</code> (do not forget to source your profile or restart your terminal).</li>
+<li><a href="https://maven.apache.org">Maven</a>, it is usually available in the package manager of your distribution:
+<ol>
+<li>MacOSX: <code>sudo brew install maven</code></li>
+<li>Linux Ubuntu: <code>sudo apt-get install maven</code></li>
+</ol>
+</li>
+</ul>
+<a class="header" href="PPDP19.html#installing-bonsai-tag-ppdp19" id="installing-bonsai-tag-ppdp19"><h3>Installing Bonsai (tag PPDP19)</h3></a>
+<p>If you want to replicate any benchmark and running examples, first install the compiler and runtime as follows:</p>
+<pre><code>git clone https://github.com/ptal/bonsai.git
+cd bonsai
+git checkout PPDP19
+python3 setup.py
+</code></pre>
+<p>If you have any issue, please consult <a href="getting-started.html">Getting Started</a> for further instructions.</p>
+<a class="header" href="PPDP19.html#demo-of-the-examples-in-the-paper" id="demo-of-the-examples-in-the-paper"><h2>Demo of the examples in the paper</h2></a>
+<p>We provide a demonstration of the programs given in the paper in the directory <a href="https://github.com/ptal/bonsai/tree/PPDP19/examples/bonsai/PPDP19">PPDP19</a>.
+After installing spacetime, you can simply type:</p>
+<pre><code class="language-sh">cd examples/bonsai/PPDP19
+./run.sh
+</code></pre>
+<a class="header" href="PPDP19.html#additional-examples-of-strategies" id="additional-examples-of-strategies"><h2>Additional examples of strategies</h2></a>
+<p>Examples are provided in the <a href="https://github.com/ptal/bonsai/tree/master/libstd/src/main/java/bonsai">standard library</a> of spacetime.
+In particular, we have the following:</p>
+<ul>
+<li><a href="https://github.com/ptal/bonsai/blob/PPDP19/libstd/src/main/java/bonsai/strategies/DDS.bonsai.java">Depth-bounded discrepancy search (DDS)</a></li>
+<li><a href="https://github.com/ptal/bonsai/blob/PPDP19/libstd/src/main/java/bonsai/strategies/ILDS.bonsai.java">Improved Limited Discrepancy Search (ILDS)</a></li>
+<li>Highest and lowest discrepancy first variations of LDS can be obtained by changing the queueing strategy from <code>StackLR</code> to <code>StackRL</code>.</li>
+<li><a href="https://github.com/ptal/bonsai/blob/PPDP19/libstd/src/main/java/bonsai/cp/MaximizeBAB.bonsai.java">Branch and bound search (BAB)</a></li>
+</ul>
+<a class="header" href="PPDP19.html#how-to-run-the-benchmark" id="how-to-run-the-benchmark"><h2>How to run the benchmark</h2></a>
+<p>After installing spacetime, you can simply type:</p>
+<pre><code class="language-sh">cd benchmark
+./run.sh
+</code></pre>
+<p>The file <a href="https://github.com/ptal/bonsai/blob/master/benchmark/src/main/java/benchmark/Benchmark.java">Benchmark.java</a> contains some parameters that can be tweaked such as the size of the instances.</p>
+<a class="header" href="PPDP19.html#tests" id="tests"><h2>Tests</h2></a>
+<p>The compiler and runtime of spacetime are well tested, you can run the tests of the compiler with:</p>
+<pre><code class="language-sh">cargo test
+cd runtime
+mvn test
+</code></pre>
+<p>There are about 200 tests, ranging from the static analysis of the compiler (<a href="https://github.com/ptal/bonsai/tree/master/data/test/compile-fail">compile-fail</a> and <a href="https://github.com/ptal/bonsai/tree/master/data/test/compile-pass">compile-pass</a>), to the runtime behavior (<a href="https://github.com/ptal/bonsai/tree/master/data/test/run-pass">run-pass</a>), and the correctness of the lattice library.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="research.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="contributing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="research.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="contributing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = '_FontAwesome/css/font-awesome.css';
+                document.head.insertBefore(link, document.head.firstChild)
+            }
+        </script>
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

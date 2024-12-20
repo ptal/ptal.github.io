@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Introduction - Spacetime Programming</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <noscript>
+            <style type="text/css">
+                .javascript-only {
+                    display: none;
+                }
+            </style>
+        </noscript>
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme;
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="README.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><a href="getting-started.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li><a href="learn-spacetime.html"><strong aria-hidden="true">3.</strong> Learn Spacetime</a></li><li><a href="universe.html"><strong aria-hidden="true">4.</strong> Universe</a></li><li><a href="application-composition.html"><strong aria-hidden="true">5.</strong> Application: Musical Composition</a></li><li><a href="research.html"><strong aria-hidden="true">6.</strong> Research</a></li><li><ol class="section"><li><a href="PPDP19.html"><strong aria-hidden="true">6.1.</strong> PPDP19</a></li></ol></li><li><a href="contributing.html"><strong aria-hidden="true">7.</strong> Contributing</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons javascript-only">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Spacetime Programming</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </div>
+                <div id="searchresults-outer" class="searchresults-outer">
+                    <div class="searchresults-header" id="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="README.html#spacetime-programming" id="spacetime-programming"><h1>Spacetime Programming</h1></a>
+<p>Spacetime programming is a programming language on top of Java to describe search strategy when exploring a state-space, for example in constraint satisfaction problems.
+Spacetime started as a research project and is formally described in <a href="http://hyc.io/papers/dissertation-talbot.pdf">this dissertation</a>.
+A Java project integrating spacetime code can be set up in 5 minutes with the Maven build system.</p>
+<p>Spacetime is based on two main paradigms: <a href="https://en.wikipedia.org/wiki/Synchronous_programming_language">synchronous programming</a> and <a href="https://en.wikipedia.org/wiki/Concurrent_constraint_logic_programming">concurrent constraint programming</a> (CCP).
+These two paradigms are not mainstream and it is very likely that you did not hear about these two paradigms before.
+In this tutorial, we walk you through the syntax and semantics of spacetime with various examples.
+Our goal is to keep the tutorial accessible to programmers and computer scientists, and to give you an idea of the kind of problems this language can solve.</p>
+<p>Independently of your background, a first step is to read the <a href="getting-started.html">Getting Started</a> chapter.
+We introduce the concepts of <a href="synchronous-programming.html">Synchronous Programming</a> and the syntax of spacetime through several small examples.
+We make sure the build system is working out for you.
+Secondly, we introduce some novelties of <a href="learn-spacetime.html">Spacetime Programming</a> with examples stemming from constraint satisfaction problems such as Sudoku.
+We next consider the more advanced concept of <a href="universe.html">Universe</a> which is useful to design restarting search strategies.
+Finally, we go through a full application of this language by designing a interactive search strategy for an <a href="application-composition.html">application of musical composition</a>.</p>
+<p>The code is available on <a href="https://github.com/ptal/bonsai">github</a>.</p>
+<p>Note that this tutorial is a work-in-progress.</p>
+<a class="header" href="README.html#syntax-cheat-sheet" id="syntax-cheat-sheet"><h3>Syntax cheat sheet</h3></a>
+<p><code>p</code> and <code>q</code> are statements, <code>e</code> is an expression, <code>x</code> a variable identifier and <code>st</code> is a spacetime attribute (either <code>single_space</code>, <code>single_time</code> and <code>world_line</code>).</p>
+<table><thead><tr><th> Statements      </th><th> Description </th></tr></thead><tbody>
+<tr><td> <code>st T x = e</code>    </td><td> Declares the variable <code>x</code> of type <code>T</code> with the spacetime <code>st</code>. </td></tr>
+<tr><td> <code>when e then p else q end</code> </td><td> Executes <code>p</code> if <code>e</code> is equal to <code>true</code>, otherwise <code>q</code>. </td></tr>
+<tr><td> <code>x &lt;- e</code>        </td><td> Joins the information of <code>e</code> into <code>x</code>. </td></tr>
+<tr><td> <code>o.m(x1,..,xn)</code> </td><td> Executes the Java method <code>m</code> on the object <code>o</code>. Variables must be annotated by <code>read</code>, <code>write</code> or <code>readwrite</code> (<code>read</code> by default). </td></tr>
+<tr><td> <code>pause</code>         </td><td> Delays the execution to the next instant. </td></tr>
+<tr><td> <code>pause up</code>      </td><td> Delays and gives the control back to the upper universe. </td></tr>
+<tr><td> <code>stop</code>          </td><td> Delays and gives the control back to the host language. </td></tr>
+<tr><td> <code>par p</code>||<code>q end</code></td><td> Executes concurrently <code>p</code> and <code>q</code>. Terminates when both terminate. </td></tr>
+<tr><td> <code>par p &lt;&gt; q end</code></td><td> Same as || but terminates in the next instant if one process terminates before the other (weak preemption). </td></tr>
+<tr><td> <code>p ; q</code>         </td><td> Executes <code>p</code>, when it terminates, executes <code>q</code>. </td></tr>
+<tr><td> <code>loop p end</code>    </td><td> Executes indefinitely <code>p</code>. When <code>p</code> terminates it is executed from its beginning again. </td></tr>
+<tr><td> <code>space p end</code>   </td><td> Creates a new branch. All world_line variables are copied and are modified by <code>p</code> when the node is popped. </td></tr>
+<tr><td> <code>prune</code>         </td><td> Indicates that a branch should be pruned. </td></tr>
+<tr><td> <code>abort when e in p end</code></td><td> Executes <code>p</code> unless <code>e</code> is <code>true</code>, in which case the statement terminates in the current instant. </td></tr>
+<tr><td> <code>suspend when e in p end</code></td><td> Executes <code>p</code> in every instant in which <code>e</code> is <code>false</code>. </td></tr>
+<tr><td> <code>universe with x in p end</code></td><td> Executes <code>p</code> in a universe with the queue <code>x</code>. </td></tr>
+</tbody></table>
+<a class="header" href="README.html#" id=""><h1></h1></a>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+                            <a rel="next" href="getting-started.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+                    <a href="getting-started.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = '_FontAwesome/css/font-awesome.css';
+                document.head.insertBefore(link, document.head.firstChild)
+            }
+        </script>
+
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

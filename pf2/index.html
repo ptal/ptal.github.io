@@ -1,0 +1,187 @@
+<!doctype html>
+
+<html lang=en>
+<head>
+  <script type="text/javascript" src="lib/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="lib/csv.js"></script>
+  <script type="text/javascript" src="lib/particle.js"></script>
+  <link rel="stylesheet" media="screen" href="style.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.30.2/js/jquery.terminal.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.30.2/css/jquery.terminal.min.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/js-polyfills/keyboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jcubic/static/js/wcwidth.js"></script>
+
+  <meta charset=utf-8>
+  <title>Programming Fundamentals 2</title>
+
+  <script type="text/javascript">
+    var username = "";
+    var labs = [];
+    var succeeded = new Set();
+    var unlocked = new Set();
+    const labs_tree = {
+      // Starting laboratories
+      "hacking_in_bash": {deps: []},
+      "hello_world": {deps: []},
+      // Modelling track
+      "the_card_game": {deps: ["hacking_in_bash", "hello_world"]},
+      "space_exploration": {deps: ["hacking_in_bash", "hello_world"]},
+      "pokedeck": {deps: ["the_card_game", "space_exploration"]},
+      // Data structure track
+      "dynamic_array": {deps: []},
+      "linked_list": {deps: ["dynamic_array"]},
+      "generics": {deps: ["linked_list"]},
+      "hash_table": {deps: ["generics"]},
+      "binary_tree": {deps: ["generics"]},
+    };
+    const videos = {
+      "getting_started_linux": {what: "Getting started on Linux Ubuntu (preferred way)", deps: [], youtube: "J4EYwmYi1-0"},
+      "getting_started_macos": {what: "Getting started on macOS (alternative way)", deps: [], youtube: "SxfeLMTj3iY"},
+      "getting_started_windows": {what: "Getting started on Windows WSL (alternative way)", deps: [], youtube: "J4EYwmYi1-0"},
+      "bash": {what: "Control your computer like a hacker", deps: [], youtube: "WhLe3XruobA"},
+      "submit_lab": {what: "How to submit a laboratory", deps: [], youtube: "E79nlrkEliw"},
+      "basics_of_java": {what: "Python vs Java. Learn the basics of Java", deps: [], youtube: "ZvinVlb5ywM"},
+      "object_topdown": {what: "Object-oriented programming top-down", deps: [], youtube: "gP1x4rdJJGI"},
+      "testing": {what: "Testing your code", deps: ["hello_world"], youtube: "VD8FkeySKsU"},
+      "object_principles": {what: "Principles of object-oriented programming", deps: ["hello_world"], youtube: "ylcMIitamEE"},
+      "data_type": {what: "Object-oriented bottom-up: imperative data types", deps: ["hello_world"], youtube: "AlRFdY_7s6E"},
+      "object_type": {what: "Object-oriented bottom-up: object type", deps: ["hello_world"], youtube: "Pk9Wj53ztJM"},
+      "uml": {what: "Unified Modelling Language (UML)", deps: ["space_exploration"], youtube: "8AvuDIyYMAs"},
+      "polymorphism": {what: "Polymorphism in (more) depth", deps: ["space_exploration"], youtube: "eIWvJUOm2uo"},
+      "generics": {what: "Parametric polymorphism", deps: ["linked_list"], youtube: "msea9-l1pik"},
+      "object_class": {what: "(Almost) everything is object", deps: ["linked_list"], youtube: "zAh5bG6Hnxc"},
+      "casting": {what: "Casting polymorphism", deps: ["linked_list"], youtube: "-DSRLSuP5_E"},
+      "error": {what: "Error management", deps: ["space_exploration", "the_card_game"], youtube: "LSvnAhcBa2I"},
+      "advanced": {what: "Advanced Java Concepts", deps: ["space_exploration", "the_card_game"], youtube: "YXq8az8EINw"},
+      "lambda": {what: "Lambda Expressions", deps: ["space_exploration", "the_card_game"], youtube: "-tJ8uLQZl0U"},
+      "javafx": {what: "Simple graphical interface with JavaFX", deps: ["pokedeck"], youtube: "Cez96xtzo9o"},
+      "dynamic_array": {what: "Dynamic array data structure", deps: [], youtube: "QKZmqtWVQGI"},
+      "linked_list": {what: "Linked list data structure", deps: ["dynamic_array"], youtube: "hoBsK6jJISc"},
+      "hash_table": {what: "Hash table data structure", deps: ["generics"], youtube: "EnV6Q4a7l3o"},
+      "binary_tree": {what: "Binary tree data structure", deps: ["generics"], youtube: "EyztxPxZHMM"}
+    };
+
+    function submitUsername(username) {
+      fetch("https://raw.githubusercontent.com/ptal/pf2-summer-2023/main/" + username + ".csv").then(function(response) {
+        if(!response.ok) {
+          $('#pf2_term').terminal().echo(new String("Could not access your data on Github, did you mess up your pokename?"));
+        }
+        else {
+          response.text().then(function(labs_csv) {
+            labs = parseCSV(labs_csv);
+            $('#pf2_term').terminal().echo(new String("Access granted. Welcome back " + username + "!"));
+          });
+        }
+      });
+      return false;
+    }
+
+    function initializeVars() {
+      succeeded = new Set();
+      minor = new Set();
+      major = new Set();
+      unlocked = new Set();
+      for (var i = 1; i < labs.length; i++) {
+        if(labs[i][1] === "A") {
+          succeeded.add(labs[i][0]);
+        }
+        else if(labs[i][1] === "B") {
+          minor.add(labs[i][0]);
+        }
+        else if(labs[i][1] === "C") {
+          major.add(labs[i][0]);
+        }
+      }
+      for (var l in labs_tree) {
+        if(succeeded.has(l) || minor.has(l)) {
+          unlocked.add(l);
+        }
+      }
+    }
+
+    function displayLab() {
+      initializeVars();
+      var k = 0;
+      for (var l in labs_tree) {
+        var display = true;
+        for (var i = 0; i < labs_tree[l].deps.length; i++) {
+          if(!unlocked.has(labs_tree[l].deps[i])) {
+            display = false;
+          }
+        }
+        var lab_pdf_link = "([[!;;;;http://hyc.io/pf2/labs/" + l + ".pdf]PDF])"
+        var lab_name = k + ". " + l;
+        if(display) {
+          if(succeeded.has(l)) {
+            $('#pf2_term').terminal().echo(new String(lab_name + " completed " + lab_pdf_link));
+          }
+          else if(minor.has(l)) {
+            $('#pf2_term').terminal().echo(new String(lab_name + " needs minor changes (B), check the comments in the pull-request " + lab_pdf_link));
+          }
+          else if(major.has(l)) {
+            $('#pf2_term').terminal().echo(new String(lab_name + " needs major changes (C), check the comments in the pull-request " + lab_pdf_link));
+          }
+          else {
+            $('#pf2_term').terminal().echo(new String(lab_name + " unlocked " + lab_pdf_link));
+          }
+          k = k + 1;
+        }
+      }
+    }
+
+    function displayVideo() {
+      initializeVars();
+      var i = 0;
+      for(var k in videos) {
+        var can_watch = videos[k].deps.length === 0;
+        for(var j = 0; j < videos[k].deps.length; j++) {
+          if(unlocked.has(videos[k].deps[j])) {
+            can_watch = true;
+          }
+        }
+        if(can_watch) {
+          if(k === "getting_started_windows") {
+            $('#pf2_term').terminal().echo(new String(i + ". " + videos[k].what + " [[!;;;;https://docs.microsoft.com/en-us/windows/wsl/install]install WSL] then follow Ubuntu instructions."));
+          }
+          else {
+            var video_link = "([[!;;;;https://www.youtube.com/watch?v=" + videos[k].youtube + "]MP4])"
+            $('#pf2_term').terminal().echo(new String(i + ". " + videos[k].what + " " + video_link));
+          }
+        }
+        i = i + 1;
+      }
+      return false;
+    }
+
+    jQuery(function($, undefined) {
+        $('#pf2_term').terminal(function(command) {
+          if(labs.length === 0) {
+            submitUsername(command);
+          }
+          else if(command === "video") {
+            displayVideo();
+          }
+          else if(command === "lab") {
+            displayLab();
+          }
+          else {
+            $('#pf2_term').terminal().echo(new String("The only commands available are: `video` and `lab`."));
+          }
+        }, {
+            greetings: 'Welcome to Programming Fundamentals 2!\nCommands available are: `video` and `lab`.\n\nEnter your pokename:',
+            name: 'pf2',
+            height: 1000,
+            prompt: 'pf2> '
+        });
+    });
+
+
+  </script>
+</head>
+
+<body id="particles-js">
+  <script type="text/javascript" src="particles.js"></script>
+  <div id="pf2_term" style="position: absolute; top: 100px; width: 100%;"></div>
+</body>
+</html>
