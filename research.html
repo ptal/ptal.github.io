@@ -120,6 +120,27 @@
 </head>
 <body>
 
+<div class="ui modal ola-2025">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/ola2025.pdf"><button class="ui button">.pdf</button></a>
+      <a href="https://gitlab.com/NetForceExplorer/zx_dfs/-/tree/v1.0-OLA_2025?ref_type=tags"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is the work of Tobias Fischbach, Ph.D. candidate, to optimize quantum circuits. Due to the hardware requirements of quantum computers, it is necessary to optimize the circuit while preserving its semantics. For this purpose, we use the ZX-calculus, a formal semantics-preserving rewriting language. The quantum circuit is converted into a ZX diagram, optimized, and then extracted from the optimized ZX diagram. We give a formalization of the state-space and the optimization. Then, we investigate two simple exhaustive search algorithms (DFS, IDDFS) to explore the state-space of ZX diagrams. The results show that it can beat existing state-of-the-art greedy optimization algorithm (full-reduce), but it takes longer to execute.</p>
+  </div>
+
+<div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">
+    @inproceedings{OLA-2025,
+  author = {{Tobias Fischbach, Pierre Talbot, Pascal Bouvry}},
+  title = {{Exhaustive Search for Quantum Circuit Optimization using ZX Calculus}},
+  booktitle = {{International Conference in Optimization and Learning (OLA 2025)}},
+  year = {2025}
+}</code></pre></div></div>
+
 <!-- ICTAI-24 -->
 
 <div class="ui modal ictai-2024">
@@ -147,6 +168,7 @@
   <div class="ui very padded segment">
     <div class="ui icon green small buttons">
       <a href="papers/pthg2024.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/pthg2024-slides.pdf"><button class="ui button">slides</button></a>
     </div>
     </br>
     </br>
@@ -653,6 +675,12 @@
       <p>Bibtex, PDF, recorded presentation, slides, and story of the paper are available by clicking on the title of a research paper.</p>
       <p><b>Replicate</b>: The code is linked to the version of the project that was used in the paper.</p>
       <ol>
+      <div class="ui horizontal divider">2025</div>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.ola-2025').modal('show');">Exhaustive Search for Quantum Circuit Optimization using ZX Calculus</a></br>
+        Tobias Fischbach, Pierre Talbot, Pascal Bouvry</br>
+        International Conference in Optimization and Learning (OLA 2025)</br>
+      </li>
       <div class="ui horizontal divider">2024</div>
       <li>
         <a class="ui" onclick="$('.ui.modal.ictai-2024').modal('show');">Selecting Search Strategy in Constraint Solvers using Bayesian Optimization</a></br>
@@ -662,7 +690,7 @@
       <li>
         <a class="ui" onclick="$('.ui.modal.pthg-2024').modal('show');">Comparison of Hyperparameter Optimization Methods for Selecting Search Strategy of Constraint Programming Solvers</a></br>
         Hedieh Haddad, Pierre Talbot, Pascal Bouvry</br>
-        The Seventh Workshop on Progress Towards the Holy Grail (PTHG-24)</br>
+        The Seventh Workshop on Progress Towards the Holy Grail (PTHG 2024)</br>
       </li>
       <div class="ui horizontal divider">2023</div>
       <li>
