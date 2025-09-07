@@ -1,0 +1,208 @@
+<!doctype html>
+
+<html lang=en>
+<head>
+  <script type="text/javascript" src="lib/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="lib/csv.js"></script>
+  <script type="text/javascript" src="lib/particle.js"></script>
+  <link rel="stylesheet" media="screen" href="style.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.30.2/js/jquery.terminal.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.30.2/css/jquery.terminal.min.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/js-polyfills/keyboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jcubic/static/js/wcwidth.js"></script>
+
+  <meta charset=utf-8>
+  <title>Parallel Computing</title>
+
+  <script type="text/javascript">
+    var username = "";
+    var labs = [];
+    var succeeded = new Set();
+    var unlocked = new Set();
+    const labs_tree = {
+      // C++ labs
+      "how_to_submit": {deps: [], bonus: false},
+      "rule110": {deps: ["how_to_submit"], bonus: false},
+      // "vector": {deps: ["rule110"], bonus: false},
+      // "functional": {deps: ["rule110"], bonus: false},
+      // Parallel labs
+      // "rule110_par": {deps: ["functional", "vector"], bonus: false},
+      // "biggraph": {deps: ["rule110_par"], bonus: false},
+      // "itv_propagation": {deps: ["biggraph"], bonus: false},
+      // Group works
+      // "monitor": {deps: [], bonus: false},
+      // "histogram": {deps: [], bonus: false},
+      // "producerconsumer": {deps: [], bonus: false},
+      // "seqconsistency": {deps: [], bonus: false},
+      // "readerwriter": {deps: [], bonus: false},
+    };
+    const groupwork_list = [
+      "monitor",
+      "histogram",
+      "producerconsumer",
+      "readerwriter",
+      "seqconsistency",
+    ];
+    const cpp_videos = {
+      "how_to_submit": {what: "How to submit a laboratory", deps: [], youtube: "E79nlrkEliw"},
+      "hello_cpp": {what: "Compile and run your first C++ program", deps: ["how_to_submit"], youtube: "dSqXO8RBMBg"},
+      "primitive_types": {what: "Primitive types", deps: ["how_to_submit"], youtube: "ZvinVlb5ywM"},
+      "expressions": {what: "Expressions", deps: ["how_to_submit"], youtube: "ZvinVlb5ywM"},
+      "statements": {what: "Statements", deps: ["how_to_submit"], youtube: "ZvinVlb5ywM"},
+      "functions": {what: "Functions and references", deps: ["how_to_submit"], youtube: "ZvinVlb5ywM"},
+      "pointers": {what: "Pointers", deps: ["rule110"], youtube: "ZvinVlb5ywM"},
+      "classes": {what: "Classes", deps: ["rule110"], youtube: "ZvinVlb5ywM"},
+      "allocation": {what: "Allocation", deps: ["rule110"], youtube: "ZvinVlb5ywM"},
+      "overloading": {what: "Operator overloading", deps: ["rule110"], youtube: "ZvinVlb5ywM"},
+      "template": {what: "Template", deps: ["rule110"], youtube: "ZvinVlb5ywM"},
+      "move_semantics": {what: "Move semantics", deps: ["rule110"], youtube: "ZvinVlb5ywM"},
+      "lambda": {what: "Lambda functions", deps: ["vector"], youtube: "ZvinVlb5ywM"},
+      "inference": {what: "Type inference", deps: ["vector"], youtube: "ZvinVlb5ywM"},
+      "metaprogramming": {what: "Metaprogramming", deps: ["vector"], youtube: "ZvinVlb5ywM"},
+      "c_language": {what: "C language", deps: ["vector"], youtube: "ZvinVlb5ywM"},
+    };
+
+    function submitUsername(username) {
+      fetch("https://raw.githubusercontent.com/ptal/pc-winter-2025/main/" + username + ".csv").then(function(response) {
+        if(!response.ok) {
+          $('#pc_term').terminal().echo(new String("Could not access your data on Github, did you mess up your pokename?"));
+        }
+        else {
+          response.text().then(function(labs_csv) {
+            labs = parseCSV(labs_csv);
+            $('#pc_term').terminal().echo(new String("Access granted. Welcome back " + username + "!"));
+          });
+        }
+      });
+      return false;
+    }
+
+    function initializeVars() {
+      succeeded = new Set();
+      minor = new Set();
+      major = new Set();
+      unlocked = new Set();
+      for (var i = 1; i < labs.length; i++) {
+        if(labs[i][1] === "A") {
+          succeeded.add(labs[i][0]);
+        }
+        else if(labs[i][1] === "B") {
+          minor.add(labs[i][0]);
+        }
+        else if(labs[i][1] === "C") {
+          major.add(labs[i][0]);
+        }
+      }
+      for (var l in labs_tree) {
+        if(succeeded.has(l) || minor.has(l)) {
+          unlocked.add(l);
+        }
+      }
+    }
+
+    function displayLab() {
+      initializeVars();
+      var k = 0;
+      for (var l in labs_tree) {
+        var display = true;
+        for (var i = 0; i < labs_tree[l].deps.length; i++) {
+          if(!succeeded.has(labs_tree[l].deps[i])) {
+            display = false;
+          }
+        }
+        var lab_pdf_link = "([[!;;;;http://ptal.github.io/pc/labs/" + l + ".pdf]PDF])"
+        var lab_name = k + ". " + l;
+        if(display) {
+          if(succeeded.has(l)) {
+            $('#pc_term').terminal().echo(new String(lab_name + " completed " + lab_pdf_link));
+          }
+          else if(minor.has(l)) {
+            $('#pc_term').terminal().echo(new String(lab_name + " needs minor changes (B), check the comments in the pull-request " + lab_pdf_link));
+          }
+          else if(major.has(l)) {
+            $('#pc_term').terminal().echo(new String(lab_name + " needs major changes (C), check the comments in the pull-request " + lab_pdf_link));
+          }
+          else {
+            $('#pc_term').terminal().echo(new String(lab_name + " unlocked " + lab_pdf_link));
+          }
+          k = k + 1;
+        }
+      }
+    }
+
+    function displayGroupwork() {
+      initializeVars();
+      var k = 0;
+      for (var l in groupwork_list) {
+        var lab_pdf_link = "([[!;;;;http://ptal.github.io/pc/groupwork/" + l + ".pdf]PDF])"
+        var lab_name = k + ". " + l;
+        if(succeeded.has(l)) {
+          $('#pc_term').terminal().echo(new String(lab_name + " completed " + lab_pdf_link));
+        }
+        else {
+          $('#pc_term').terminal().echo(new String(lab_name + " not submitted " + lab_pdf_link));
+        }
+        k = k + 1;
+      }
+    }
+
+    function displayCppVideo() {
+      initializeVars();
+      var i = 0;
+      for(var k in cpp_videos) {
+        var can_watch = cpp_videos[k].deps.length === 0;
+        for(var j = 0; j < cpp_videos[k].deps.length; j++) {
+          if(unlocked.has(cpp_videos[k].deps[j])) {
+            can_watch = true;
+            alert(cpp_videos[k].what)
+          }
+        }
+        if(can_watch) {
+          if(k === "getting_started_windows") {
+            $('#pc_term').terminal().echo(new String(i + ". " + cpp_videos[k].what + " [[!;;;;https://docs.microsoft.com/en-us/windows/wsl/install]install WSL] then follow Ubuntu instructions."));
+          }
+          else {
+            var video_link = "([[!;;;;https://www.youtube.com/watch?v=" + cpp_videos[k].youtube + "]MP4])"
+            $('#pc_term').terminal().echo(new String(i + ". " + cpp_videos[k].what + " " + video_link));
+          }
+        }
+        i = i + 1;
+      }
+      return false;
+    }
+
+    jQuery(function($, undefined) {
+        $('#pc_term').terminal(function(command) {
+          if(labs.length === 0) {
+            submitUsername(command);
+          }
+          else if(command === "c++") {
+            displayCppVideo();
+          }
+          else if(command === "lab") {
+            displayLab();
+          }
+          else if(command === "groupwork") {
+            // displayGroupwork();
+          }
+          else {
+            $('#pc_term').terminal().echo(new String("The only commands available are: `c++`, `lab` and `groupwork`."));
+          }
+        }, {
+            greetings: 'Welcome to Parallel Computing!\nCommands available are: `c++`, `lab` and `groupwork`.\n\nEnter your pokename:',
+            name: 'pc',
+            height: 1000,
+            prompt: 'pc> '
+        });
+    });
+
+
+  </script>
+</head>
+
+<body id="particles-js">
+  <script type="text/javascript" src="particles.js"></script>
+  <div id="pc_term" style="position: absolute; top: 100px; width: 100%;"></div>
+</body>
+</html>
