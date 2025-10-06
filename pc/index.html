@@ -27,7 +27,7 @@
       "vector": {deps: ["how_to_submit"], bonus: false},
       "functional": {deps: ["how_to_submit"], bonus: false},
       // Parallel labs
-      // "rule110_par": {deps: ["functional", "vector"], bonus: false},
+      "rule110_par": {deps: ["functional", "vector"], bonus: false},
       // "biggraph": {deps: ["rule110_par"], bonus: false},
       // "itv_propagation": {deps: ["biggraph"], bonus: false},
       // Group works
@@ -62,6 +62,21 @@
       "metaprogramming": {what: "Metaprogramming", deps: ["vector"], youtube: "c5a6HXi2vv8"},
       "c_language": {what: "C language", deps: ["vector"], youtube: "ZvinVlb5ywM"},
     };
+
+    const par_videos = {
+      "hpc_top_down": {what: "HPC Top-down", deps: [], youtube: "KhAYTCG8FJA"},
+      "benchmarking": {what: "Benchmarking", deps: ["functional"], youtube: "vx_vCMLPeAE"},
+      "easy_acceleration": {what: "Easy Acceleration", deps: ["functional"], youtube: "CVOBTUzUvXY"},
+      "arithmetic_intensity": {what: "Arithmetic Intensity", deps: ["functional"], youtube: "2-0iWx47ZZk"},
+    };
+
+    // const stanford_videos = {
+    //   "hpc_top_down": {what: "HPC Top-down", deps: [], youtube: "KhAYTCG8FJA"},
+    //   "benchmarking": {what: "Benchmarking", deps: ["functional"], youtube: "vx_vCMLPeAE"},
+    //   "easy_acceleration": {what: "Easy Acceleration", deps: ["functional"], youtube: "CVOBTUzUvXY"},
+    //   "arithmetic_intensity": {what: "Arithmetic Intensity", deps: ["functional"], youtube: "2-0iWx47ZZk"},
+    // };
+
 
     function submitUsername(username) {
       fetch("https://raw.githubusercontent.com/ptal/pc-winter-2025/main/" + username + ".csv").then(function(response) {
@@ -171,6 +186,25 @@
       return false;
     }
 
+    function displayParVideo() {
+      initializeVars();
+      var i = 0;
+      for(var k in par_videos) {
+        var can_watch = par_videos[k].deps.length === 0;
+        for(var j = 0; j < par_videos[k].deps.length; j++) {
+          if(unlocked.has(par_videos[k].deps[j])) {
+            can_watch = true;
+          }
+        }
+        if(can_watch) {
+          var video_link = "([[!;;;;https://www.youtube.com/watch?v=" + par_videos[k].youtube + "]MP4])"
+          $('#pc_term').terminal().echo(new String(i + ". " + par_videos[k].what + " " + video_link));
+        }
+        i = i + 1;
+      }
+      return false;
+    }
+
     jQuery(function($, undefined) {
         $('#pc_term').terminal(function(command) {
           if(labs.length === 0) {
@@ -179,6 +213,9 @@
           else if(command === "c++") {
             displayCppVideo();
           }
+          else if(command === "par") {
+            displayParVideo();
+          }
           else if(command === "lab") {
             displayLab();
           }
@@ -186,10 +223,10 @@
             // displayGroupwork();
           }
           else {
-            $('#pc_term').terminal().echo(new String("The only commands available are: `c++`, `lab` and `groupwork`."));
+            $('#pc_term').terminal().echo(new String("The only commands available are: `c++`, `par`, `lab` and `groupwork`."));
           }
         }, {
-            greetings: 'Welcome to Parallel Computing!\nCommands available are: `c++`, `lab` and `groupwork`.\n\nEnter your pokename:',
+            greetings: 'Welcome to Parallel Computing!\nCommands available are: `c++`, `par`, `lab` and `groupwork`.\n\nEnter your pokename:',
             name: 'pc',
             height: 1000,
             prompt: 'pc> '
