@@ -119,7 +119,7 @@
       for (var l in labs_tree) {
         var display = true;
         for (var i = 0; i < labs_tree[l].deps.length; i++) {
-          if(!succeeded.has(labs_tree[l].deps[i])) {
+          if(!unlocked.has(labs_tree[l].deps[i])) {
             display = false;
           }
         }
