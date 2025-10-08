@@ -25,15 +25,17 @@
       "how_to_submit": {deps: [], bonus: false},
       "rule110": {deps: ["how_to_submit"], bonus: false},
       "vector": {deps: ["how_to_submit"], bonus: false},
-      "functional": {deps: ["how_to_submit"], bonus: false},
+      "functional": {deps: ["rule110"], bonus: false},
       // Parallel labs
-      "rule110_par": {deps: ["functional", "vector"], bonus: false},
+      "rule110_par": {deps: ["functional"], bonus: false},
       // "biggraph": {deps: ["rule110_par"], bonus: false},
       // "itv_propagation": {deps: ["biggraph"], bonus: false},
     };
+
     const groupwork_list = [
       "smart_pointers": {what: "Design a smart pointer (std::unique_ptr and std::shared_ptr)"},
     ];
+
     const cpp_videos = {
       "how_to_submit": {what: "How to submit a laboratory", deps: [], youtube: "E79nlrkEliw"},
       "hello_cpp": {what: "Compile and run your first C++ program", deps: ["how_to_submit"], youtube: "qCi2vOkzobw"},
@@ -59,8 +61,10 @@
       "easy_acceleration": {what: "Easy acceleration", deps: ["functional"], youtube: "CVOBTUzUvXY"},
       "arithmetic_intensity": {what: "Arithmetic intensity", deps: ["functional"], youtube: "2-0iWx47ZZk"},
       "multithreading_theory": {what: "Multithreading in theory", deps: ["functional"], youtube: "YcA7ipUazqg"},
-      "multithreading_practice": {what: "Multithreading in practice", deps: ["functional"], youtube: "SHBp_XD5_Uo"},
-      "static_decomposition": {what: "Static decomposition", deps: ["functional"], youtube: "SHBp_XD5_Uo"},
+      "multithreading_practice": {what: "Multithreading in practice", deps: ["functional"], youtube: "vweK3VLOzd0"},
+      "static_decomposition": {what: "Static decomposition", deps: ["functional"], youtube: "kCZDC9gCjQY"},
+      "load_imbalance": {what: "Load imbalance", deps: ["functional"], youtube: "Z9oKViMhYpI"},
+      "fork_join_model": {what: "Fork-join model", deps: ["functional"], youtube: "hbE6kxSQcQk"},
     };
 
     const stanford_videos = {
@@ -115,7 +119,7 @@
       for (var l in labs_tree) {
         var display = true;
         for (var i = 0; i < labs_tree[l].deps.length; i++) {
-          if(!succeeded.has(labs_tree[l].deps[i])) {
+          if(!unlocked.has(labs_tree[l].deps[i])) {
             display = false;
           }
         }
