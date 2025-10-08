@@ -30,20 +30,11 @@
       "rule110_par": {deps: ["functional", "vector"], bonus: false},
       // "biggraph": {deps: ["rule110_par"], bonus: false},
       // "itv_propagation": {deps: ["biggraph"], bonus: false},
-      // Group works
-      // "monitor": {deps: [], bonus: false},
-      // "histogram": {deps: [], bonus: false},
-      // "producerconsumer": {deps: [], bonus: false},
-      // "seqconsistency": {deps: [], bonus: false},
-      // "readerwriter": {deps: [], bonus: false},
     };
     const groupwork_list = [
-      "monitor",
-      "histogram",
-      "producerconsumer",
-      "readerwriter",
-      "seqconsistency",
+      "smart_pointers": {what: "Design a smart pointer (std::unique_ptr and std::shared_ptr)"},
     ];
+
     const cpp_videos = {
       "how_to_submit": {what: "How to submit a laboratory", deps: [], youtube: "E79nlrkEliw"},
       "hello_cpp": {what: "Compile and run your first C++ program", deps: ["how_to_submit"], youtube: "qCi2vOkzobw"},
@@ -64,19 +55,24 @@
     };
 
     const par_videos = {
-      "hpc_top_down": {what: "HPC Top-down", deps: [], youtube: "KhAYTCG8FJA"},
+      "hpc_top_down": {what: "HPC top-down", deps: [], youtube: "KhAYTCG8FJA"},
       "benchmarking": {what: "Benchmarking", deps: ["functional"], youtube: "vx_vCMLPeAE"},
-      "easy_acceleration": {what: "Easy Acceleration", deps: ["functional"], youtube: "CVOBTUzUvXY"},
-      "arithmetic_intensity": {what: "Arithmetic Intensity", deps: ["functional"], youtube: "2-0iWx47ZZk"},
+      "easy_acceleration": {what: "Easy acceleration", deps: ["functional"], youtube: "CVOBTUzUvXY"},
+      "arithmetic_intensity": {what: "Arithmetic intensity", deps: ["functional"], youtube: "2-0iWx47ZZk"},
+      "multithreading_theory": {what: "Multithreading in theory", deps: ["functional"], youtube: "YcA7ipUazqg"},
+      "multithreading_practice": {what: "Multithreading in practice", deps: ["functional"], youtube: "vweK3VLOzd0"},
+      "static_decomposition": {what: "Static decomposition", deps: ["functional"], youtube: "kCZDC9gCjQY"},
+      "load_imbalance": {what: "Load imbalance", deps: ["functional"], youtube: "Z9oKViMhYpI"},
+      "fork_join_model": {what: "Fork-join model", deps: ["functional"], youtube: "hbE6kxSQcQk"},
     };
 
-    // const stanford_videos = {
-    //   "hpc_top_down": {what: "HPC Top-down", deps: [], youtube: "KhAYTCG8FJA"},
-    //   "benchmarking": {what: "Benchmarking", deps: ["functional"], youtube: "vx_vCMLPeAE"},
-    //   "easy_acceleration": {what: "Easy Acceleration", deps: ["functional"], youtube: "CVOBTUzUvXY"},
-    //   "arithmetic_intensity": {what: "Arithmetic Intensity", deps: ["functional"], youtube: "2-0iWx47ZZk"},
-    // };
-
+    const stanford_videos = {
+      "introduction": {what: "Why Parallelism? Why Efficiency?", deps: [], youtube: "V1tINV2-9p4"},
+      "architecture1": {what: "A Modern Multi-Core Processor", deps: ["rule110_par"], youtube: "CKmNpAO5rS4"},
+      "architecture2": {what: "Multi-core Arch Part II + ISPC Programming Abstractions", deps: ["rule110_par"], youtube: "F4bVSyz_jxo"},
+      "parallel_basics": {what: "Parallel Programming Basics", deps: ["rule110_par"], youtube: "2-0iWx47ZZk"},
+      "optimization1": {what: "Performance Optimization I: Work Distribution and Scheduling", deps: ["rule110_par"], youtube: "mmO2Ri_dJkk"}
+    };
 
     function submitUsername(username) {
       fetch("https://raw.githubusercontent.com/ptal/pc-winter-2025/main/" + username + ".csv").then(function(response) {
@@ -147,17 +143,11 @@
     }
 
     function displayGroupwork() {
-      initializeVars();
       var k = 0;
       for (var l in groupwork_list) {
         var lab_pdf_link = "([[!;;;;http://ptal.github.io/pc/groupwork/" + l + ".pdf]PDF])"
-        var lab_name = k + ". " + l;
-        if(succeeded.has(l)) {
-          $('#pc_term').terminal().echo(new String(lab_name + " completed " + lab_pdf_link));
-        }
-        else {
-          $('#pc_term').terminal().echo(new String(lab_name + " not submitted " + lab_pdf_link));
-        }
+        var lab_name = k + ". " + groupwork_list[l].what;
+        $('#pc_term').terminal().echo(new String(lab_name + " " + lab_pdf_link));
         k = k + 1;
       }
     }
@@ -220,7 +210,7 @@
             displayLab();
           }
           else if(command === "groupwork") {
-            // displayGroupwork();
+            displayGroupwork();
           }
           else {
             $('#pc_term').terminal().echo(new String("The only commands available are: `c++`, `par`, `lab` and `groupwork`."));
