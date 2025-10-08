@@ -25,12 +25,13 @@
       "how_to_submit": {deps: [], bonus: false},
       "rule110": {deps: ["how_to_submit"], bonus: false},
       "vector": {deps: ["how_to_submit"], bonus: false},
-      "functional": {deps: ["how_to_submit"], bonus: false},
+      "functional": {deps: ["rule110"], bonus: false},
       // Parallel labs
-      "rule110_par": {deps: ["functional", "vector"], bonus: false},
+      "rule110_par": {deps: ["functional"], bonus: false},
       // "biggraph": {deps: ["rule110_par"], bonus: false},
       // "itv_propagation": {deps: ["biggraph"], bonus: false},
     };
+
     const groupwork_list = [
       "smart_pointers": {what: "Design a smart pointer (std::unique_ptr and std::shared_ptr)"},
     ];
