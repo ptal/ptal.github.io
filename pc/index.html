@@ -29,13 +29,12 @@
       // Parallel labs
       "rule110_par": {deps: ["functional"], bonus: false},
       "rule110_fast": {deps: ["rule110_par"], bonus: false},
-      // "biggraph": {deps: ["rule110_par"], bonus: false},
-      // "itv_propagation": {deps: ["biggraph"], bonus: false},
+      "itv_propagation": {deps: ["rule110_fast"], bonus: false},
     };
 
-    const groupwork_list = [
+    const groupwork_list = {
       "smart_pointers": {what: "Design a smart pointer (std::unique_ptr and std::shared_ptr)"},
-    ];
+    };
 
     const cpp_videos = {
       "how_to_submit": {what: "How to submit a laboratory", deps: [], youtube: "E79nlrkEliw"},
