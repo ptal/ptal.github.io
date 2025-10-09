@@ -32,9 +32,9 @@
       // "itv_propagation": {deps: ["biggraph"], bonus: false},
     };
 
-    const groupwork_list = {
+    const groupwork_list = [
       "smart_pointers": {what: "Design a smart pointer (std::unique_ptr and std::shared_ptr)"},
-    };
+    ];
 
     const cpp_videos = {
       "how_to_submit": {what: "How to submit a laboratory", deps: [], youtube: "E79nlrkEliw"},
@@ -200,6 +200,25 @@
       return false;
     }
 
+    function displayStanfordVideo() {
+      initializeVars();
+      var i = 0;
+      for(var k in stanford_videos) {
+        var can_watch = stanford_videos[k].deps.length === 0;
+        for(var j = 0; j < stanford_videos[k].deps.length; j++) {
+          if(unlocked.has(stanford_videos[k].deps[j])) {
+            can_watch = true;
+          }
+        }
+        if(can_watch) {
+          var video_link = "([[!;;;;https://www.youtube.com/watch?v=" + stanford_videos[k].youtube + "]MP4])"
+          $('#pc_term').terminal().echo(new String(i + ". " + stanford_videos[k].what + " " + video_link));
+        }
+        i = i + 1;
+      }
+      return false;
+    }
+
     jQuery(function($, undefined) {
         $('#pc_term').terminal(function(command) {
           if(labs.length === 0) {
@@ -211,6 +230,9 @@
           else if(command === "par") {
             displayParVideo();
           }
+          else if(command === "stanford") {
+            displayStanfordVideo();
+          }
           else if(command === "lab") {
             displayLab();
           }
@@ -218,10 +240,10 @@
             displayGroupwork();
           }
           else {
-            $('#pc_term').terminal().echo(new String("The only commands available are: `c++`, `par`, `lab` and `groupwork`."));
+            $('#pc_term').terminal().echo(new String("The only commands available are: `c++`, `par`, `stanford`, `lab` and `groupwork`."));
           }
         }, {
-            greetings: 'Welcome to Parallel Computing!\nCommands available are: `c++`, `par`, `lab` and `groupwork`.\n\nEnter your pokename:',
+            greetings: 'Welcome to Parallel Computing!\nCommands available are: `c++` (C++ videos), `par` (parallel computing videos), `stanford` (extra videos on parallel computing), `lab` and `groupwork`.\n\nEnter your pokename:',
             name: 'pc',
             height: 1000,
             prompt: 'pc> '
