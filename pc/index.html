@@ -36,6 +36,8 @@
     const groupwork_list = {
       "smart_pointers": {what: "Design a smart pointer (std::unique_ptr and std::shared_ptr)"},
       "atoms": {what: "Design a parallel algorithm to count atoms"},
+      "stanford_assignment1": {what: "Assignment from Stanford University (CS149) on processor architectures."},
+      "pattern_counting": {what: "Design a parallel algorithm to count patterns in a string."},
     };
 
     const cpp_videos = {
@@ -162,6 +164,7 @@
     function displayCppVideo() {
       initializeVars();
       var i = 0;
+      $('#pc_term').terminal().echo(new String("([[!;;;;http://ptal.github.io/pc/code/cpp.zip]C++ code])"));
       for(var k in cpp_videos) {
         var can_watch = cpp_videos[k].deps.length === 0;
         for(var j = 0; j < cpp_videos[k].deps.length; j++) {
@@ -186,6 +189,7 @@
     function displayParVideo() {
       initializeVars();
       var i = 0;
+      $('#pc_term').terminal().echo(new String("([[!;;;;http://ptal.github.io/pc/code/parallel_srom.zip]Parallel code (SROM)])"));
       for(var k in par_videos) {
         var can_watch = par_videos[k].deps.length === 0;
         for(var j = 0; j < par_videos[k].deps.length; j++) {
