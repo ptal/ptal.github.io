@@ -120,6 +120,98 @@
 </head>
 <body>
 
+<!-- AAAI26 -->
+
+<div class="ui modal aaai2026">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/aaai2026.pdf"><button class="ui button">.pdf</button></a>
+      <a href="https://uniluxembourg-my.sharepoint.com/:v:/g/personal/pierre_talbot_uni_lu/IQCI6Iz2FDgCSLD6OTDKmeidAZJc5YMjJ1CxTc-V3SMs5Uw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=WGfvWy"><button class="ui button">talk (video)</button></a>
+      <a href="papers/aaai2026-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/ptal/turbo/tree/aaai2026"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper describes the constraint solver Turbo (as of version 1.2.8), which is fully executed on GPU (both propagation and search).
+    It extends the AAAI 2022 paper, which focused on the theoretical model and only supported a few constraints.
+    When I tried to extend the solver from AAAI 2022, it turned out to be very slow due to code abstractions (clean code?!) which were not suited to GPU architectures.
+    I revamped the solver to be compatible with GPU architectures, and this paper describes the current algorithm, after years of trial and error (as shown on the <a href="https://lattice-land.github.io/">online technical journal of Turbo</a>).
+    It is a significant milestone because we now have a working general-purpose GPU-based constraint solver.
+    </p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{AAAI2026-Talbot,
+  author={Talbot, Pierre},
+  title = {{A GPU-based Constraint Programming Solver}},
+  booktitle={{Proceedings of the AAAI Conference on Artificial Intelligence}},
+  year = {2026},
+  volume={XX},
+  number={X},
+  doi={XXX},
+  month={XX},
+  pages={XX}
+}</code></pre></div></div>
+
+<!-- TCN 2025 (preprint) -->
+
+<div class="ui modal tcn2025">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/tcn2025.pdf"><button class="ui button">.pdf</button></a>
+      <a href="https://github.com/lattice-land/lala-core/tree/v1.2.8"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper show how to transform a constraint network into a ternary constraint network (TCN).
+    This transformation and the preprocessing algorithm are the ones used in Turbo.
+    It is complementary to the AAAI 2026 paper; I initially included this decomposition in a paper submitted to CP 2025, but the reviewers said it was standard/not new.
+    Clearly, TCNs exist since the inception of CP, but I could not find a paper formally describing the transformation and preprocessing of TCN.
+    Although it is not very complicated, there can be subtle bugs when implementing this transformation, and I hope this paper can help future implementation!
+    I intend to update the paper from times to times to make it more complete and, perhaps, submit it to a journal in the future.</p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">
+@misc{TCN-preprint25-Talbot,
+      title={Decomposition and Preprocessing of Ternary Constraint Networks},
+      author={Pierre Talbot},
+      year={2025},
+      eprint={2511.11872},
+      archivePrefix={arXiv},
+      primaryClass={cs.SC},
+      url={https://arxiv.org/abs/2511.11872}
+}</code></pre></div></div>
+
+<!-- ZX 2025 (preprint) -->
+
+<div class="ui modal zx2025">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/zx2025.pdf"><button class="ui button">.pdf</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This is a survey paper of combinatorial optimization of quantum circuit expressed as ZX-calculus diagrams.
+    The work is conducted by Tobias who read and explained most of the literature of this recent and quickly progressing field!
+    This paper is under review in the journal Quantum.</p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">
+@misc{ZX-preprint25-Fischbach,
+      title={A Review on Quantum Circuit Optimization using ZX-Calculus},
+      author={Tobias Fischbach and Pierre Talbot and Pascal Bouvry},
+      year={2025},
+      eprint={2509.20663},
+      archivePrefix={arXiv},
+      primaryClass={quant-ph},
+      url={https://arxiv.org/abs/2509.20663},
+}</code></pre></div></div>
+
 <!-- JFPC25 -->
 
 <div class="ui modal jfpc-2025">
@@ -133,7 +225,8 @@
     </br>
     </br>
     <h3>Story of this paper</h3>
-    <p>This paper is a draft of an upcoming paper on Turbo, the first general constraint solver fully executed on GPU.</p>
+    <p>This paper is a draft of an upcoming paper on Turbo, the first general constraint solver fully executed on GPU.
+    This is a preliminary version of the AAAI 2026 paper and the preprint 2025 on ternary constraint network.</p>
   </div>
 
   <div class="ui vertical left aligned very padded segment">
@@ -165,8 +258,12 @@
     @inproceedings{OLA-2025,
   author = {{Tobias Fischbach, Pierre Talbot, Pascal Bouvry}},
   title = {{Exhaustive Search for Quantum Circuit Optimization using ZX Calculus}},
-  booktitle = {{International Conference in Optimization and Learning (OLA 2025)}},
-  year = {2025}
+  booktitle = {{Optimization and Learning}},
+  publisher={Springer Nature Switzerland},
+  year={2026},
+  pages={239--253},
+  doi = {10.1007/978-3-032-13589-6_18},
+  url = {https://link.springer.com/chapter/10.1007/978-3-032-13589-6_18}
 }</code></pre></div></div>
 
 <!-- ICTAI-24 -->
@@ -191,6 +288,7 @@
   booktitle = {{IEEE 36th International Conference on Tools with Artificial Intelligence (ICTAI 2024)}},
   year = {2024},
   pages={764--773},
+  doi = {10.1109/ICTAI62512.2024.00113},
   organization={IEEE}
 }</code></pre></div></div>
 
@@ -711,7 +809,23 @@
       <p>Bibtex, PDF, recorded presentation, slides, and story of the paper are available by clicking on the title of a research paper.</p>
       <p><b>Replicate</b>: The code is linked to the version of the project that was used in the paper.</p>
       <ol>
+      <div class="ui horizontal divider">2026</div>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.aaai2026').modal('show');">A GPU-based Constraint Programming Solver</a></br>
+        Pierre Talbot</br>
+        40th AAAI Conference on Artificial Intelligence (AAAI 2026)</br>
+      </li>
       <div class="ui horizontal divider">2025</div>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.tcn2025').modal('show');">Decomposition and Preprocessing of Ternary Constraint Networks</a></br>
+        Pierre Talbot</br>
+        Preprint</br>
+      </li>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.zx2025').modal('show');">A Review on Quantum Circuit Optimization using ZX-Calculus</a></br>
+        Tobias Fischbach, Pierre Talbot, Pascal Bouvry</br>
+        Preprint submitted to the Quantum journal</br>
+      </li>
       <li>
         <a class="ui" onclick="$('.ui.modal.jfpc-2025').modal('show');">Réseau de Contrainte Ternaire pour une Propagation Efficace de Bornes sur GPU</a></br>
         Pierre Talbot</br>

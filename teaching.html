@@ -8,23 +8,7 @@
 
   <!-- Site Properties -->
   <title>Pierre Talbot</title>
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/reset.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/site.css">
-
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/container.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/grid.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/header.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/image.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/menu.css">
-
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/divider.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/dropdown.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/segment.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/button.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/list.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/icon.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/sidebar.css">
-  <link rel="stylesheet" type="text/css" href="library/semantic/dist/components/transition.css">
+  <link rel="stylesheet" type="text/css" href="library/semantic/dist/semantic.min.css">
 
   <style type="text/css">
     .hidden.menu {
@@ -105,16 +89,32 @@
         font-size: 1.5em;
       }
     }
+    /* Make the dimmer a positioning context */
+    .ui.dimmer.bottom-text {
+      display: block !important;
+    }
+
+    /* THIS is the key part */
+    .ui.dimmer.bottom-text > .content {
+      position: absolute;
+      bottom: 3em;          /* distance from bottom */
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
+
+    /* Bigger text */
+    .ui.dimmer .title {
+      font-size: 1.4em;
+      font-weight: 600;
+    }
   </style>
 
   <script src="library/jquery.min.js"></script>
-  <script src="library/semantic/dist/components/visibility.js"></script>
-  <script src="library/semantic/dist/components/sidebar.js"></script>
-  <script src="library/semantic/dist/components/transition.js"></script>
+  <script src="library/semantic/dist/semantic.min.js"></script>
   <script>
   $(document)
     .ready(function() {
-      // fix menu when passed
       $('.masthead')
         .visibility({
           once: false,
@@ -130,11 +130,17 @@
       $('.ui.sidebar')
         .sidebar('attach events', '.toc.item')
       ;
+      $('.special.cards .image').dimmer({
+        on: 'hover'
+      });
+      $('#toggleText').on('click', function () {
+        $('#hiddenText').transition('fade');
+      });
     })
   ;
   </script>
 </head>
-<body>
+<body class="site">
 
 <!-- Following Menu -->
 <div class="ui large top fixed hidden menu">
@@ -157,7 +163,7 @@
 </div>
 
 <!-- Page Contents -->
-<div class="pusher">
+<div class="site-content">
 <!-- masthead -->
   <div class="ui vertical center aligned segment">
     <div class="ui container">
@@ -174,7 +180,74 @@
     </div>
 
     <div class="ui container">
-    <div class="ui vertical left aligned very padded segment">
+      <div class="ui vertical left aligned very padded basic segment">
+        <p>I'm currently teaching three courses. We have recorded the course Parallel Computing and it is available on YouTube. </p>
+      <div class="ui five stackable special cards">
+        <div class="card">
+          <div class="blurring dimmable image">
+            <div class="ui dimmer">
+              <div class="content">
+                <a href="teaching/pc.html"><div class="ui primary button">More</div></a>
+              </div>
+            </div>
+            <img src="images/parallel-symbol.svg">
+          </div>
+          <div class="content">
+            <a class="header" href="teaching/pc.html">Parallel Computing</a>
+            <div class="meta">
+              <span class="date">MHPC, 6 ECTs, on YouTube</span>
+            </div>
+          </div>
+          <div class="extra content">
+            C++, std::thread, OpenMP, concurrency problems, memory consistency
+          </div>
+        </div>
+        <div class="card">
+          <div class="blurring dimmable image">
+            <div class="ui dimmer">
+              <div class="content">
+                <a href="teaching/ltpp.html"><div class="ui primary button">More</div></a>
+              </div>
+            </div>
+            <img src="images/leq-symbol.svg">
+          </div>
+          <div class="content">
+            <a class="header" href="teaching/ltpp.html">Lattice Theory for Parallel Programming</a>
+            <div class="meta">
+              <span class="date">MHPC, 5 ECTs</span>
+            </div>
+          </div>
+          <div class="extra content">
+            lattice theory, CRDT, parallel lattice programming, abstract interpretation, NNV
+          </div>
+        </div>
+        <div class="card">
+          <div class="blurring dimmable image">
+            <div class="ui dimmer">
+              <div class="content">
+                <a href="teaching/ps.html"><div class="ui primary button">More</div></a>
+              </div>
+            </div>
+            <img src="images/entail-symbol.svg">
+          </div>
+          <div class="content">
+            <a class="header" href="teaching/ps.html">Problem Solving</a>
+            <div class="meta">
+              <span class="date">MICS, 3 ECTs</span>
+            </div>
+          </div>
+          <div class="extra content">
+            constraint network, consistency, search
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="ui left aligned basic segment">
+        <button class="ui button primary" id="toggleText">
+          Show all courses
+        </button>
+      </div>
+      <div class="ui vertical left aligned very padded segment transition hidden" id="hiddenText">
       <div class="ui horizontal divider">
         2025&ndash;2026
       </div>
@@ -182,6 +255,8 @@
         <li><a href="https://ptal.github.io/pc/">Parallel Computing</a>, Master in HPC, University of Luxembourg, lecturer with Matteo Barborini</li>
         <li><a href="https://math.uni.lu/teheux/teaching/2025/lattice/index.md.html">Lattice Theory for Parallel Programming</a>, Master in HPC, University of Luxembourg, lecturer with Bruno Teheux</li>
         <li><a href="teaching/is1.html">Intelligent Systems - Problem Solving</a>, Master in Computer Science, University of Luxembourg, lecturer with Grégoire Danoy and Gwen Maudet</li>
+        <li>Supervision of the Master thesis of Wei Huang <i>TBD</i>, Master in HPC, University of Luxembourg.</li>
+        <li>Supervision of the Master thesis of Anisa Meta <i>TBD</i>, Master in HPC, University of Luxembourg.</li>
       </ul>
       <div class="ui horizontal divider">
         2024&ndash;2025
@@ -191,6 +266,7 @@
         <li><a href="https://math.uni.lu/teheux/teaching/2024/lattice/index.md.html">Lattice Theory for Parallel Programming</a>, Master in HPC, University of Luxembourg, lecturer with Bruno Teheux</li>
         <li><a href="teaching/is1.html">Intelligent Systems - Problem Solving</a>, Master in Computer Science, University of Luxembourg, lecturer with Grégoire Danoy and Gwen Maudet</li>
         <li><a href="https://github.com/ptal/parallel-and-grid-computing-uni.lu">Parallel and Grid Computing</a>, Master in Computer Science, University of Luxembourg, lecturer with Guillaume Helbecque</li>
+        <li>Supervision of the Master thesis of Hakan Hasan <i>Multi-GPU Parallel Constraint Programming</i>, Master in HPC, University of Luxembourg.</li>
       </ul>
       <div class="ui horizontal divider">
         2023&ndash;2024
@@ -276,13 +352,6 @@
       </ul>
     </div>
     </div>
-
-    <div class="ui inverted vertical footer segment">
-      <div class="ui container">
-        <div class="ui inverted">Copyright &copy; 2017&mdash;<a href="mailto:pierre.talbot@uni.lu">Pierre Talbot</a></div>
-      </div>
-    </div>
-
   </div>
 </div>
 </body>

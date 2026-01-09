@@ -125,6 +125,9 @@
       $('.ui.sidebar')
         .sidebar('attach events', '.toc.item')
       ;
+      $('#toggleText').on('click', function () {
+        $('#hiddenText').transition('fade');
+      });
     })
   ;
   </script>
@@ -176,7 +179,7 @@
     </div>
 
     <div class="ui container">
-    <div class="ui vertical left aligned very padded segment">
+    <div class="ui vertical left aligned very padded basic segment">
       <h1 class="ui header">Welcome!</h1>
       <p>This is the website of Pierre Talbot. I'm a research scientist at the University of Luxembourg. I'm working on new theories of <i>constraint reasoning</i> and <i>parallel programming</i>. I'm also the co-director of the <a href="https://www.uni.lu/fstm-en/study-programs/master-in-high-performance-computing/">Master in High Performance Computing</a>. I serve in the program committees of AAAI (since 2024) and ICTAI (since 2025).</p>
       <div class="ui horizontal divider"><h3>News</h3></div>
@@ -191,22 +194,29 @@
         <li>7 May 2025: During my 1-week stay at Zhejiang University (China) in the <a href="https://zlaire.uni.lu/">ZLAIRE laboratory</a>, I gave a talk on <i>abstract constraint programming on GPU</i> [<a href="papers/talbot-zhejiang-2025-slides.pdf">slides</a>].</li>
         <li>🎉2 May 2025: Our outreach activity "Supercomputer: Always Faster?" has been selected for the <a href="https://www.science-festival.lu/">Science Festival 2025</a> in November (with Angelica Rings).</li>
         <li>10 April 2025: I gave a talk at the IRILL (Center for Research and Innovation on Free Software) in Paris on constraint programming + GPU [<a href="papers/talbot-irill-2025-slides.pdf">slides</a>][<a href="https://www.irill.org/videos/IRILL-2024-2025/Irill-seminaire-Pierre-Talbot-2025-04-08.html">video (FR)</a>].</li>
-        <li>🎉24 February 2025: Tobias Fischbach got his paper <i>Exhaustive Search for Quantum Circuit Optimization using ZX Calculus</i> accepted to <a href="https://ola2025.sciencesconf.org/">OLA 2025</a> [<a href="http://ptal.github.io/research.html">more info</a>].</li>
-        <li>17 February 2025: Welcome to Hakan Hasan, master student in the MHPC, who joins us for his master thesis on <i>Multi-GPU Parallel Constraint Programming</i>.</li>
-        <li>15 January 2025: Team seminar: everyone presents of their work in 2024 and planned work in 2025! [slides: <a href="papers/francesca_guffanti.pdf">Francesca</a>, <a href="papers/hedieh_haddad.pdf">Hedieh</a>, <a href="papers/manuel_combarro.pdf">Manuel</a>, <a href="papers/thibault_falque.pdf">Thibault</a>, <a href="papers/tobias_fischbach.pdf">Tobias</a>, <a href="papers/yi-nung_tsao.pdf">Yi-Nung</a>]
-        </li>
-        <li>9 January 2025: I gave a talk at the LERIA @University of Angers on constraint programming + GPU [<a href="papers/talbot-leria-2025-slides.pdf">slides</a>].</li>
-        <li>6-10 January 2025: I visit the University of Angers in the context of a collaboration with Éric Monfroy on the table global constraint.</li>
-        <li>28-30 November 2024: We had a booth at the <a href="https://researchersdays.science.lu/fr">Researchers' Days</a> to explain parallel computing to kids, teens and adults :)</li>
-        <li>🎉22-30 October 2024: We were selected to participate in the <a href="https://www.openhackathons.org/s/siteevent/a0C5e000009W8MqEAK/se000307?p=4OVal7qBAY6%2FFLWHyETbkwh66SClhyelBl79%2FR1tID1ERZR9ly9oZEseBU%2B%2FQOAe%2B1PJ%2BAdY%2F%2F62bDJM0SlZYg%3D%3D">Poland Open Hackathon</a> in collaboration with mentors from Nvidia to optimize Turbo! More about our adventure and results <a href="https://lattice-land.github.io/9-turbo.html">here</a>.</li>
-        <li>1 October 2024: Welcome to Angelica Rings, Bachelor student, who joins us to develop a video game for the Researcher's Days in the context of the project COMOC.</li>
-        <li>15 September 2024: Welcome to Francesca Guffanti, Ph.D. in mathematics, who joins us for a postdoc to strengthen the mathematical foundation of our parallel model of computation in the project COMOC.</li>
-        <li>🎉9 September 2024: Hedieh Haddad got her paper <i>Selecting Search Strategy in Constraint Solvers using Bayesian Optimization</i> accepted to <a href="https://ictai.computer.org/2024/">ICTAI-24</a> [<a href="http://ptal.github.io/research.html">more info</a>].</li>
-        <li>🎉10 July 2024: Hedieh Haddad got her paper <i>Comparison of Hyperparameter Optimization Methods for Selecting Search Strategy of Constraint Programming Solvers</i> accepted to <a href="https://freuder.wordpress.com/progress-towards-the-holy-grail-workshops/pthg-24-the-seventh-workshop-on-progress-towards-the-holy-grail/">PTHG-24</a> [<a href="http://ptal.github.io/research.html">more info</a>].</li>
-        <li>17 June 2024: We organize the new <a href="https://lattice-land.github.io/abstract-week.html">Abstract Interpretation Workshop 2024</a>, feel free to join :-)</li>
-        <li>🎉26 April 2024: Our proposal with Angelica Rings <i>A Musical Game to Understand the Challenge of Collaboration in Computing</i> for the <a href="https://researchersdays.science.lu/">Researchers' Days</a> (28-30 November 2024) has been accepted. </li>
-        <li>23 April 2024: I gave a seminar to the <a href="https://www.uni.lu/snt-en/research-groups/PCOG/">parallel and combinatorial optimization group (PCOG)</a> on an <i>introduction to abstract interpretation</i>, <a href="papers/pcog2024-slides.pdf">slides</a>.</li>
       </ul>
+      <button class="ui button primary" id="toggleText">
+        All news
+      </button>
+      <div class="ui vertical left aligned basic segment transition hidden" id="hiddenText">
+        <ul>
+          <li>🎉24 February 2025: Tobias Fischbach got his paper <i>Exhaustive Search for Quantum Circuit Optimization using ZX Calculus</i> accepted to <a href="https://ola2025.sciencesconf.org/">OLA 2025</a> [<a href="http://ptal.github.io/research.html">more info</a>].</li>
+          <li>17 February 2025: Welcome to Hakan Hasan, master student in the MHPC, who joins us for his master thesis on <i>Multi-GPU Parallel Constraint Programming</i>.</li>
+          <li>15 January 2025: Team seminar: everyone presents of their work in 2024 and planned work in 2025! [slides: <a href="papers/francesca_guffanti.pdf">Francesca</a>, <a href="papers/hedieh_haddad.pdf">Hedieh</a>, <a href="papers/manuel_combarro.pdf">Manuel</a>, <a href="papers/thibault_falque.pdf">Thibault</a>, <a href="papers/tobias_fischbach.pdf">Tobias</a>, <a href="papers/yi-nung_tsao.pdf">Yi-Nung</a>]
+          </li>
+          <li>9 January 2025: I gave a talk at the LERIA @University of Angers on constraint programming + GPU [<a href="papers/talbot-leria-2025-slides.pdf">slides</a>].</li>
+          <li>6-10 January 2025: I visit the University of Angers in the context of a collaboration with Éric Monfroy on the table global constraint.</li>
+          <li>28-30 November 2024: We had a booth at the <a href="https://researchersdays.science.lu/fr">Researchers' Days</a> to explain parallel computing to kids, teens and adults :)</li>
+          <li>🎉22-30 October 2024: We were selected to participate in the <a href="https://www.openhackathons.org/s/siteevent/a0C5e000009W8MqEAK/se000307?p=4OVal7qBAY6%2FFLWHyETbkwh66SClhyelBl79%2FR1tID1ERZR9ly9oZEseBU%2B%2FQOAe%2B1PJ%2BAdY%2F%2F62bDJM0SlZYg%3D%3D">Poland Open Hackathon</a> in collaboration with mentors from Nvidia to optimize Turbo! More about our adventure and results <a href="https://lattice-land.github.io/9-turbo.html">here</a>.</li>
+          <li>1 October 2024: Welcome to Angelica Rings, Bachelor student, who joins us to develop a video game for the Researcher's Days in the context of the project COMOC.</li>
+          <li>15 September 2024: Welcome to Francesca Guffanti, Ph.D. in mathematics, who joins us for a postdoc to strengthen the mathematical foundation of our parallel model of computation in the project COMOC.</li>
+          <li>🎉9 September 2024: Hedieh Haddad got her paper <i>Selecting Search Strategy in Constraint Solvers using Bayesian Optimization</i> accepted to <a href="https://ictai.computer.org/2024/">ICTAI-24</a> [<a href="http://ptal.github.io/research.html">more info</a>].</li>
+          <li>🎉10 July 2024: Hedieh Haddad got her paper <i>Comparison of Hyperparameter Optimization Methods for Selecting Search Strategy of Constraint Programming Solvers</i> accepted to <a href="https://freuder.wordpress.com/progress-towards-the-holy-grail-workshops/pthg-24-the-seventh-workshop-on-progress-towards-the-holy-grail/">PTHG-24</a> [<a href="http://ptal.github.io/research.html">more info</a>].</li>
+          <li>17 June 2024: We organize the new <a href="https://lattice-land.github.io/abstract-week.html">Abstract Interpretation Workshop 2024</a>, feel free to join :-)</li>
+          <li>🎉26 April 2024: Our proposal with Angelica Rings <i>A Musical Game to Understand the Challenge of Collaboration in Computing</i> for the <a href="https://researchersdays.science.lu/">Researchers' Days</a> (28-30 November 2024) has been accepted. </li>
+          <li>23 April 2024: I gave a seminar to the <a href="https://www.uni.lu/snt-en/research-groups/PCOG/">parallel and combinatorial optimization group (PCOG)</a> on an <i>introduction to abstract interpretation</i>, <a href="papers/pcog2024-slides.pdf">slides</a>.</li>
+        </ul>
+      </div>
       <div class="ui horizontal divider"><h3>Abstract Satisfaction</h3></div>
       <i>Can abstract interpretation be the backbone theory to unify constraint reasoning approaches?</i><br/>
       <ul>
@@ -235,6 +245,7 @@
           <li><a href="https://github.com/ptal/turbo">Turbo</a> is an abstract constraint solver fully executing on the GPU.</li>
           <li><a href="https://github.com/lattice-land/cuda-battery">cuda-battery</a> provides C++ data structures working on both the CPU and GPU (CUDA).</li>
           <li><a href="papers/aaai2022.pdf">Our AAAI2022 paper</a> describes the foundation of this parallel model of computation.</li>
+          <li><a href="papers/aaai2026.pdf">Our AAAI2026 paper</a> describes the implementation of a GPU-based constraint solver within this model.</li>
           <li><a href="https://www.fnr.lu/results-2021-core-call/">FNR CORE Grant COMOC 2022-2025</a> to explore this strand of research (PI: P. Talbot, 384k€).</li>
         </ul>
       <div class="ui horizontal divider"><h3>Team</h3></div>
@@ -245,7 +256,6 @@
           <img src="images/pierre.jpg" width="140" style="border-radius: 50%;"/>
           <figcaption>Pierre Talbot</figcaption>
         </figure>
-
         <figure>
           <img src="images/hedieh.jpg" width="140" style="border-radius: 50%;"/>
           <figcaption>Hedieh Haddad</figcaption>
@@ -265,20 +275,16 @@
           <figcaption>Tobias Fischbach</figcaption>
         </figure>
         <figure>
-          <img src="images/angelica.png" width="100" style="border-radius: 50%;"/>
-          <figcaption>Angelica Rings</figcaption>
-        </figure>
-        <figure>
           <img src="images/hakan.jpg" width="85" style="border-radius: 50%;"/>
           <figcaption>Hakan Hasan</figcaption>
         </figure>
         <figure>
-          <img src="images/paul.jpg" width="140" style="border-radius: 50%;"/>
-          <figcaption>Paul Aromolaran</figcaption>
-        </figure>
-        <figure>
           <img src="images/wei.jpg" width="140" style="border-radius: 50%;"/>
           <figcaption>Wei Huang</figcaption>
+        </figure>
+        <figure>
+          <img src="images/anisa.png" width="140" style="border-radius: 50%;"/>
+          <figcaption>Anisa Meta</figcaption>
         </figure>
         </div>
       </p>
@@ -288,9 +294,8 @@
         <li>Manuel Combarro, Ph.D. candidate, <i>Multiobjective Constraint Programming</i>, 2023-2026.</li>
         <li>Hedieh Haddad, Ph.D. candidate, <i>Hyperparameter Optimization of Constraint Solver</i>, 2023-2026.</li>
         <li>Tobias Fischbach, Ph.D. candidate, <i>Optimization of Quantum Circuits</i>, 2023-2026.</li>
-        <li>Angelica Rings, Bachelor student, <i>Outreach projects</i>, 2024-2025.</li>
-        <li>Paul Aromolaran, Master student, <i>Adding Random Search in Turbo</i>, 2025.</li>
-        <li>Wei Huang, Master student, <i>Improving Fixpoint Loop in Turbo</i>, 2025.</li>
+        <li>Wei Huang, Master student, <i>Improving Fixpoint Loop in Turbo</i> (master thesis), March–August 2026.</li>
+        <li>Anisa Meta, Master student, <i>GPU-based Inprocessing in Turbo</i> (master thesis), February–July 2026.</li>
       </ul>
       <div class="ui horizontal divider"><h3>They were here...</h3></div>
       <div class="figure-container">
@@ -302,10 +307,20 @@
           <img src="images/thibault.jpg" width="140" style="border-radius: 50%;"/>
           <figcaption>Thibault Falque</figcaption>
         </figure>
+        <figure>
+          <img src="images/angelica.png" width="100" style="border-radius: 50%;"/>
+          <figcaption>Angelica Rings</figcaption>
+        </figure>
+        <figure>
+          <img src="images/paul.jpg" width="140" style="border-radius: 50%;"/>
+          <figcaption>Paul Aromolaran</figcaption>
+        </figure>
       </div>
         <ul>
           <li>Francesca Guffanti, postdoctoral researcher on the project COMOC, September 2024-March 2025.</li>
           <li>Thibault Falque, postdoctoral researcher on the project COMOC, January 2024-May 2025.</li>
+          <li>Angelica Rings, Bachelor student, <i>Outreach projects</i>, 2024-2025.</li>
+          <li>Paul Aromolaran, Master student, <i>Adding Random Search in Turbo</i> and help me to record videos on parallel computing, July-August 2025.</li>
         </ul>
       <div class="ui horizontal divider"><h3>Previously...</h3></div>
       <div class="ui styled accordion center">
