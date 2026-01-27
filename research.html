@@ -120,6 +120,32 @@
 </head>
 <body>
 
+<!-- HPO-CP 2026 (preprint) -->
+
+<div class="ui modal hpo-cp2026">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/hpo-cp2026.pdf"><button class="ui button">.pdf</button></a>
+      <a href="https://github.com/Hedieh-Haddad/cpmpy/tree/psa"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is the summary of the PhD work of Hedieh Haddad in integrating Bayesian optimisation and constraint programming. It extends our previous papers at PTHG 2024 and ICTAI 2024. Although the proposed algorithm is simple, it have shown to improve the efficiency of several state-of-the-art solvers on standard benchmarks.</p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">
+@misc{haddad2026hyperparameteroptimizationconstraintprogramming,
+      title={Hyperparameter Optimization of Constraint Programming Solvers},
+      author={Hedieh Haddad and Thibault Falque and Pierre Talbot and Pascal Bouvry},
+      year={2026},
+      eprint={2601.11389},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2601.11389}
+}</code></pre></div></div>
+
 <!-- AAAI26 -->
 
 <div class="ui modal aaai2026">
@@ -165,7 +191,7 @@
     </br>
     </br>
     <h3>Story of this paper</h3>
-    <p>This paper show how to transform a constraint network into a ternary constraint network (TCN).
+    <p>This paper shows how to transform a constraint network into a ternary constraint network (TCN).
     This transformation and the preprocessing algorithm are the ones used in Turbo.
     It is complementary to the AAAI 2026 paper; I initially included this decomposition in a paper submitted to CP 2025, but the reviewers said it was standard/not new.
     Clearly, TCNs exist since the inception of CP, but I could not find a paper formally describing the transformation and preprocessing of TCN.
@@ -814,6 +840,11 @@
         <a class="ui" onclick="$('.ui.modal.aaai2026').modal('show');">A GPU-based Constraint Programming Solver</a></br>
         Pierre Talbot</br>
         40th AAAI Conference on Artificial Intelligence (AAAI 2026)</br>
+      </li>
+      <li>
+        <a class="ui" onclick="$('.ui.modal.hpo-cp2026').modal('show');">Hyperparameter Optimization of Constraint Programming Solvers</a></br>
+        Hedieh Haddad, Thibault Falque, Pierre Talbot, Pascal Bouvry</br>
+        Preprint submitted to the Journal of Combinatorial Optimization</br>
       </li>
       <div class="ui horizontal divider">2025</div>
       <li>
