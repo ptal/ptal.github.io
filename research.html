@@ -135,6 +135,70 @@
 </head>
 <body>
 
+<!-- CP 2026 -->
+
+<div class="ui modal cp2026">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/cp2026.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/cp2026-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/mancs20/choco-solver/tree/multi-objective-algorithms-choco-5-0-0"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is part of the PhD thesis of Manuel Combarro on his work exploring multi-objective algorithms in constraint programming.
+      We adapted SAUGMECON, a well-known multi-objective algorithm in the operation research/mathematical programming community, to the formalism of constraint programming.
+      We further extended it to PAUGMECON, merging SAUGMECON with the Pareto global constraint.
+      All algorithms have been implemented in the Choco constraint solver v5.0.
+      We show in the experiments that PAUGMECON improves significantly the state-of-the-art on some multi-objective problems.
+    </p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{CP2026-Combarro,
+  author =  {Combarro Sim\'{o}n, Manuel and Talbot, Pierre and Bouvry, Pascal},
+  title = {{Combining an ϵ-Constraint Method with the Pareto Global Constraint}},
+  booktitle = {32nd International Conference on Principles and Practice of Constraint Programming (CP 2026)},
+  pages = {XXX},
+  series = {Leibniz International Proceedings in Informatics (LIPIcs)},
+  year = {2026},
+  volume = {XX},
+  doi = {XXX}
+}</code></pre></div></div>
+
+<!-- PaPoc 2026 -->
+
+<div class="ui modal papoc2026">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/papoc2026.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/papoc2026-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/haki-1/turbo/tree/papoc2026"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper summarizes the master thesis of Hakan Hasan and his beginning as a PhD candidate.
+      Technically, he extended Turbo to support multi-GPUs using MPI.
+      The underlying theory is very interesting: it is based on conflict-free replicated types (CRDTs), a lattice-based data structure to obtain convergence in a distributed system.
+      It shares a lot of similarities with the model introduced in the <a class="ui" onclick="$('.ui.modal.aaai2022').modal('show');">AAAI 2022 paper</a>.
+      So far, only the objective bound is shared, but the model should accomodate more kind of information to be shared such as nogoods.
+    </p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{PAPOC2026-Hasan,
+    author = {Hasan, Hakan and Talbot, Pierre},
+    title = {Towards Distributed Constraint Solving with CRDT},
+    year = {2026},
+    doi = {10.1145/3806077.3806699},
+    booktitle = {Proceedings of the 13th International Workshop on Principles and Practice of Consistency for Distributed Data},
+    pages = {9--16},
+    numpages = {8},
+    series = {PaPoC '26}
+}</code></pre></div></div>
+
 <!-- HPO-CP 2026 (preprint) -->
 
 <div class="ui modal hpo-cp2026">
@@ -151,7 +215,7 @@
 
   <div class="ui vertical left aligned very padded segment">
   <pre><code class="language-latex">
-@misc{haddad2026hyperparameteroptimizationconstraintprogramming,
+@misc{haddad2026-hpo-cp,
       title={Hyperparameter Optimization of Constraint Programming Solvers},
       author={Hedieh Haddad and Thibault Falque and Pierre Talbot and Pascal Bouvry},
       year={2026},
@@ -225,6 +289,33 @@
       primaryClass={cs.SC},
       url={https://arxiv.org/abs/2511.11872}
 }</code></pre></div></div>
+
+<!-- ZX 2025 (preprint) -->
+
+<div class="ui modal zx2025">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/zx2025.pdf"><button class="ui button">.pdf</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This is a survey paper of combinatorial optimization of quantum circuit expressed as ZX-calculus diagrams.
+    The work is conducted by Tobias who read and explained most of the literature of this recent and quickly progressing field!</p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">
+@misc{ZX-preprint25-Fischbach,
+      title={A Review on Quantum Circuit Optimization using ZX-Calculus},
+      author={Tobias Fischbach and Pierre Talbot and Pascal Bouvry},
+      year={2025},
+      eprint={2509.20663},
+      archivePrefix={arXiv},
+      primaryClass={quant-ph},
+      url={https://arxiv.org/abs/2509.20663},
+}</code></pre></div></div>
+
 
 <!-- JFPC25 -->
 
@@ -446,6 +537,13 @@
     </div>
     </br>
     </br>
+    <h3>Story of this paper</h3>
+    <p>This paper develops a new model of parallel computation using lattice theory and fixpoint.
+      We apply this model to constraint solving and developed a small prototype called Turbo.
+      The main characteristics is that the solver is entirely running on GPU (propagation and search) and is lock-free thanks to the properties of the underlying model.
+      So far, only scheduling problems can be solved, but we intend to extend Turbo to a general-purpose GPU-based constraint solver.
+      Furthermore, we aim to study the underlying model beyond constraint solving.
+    </p>
   </div>
 
   <div class="ui vertical left aligned very padded segment">
@@ -825,6 +923,16 @@
       <ol>
       <div class="ui horizontal divider">2026</div>
       <li>
+        <a class="ui" href="#cp2026">Combining an ϵ-Constraint Method with the Pareto Global Constraint</a></br>
+        Manuel Combarro Simòn, Pierre Talbot, Pascal Bouvry</br>
+        32nd International Conference on Principles and Practice of Constraint Programming (CP 2026)</br>
+      </li>
+      <li>
+        <a class="ui" href="#papoc2026">Towards Distributed Constraint Solving with CRDT</a></br>
+        Hakan Hasan, Pierre Talbot</br>
+        13th International Workshop on Principles and Practice of Consistency for Distributed Data (PaPoC 2026)</br>
+      </li>
+      <li>
         <a class="ui" href="#aaai2026">A GPU-based Constraint Programming Solver</a></br>
         Pierre Talbot</br>
         40th AAAI Conference on Artificial Intelligence (AAAI 2026)</br>
@@ -838,6 +946,11 @@
       <li>
         <a class="ui" href="#tcn2025">Decomposition and Preprocessing of Ternary Constraint Networks</a></br>
         Pierre Talbot</br>
+        Preprint</br>
+      </li>
+      <li>
+        <a class="ui" href="#zx2025">A Review on Quantum Circuit Optimization using ZX-Calculus</a></br>
+        Tobias Fischbach, Pierre Talbot, Pascal Bouvry</br>
         Preprint</br>
       </li>
       <li>
@@ -869,7 +982,7 @@
       </li>
       <li>
         <a class="ui" href="#cp2023-2">Constraint Model for the Satellite Image Mosaic Selection Problem</a></br>
-        Manuel Combarro Simòn, Pierre Talbot, Grégoire Danoy, Jedrzej Musial, Mohammed Alswaitti and Pascal Bouvry</br>
+        Manuel Combarro Simòn, Pierre Talbot, Grégoire Danoy, Jedrzej Musial, Mohammed Alswaitti, Pascal Bouvry</br>
         29th International Conference on Principles and Practice of Constraint Programming (CP 2023)</br>
       </li>
       <li>
@@ -886,13 +999,13 @@
       <div class="ui horizontal divider">2020</div>
       <li>
         <a class="ui" href="#iclp2020">Modular Constraint Solver Cooperation via Abstract Interpretation</a></br>
-        Pierre Talbot, Éric Monfroy and Charlotte Truchet</br>
+        Pierre Talbot, Éric Monfroy, Charlotte Truchet</br>
         Theory and Practice of Logic Programming</br>
       </li>
       <div class="ui horizontal divider">2019</div>
       <li>
         <a class="ui" href="#ictai2019">Combining Constraint Languages via Abstract Interpretation</a></br>
-        Pierre Talbot, David Cachera, Éric Monfroy and Charlotte Truchet</br>
+        Pierre Talbot, David Cachera, Éric Monfroy, Charlotte Truchet</br>
         31st IEEE International Conference on Tools with Artificial Intelligence (ICTAI 2019)</br>
       </li>
       <li>
@@ -902,7 +1015,7 @@
       </li>
       <li>
         <a class="ui" href="#jfpc2019">Octogones entiers pour le problème RCPSP</a></br>
-        Pierre Talbot, David Cachera, Éric Monfroy and Charlotte Truchet</br>
+        Pierre Talbot, David Cachera, Éric Monfroy, Charlotte Truchet</br>
         Quinzièmes Journées Francophones de Programmation par Contraintes (JFPC 2019)
       </li>
       <div class="ui horizontal divider">2018</div>
@@ -914,12 +1027,12 @@
       <div class="ui horizontal divider">2017</div>
       <li>
         <a class="ui" href="#icmc2017">Interactive computer-aided composition with constraints</a></br>
-        Pierre Talbot, Carlos Agon, and Philippe Esling</br>
+        Pierre Talbot, Carlos Agon, Philippe Esling</br>
         Proceedings of the 2017 International Computer Music Conference (ICMC 2017)</br>
       </li>
       <li>
         <a class="ui" href="#jfpc2017">Langage pour la vérification de modèles par contraintes</a></br>
-        Pierre Talbot and Clément Poncelet</br>
+        Pierre Talbot, Clément Poncelet</br>
         Treizièmes Journées Francophones de Programmation par Contraintes (JFPC 2017)</br>
       </li>
       <li>
