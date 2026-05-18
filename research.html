@@ -114,11 +114,116 @@
       $('.ui.sidebar')
         .sidebar('attach events', '.toc.item')
       ;
+
+      function openModalFromHash() {
+        const modalName = window.location.hash.substring(1);
+        if (!modalName) return;
+        const $modal = $('.ui.modal.' + modalName);
+        if ($modal.length) {
+          $modal.modal({
+            onHidden: function () {
+              history.replaceState(null, '', window.location.pathname);
+            }
+          }).modal('show');
+        }
+      }
+      openModalFromHash();
+      $(window).on('hashchange', openModalFromHash);
     })
   ;
   </script>
 </head>
 <body>
+
+<!-- CP 2026 -->
+
+<div class="ui modal cp2026">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/cp2026.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/cp2026-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/mancs20/choco-solver/tree/multi-objective-algorithms-choco-5-0-0"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is part of the PhD thesis of Manuel Combarro on his work exploring multi-objective algorithms in constraint programming.
+      We adapted SAUGMECON, a well-known multi-objective algorithm in the operation research/mathematical programming community, to the formalism of constraint programming.
+      We further extended it to PAUGMECON, merging SAUGMECON with the Pareto global constraint.
+      All algorithms have been implemented in the Choco constraint solver v5.0.
+      We show in the experiments that PAUGMECON improves significantly the state-of-the-art on some multi-objective problems.
+    </p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{CP2026-Combarro,
+  author =  {Combarro Sim\'{o}n, Manuel and Talbot, Pierre and Bouvry, Pascal},
+  title = {{Combining an ϵ-Constraint Method with the Pareto Global Constraint}},
+  booktitle = {32nd International Conference on Principles and Practice of Constraint Programming (CP 2026)},
+  pages = {XXX},
+  series = {Leibniz International Proceedings in Informatics (LIPIcs)},
+  year = {2026},
+  volume = {XX},
+  doi = {XXX}
+}</code></pre></div></div>
+
+<!-- PaPoc 2026 -->
+
+<div class="ui modal papoc2026">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/papoc2026.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/papoc2026-slides.pdf"><button class="ui button">slides</button></a>
+      <a href="https://github.com/haki-1/turbo/tree/papoc2026"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper summarizes the master thesis of Hakan Hasan and his beginning as a PhD candidate.
+      Technically, he extended Turbo to support multi-GPUs using MPI.
+      The underlying theory is very interesting: it is based on conflict-free replicated types (CRDTs), a lattice-based data structure to obtain convergence in a distributed system.
+      It shares a lot of similarities with the model introduced in the <a class="ui" onclick="$('.ui.modal.aaai2022').modal('show');">AAAI 2022 paper</a>.
+      So far, only the objective bound is shared, but the model should accomodate more kind of information to be shared such as nogoods.
+    </p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{PAPOC2026-Hasan,
+    author = {Hasan, Hakan and Talbot, Pierre},
+    title = {Towards Distributed Constraint Solving with CRDT},
+    year = {2026},
+    doi = {10.1145/3806077.3806699},
+    booktitle = {Proceedings of the 13th International Workshop on Principles and Practice of Consistency for Distributed Data},
+    pages = {9--16},
+    numpages = {8},
+    series = {PaPoC '26}
+}</code></pre></div></div>
+
+<!-- HPO-CP 2026 (preprint) -->
+
+<div class="ui modal hpo-cp2026">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/hpo-cp2026.pdf"><button class="ui button">.pdf</button></a>
+      <a href="https://github.com/Hedieh-Haddad/cpmpy/tree/psa"><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is the summary of the PhD work of Hedieh Haddad in integrating Bayesian optimisation and constraint programming. It extends our previous papers at PTHG 2024 and ICTAI 2024. Although the proposed algorithm is simple, it have shown to improve the efficiency of several state-of-the-art solvers on standard benchmarks.</p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">
+@misc{haddad2026-hpo-cp,
+      title={Hyperparameter Optimization of Constraint Programming Solvers},
+      author={Hedieh Haddad and Thibault Falque and Pierre Talbot and Pascal Bouvry},
+      year={2026},
+      eprint={2601.11389},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2601.11389}
+}</code></pre></div></div>
 
 <!-- AAAI26 -->
 
@@ -147,11 +252,11 @@
   title = {{A GPU-based Constraint Programming Solver}},
   booktitle={{Proceedings of the AAAI Conference on Artificial Intelligence}},
   year = {2026},
-  volume={XX},
-  number={X},
-  doi={XXX},
-  month={XX},
-  pages={XX}
+  volume={40},
+  number={17},
+  doi={10.1609/aaai.v40i17.38448},
+  month={Mar.},
+  pages={14331-14341}
 }</code></pre></div></div>
 
 <!-- TCN 2025 (preprint) -->
@@ -165,7 +270,7 @@
     </br>
     </br>
     <h3>Story of this paper</h3>
-    <p>This paper show how to transform a constraint network into a ternary constraint network (TCN).
+    <p>This paper shows how to transform a constraint network into a ternary constraint network (TCN).
     This transformation and the preprocessing algorithm are the ones used in Turbo.
     It is complementary to the AAAI 2026 paper; I initially included this decomposition in a paper submitted to CP 2025, but the reviewers said it was standard/not new.
     Clearly, TCNs exist since the inception of CP, but I could not find a paper formally describing the transformation and preprocessing of TCN.
@@ -196,8 +301,7 @@
     </br>
     <h3>Story of this paper</h3>
     <p>This is a survey paper of combinatorial optimization of quantum circuit expressed as ZX-calculus diagrams.
-    The work is conducted by Tobias who read and explained most of the literature of this recent and quickly progressing field!
-    This paper is under review in the journal Quantum.</p>
+    The work is conducted by Tobias who read and explained most of the literature of this recent and quickly progressing field!</p>
   </div>
 
   <div class="ui vertical left aligned very padded segment">
@@ -211,6 +315,7 @@
       primaryClass={quant-ph},
       url={https://arxiv.org/abs/2509.20663},
 }</code></pre></div></div>
+
 
 <!-- JFPC25 -->
 
@@ -432,6 +537,13 @@
     </div>
     </br>
     </br>
+    <h3>Story of this paper</h3>
+    <p>This paper develops a new model of parallel computation using lattice theory and fixpoint.
+      We apply this model to constraint solving and developed a small prototype called Turbo.
+      The main characteristics is that the solver is entirely running on GPU (propagation and search) and is lock-free thanks to the properties of the underlying model.
+      So far, only scheduling problems can be solved, but we intend to extend Turbo to a general-purpose GPU-based constraint solver.
+      Furthermore, we aim to study the underlying model beyond constraint solving.
+    </p>
   </div>
 
   <div class="ui vertical left aligned very padded segment">
@@ -811,105 +923,120 @@
       <ol>
       <div class="ui horizontal divider">2026</div>
       <li>
-        <a class="ui" onclick="$('.ui.modal.aaai2026').modal('show');">A GPU-based Constraint Programming Solver</a></br>
+        <a class="ui" href="#cp2026">Combining an ϵ-Constraint Method with the Pareto Global Constraint</a></br>
+        Manuel Combarro Simòn, Pierre Talbot, Pascal Bouvry</br>
+        32nd International Conference on Principles and Practice of Constraint Programming (CP 2026)</br>
+      </li>
+      <li>
+        <a class="ui" href="#papoc2026">Towards Distributed Constraint Solving with CRDT</a></br>
+        Hakan Hasan, Pierre Talbot</br>
+        13th International Workshop on Principles and Practice of Consistency for Distributed Data (PaPoC 2026)</br>
+      </li>
+      <li>
+        <a class="ui" href="#aaai2026">A GPU-based Constraint Programming Solver</a></br>
         Pierre Talbot</br>
         40th AAAI Conference on Artificial Intelligence (AAAI 2026)</br>
       </li>
+      <li>
+        <a class="ui" href="#hpo-cp2026">Hyperparameter Optimization of Constraint Programming Solvers</a></br>
+        Hedieh Haddad, Thibault Falque, Pierre Talbot, Pascal Bouvry</br>
+        Preprint submitted to the Journal of Combinatorial Optimization</br>
+      </li>
       <div class="ui horizontal divider">2025</div>
       <li>
-        <a class="ui" onclick="$('.ui.modal.tcn2025').modal('show');">Decomposition and Preprocessing of Ternary Constraint Networks</a></br>
+        <a class="ui" href="#tcn2025">Decomposition and Preprocessing of Ternary Constraint Networks</a></br>
         Pierre Talbot</br>
         Preprint</br>
       </li>
       <li>
-        <a class="ui" onclick="$('.ui.modal.zx2025').modal('show');">A Review on Quantum Circuit Optimization using ZX-Calculus</a></br>
+        <a class="ui" href="#zx2025">A Review on Quantum Circuit Optimization using ZX-Calculus</a></br>
         Tobias Fischbach, Pierre Talbot, Pascal Bouvry</br>
-        Preprint submitted to the Quantum journal</br>
+        Preprint</br>
       </li>
       <li>
-        <a class="ui" onclick="$('.ui.modal.jfpc-2025').modal('show');">Réseau de Contrainte Ternaire pour une Propagation Efficace de Bornes sur GPU</a></br>
+        <a class="ui" href="#jfpc-2025">Réseau de Contrainte Ternaire pour une Propagation Efficace de Bornes sur GPU</a></br>
         Pierre Talbot</br>
         Journées Francophones de Programmation par Contraintes (JFPC 2025)</br>
       </li>
       <li>
-        <a class="ui" onclick="$('.ui.modal.ola-2025').modal('show');">Exhaustive Search for Quantum Circuit Optimization using ZX Calculus</a></br>
+        <a class="ui" href="#ola-2025">Exhaustive Search for Quantum Circuit Optimization using ZX Calculus</a></br>
         Tobias Fischbach, Pierre Talbot, Pascal Bouvry</br>
         International Conference in Optimization and Learning (OLA 2025)</br>
       </li>
       <div class="ui horizontal divider">2024</div>
       <li>
-        <a class="ui" onclick="$('.ui.modal.ictai-2024').modal('show');">Selecting Search Strategy in Constraint Solvers using Bayesian Optimization</a></br>
+        <a class="ui" href="#ictai-2024">Selecting Search Strategy in Constraint Solvers using Bayesian Optimization</a></br>
         Hedieh Haddad, Pierre Talbot, Pascal Bouvry</br>
         36th IEEE International Conference on Tools with Artificial Intelligence (ICTAI 2024)</br>
       </li>
       <li>
-        <a class="ui" onclick="$('.ui.modal.pthg-2024').modal('show');">Comparison of Hyperparameter Optimization Methods for Selecting Search Strategy of Constraint Programming Solvers</a></br>
+        <a class="ui" href="#pthg-2024">Comparison of Hyperparameter Optimization Methods for Selecting Search Strategy of Constraint Programming Solvers</a></br>
         Hedieh Haddad, Pierre Talbot, Pascal Bouvry</br>
         The Seventh Workshop on Progress Towards the Holy Grail (PTHG 2024)</br>
       </li>
       <div class="ui horizontal divider">2023</div>
       <li>
-        <a class="ui" onclick="$('.ui.modal.constraints2023').modal('show');">Spacetime programming: a synchronous language for constraint search</a></br>
+        <a class="ui" href="#constraints2023">Spacetime programming: a synchronous language for constraint search</a></br>
         Pierre Talbot</br>
         Constraints</br>
       </li>
       <li>
-        <a class="ui" onclick="$('.ui.modal.cp2023-2').modal('show');">Constraint Model for the Satellite Image Mosaic Selection Problem</a></br>
-        Manuel Combarro Simòn, Pierre Talbot, Grégoire Danoy, Jedrzej Musial, Mohammed Alswaitti and Pascal Bouvry</br>
+        <a class="ui" href="#cp2023-2">Constraint Model for the Satellite Image Mosaic Selection Problem</a></br>
+        Manuel Combarro Simòn, Pierre Talbot, Grégoire Danoy, Jedrzej Musial, Mohammed Alswaitti, Pascal Bouvry</br>
         29th International Conference on Principles and Practice of Constraint Programming (CP 2023)</br>
       </li>
       <li>
-        <a class="ui" onclick="$('.ui.modal.cp2023-1').modal('show');">Constraint Programming with External Worst-Case Traversal Time Analysis</a></br>
+        <a class="ui" href="#cp2023-1">Constraint Programming with External Worst-Case Traversal Time Analysis</a></br>
         Pierre Talbot, Tingting Hu and Nicolas Navet</br>
         29th International Conference on Principles and Practice of Constraint Programming (CP 2023)</br>
       </li>
       <div class="ui horizontal divider">2022</div>
       <li>
-        <a class="ui" onclick="$('.ui.modal.aaai2022').modal('show');">A Variant of Concurrent Constraint Programming on GPU</a></br>
+        <a class="ui" href="#aaai2022">A Variant of Concurrent Constraint Programming on GPU</a></br>
         Pierre Talbot, Frédéric Pinel, Pascal Bouvry</br>
         36th AAAI Conference on Artificial Intelligence (AAAI 2022)</br>
       </li>
       <div class="ui horizontal divider">2020</div>
       <li>
-        <a class="ui" onclick="$('.ui.modal.iclp2020').modal('show');">Modular Constraint Solver Cooperation via Abstract Interpretation</a></br>
-        Pierre Talbot, Éric Monfroy and Charlotte Truchet</br>
+        <a class="ui" href="#iclp2020">Modular Constraint Solver Cooperation via Abstract Interpretation</a></br>
+        Pierre Talbot, Éric Monfroy, Charlotte Truchet</br>
         Theory and Practice of Logic Programming</br>
       </li>
       <div class="ui horizontal divider">2019</div>
       <li>
-        <a class="ui" onclick="$('.ui.modal.ictai2019').modal('show');">Combining Constraint Languages via Abstract Interpretation</a></br>
-        Pierre Talbot, David Cachera, Éric Monfroy and Charlotte Truchet</br>
+        <a class="ui" href="#ictai2019">Combining Constraint Languages via Abstract Interpretation</a></br>
+        Pierre Talbot, David Cachera, Éric Monfroy, Charlotte Truchet</br>
         31st IEEE International Conference on Tools with Artificial Intelligence (ICTAI 2019)</br>
       </li>
       <li>
-        <a class="ui" onclick="$('.ui.modal.ppdp2019').modal('show');">Spacetime Programming: A Synchronous Language for Composable Search Strategies</a></br>
+        <a class="ui" href="#ppdp2019">Spacetime Programming: A Synchronous Language for Composable Search Strategies</a></br>
         Pierre Talbot</br>
         21st International Symposium on Principles and Practice of Declarative Programming (PPDP 2019)</br>
       </li>
       <li>
-        <a class="ui" onclick="$('.ui.modal.jfpc2019').modal('show');">Octogones entiers pour le problème RCPSP</a></br>
-        Pierre Talbot, David Cachera, Éric Monfroy and Charlotte Truchet</br>
+        <a class="ui" href="#jfpc2019">Octogones entiers pour le problème RCPSP</a></br>
+        Pierre Talbot, David Cachera, Éric Monfroy, Charlotte Truchet</br>
         Quinzièmes Journées Francophones de Programmation par Contraintes (JFPC 2019)
       </li>
       <div class="ui horizontal divider">2018</div>
       <li>
-      <a  class="ui" onclick="$('.ui.modal.thesis2018').modal('show');">Spacetime Programming: A Synchronous Language for Constraint Search</a></br>
+      <a  class="ui" href="#thesis2018">Spacetime Programming: A Synchronous Language for Constraint Search</a></br>
       Pierre Talbot</br>
       Doctoral dissertation, Sorbonne University, Paris, 2018.
       </li>
       <div class="ui horizontal divider">2017</div>
       <li>
-        <a class="ui" onclick="$('.ui.modal.icmc2017').modal('show');">Interactive computer-aided composition with constraints</a></br>
-        Pierre Talbot, Carlos Agon, and Philippe Esling</br>
+        <a class="ui" href="#icmc2017">Interactive computer-aided composition with constraints</a></br>
+        Pierre Talbot, Carlos Agon, Philippe Esling</br>
         Proceedings of the 2017 International Computer Music Conference (ICMC 2017)</br>
       </li>
       <li>
-        <a class="ui" onclick="$('.ui.modal.jfpc2017').modal('show');">Langage pour la vérification de modèles par contraintes</a></br>
-        Pierre Talbot and Clément Poncelet</br>
+        <a class="ui" href="#jfpc2017">Langage pour la vérification de modèles par contraintes</a></br>
+        Pierre Talbot, Clément Poncelet</br>
         Treizièmes Journées Francophones de Programmation par Contraintes (JFPC 2017)</br>
       </li>
       <li>
-        <a class="ui" onclick="$('.ui.modal.ijcai-dp2017').modal('show');">Search strategies as synchronous processes (extended abstract)</a></br>
+        <a class="ui" href="#ijcai-dp2017">Search strategies as synchronous processes (extended abstract)</a></br>
         Pierre Talbot</br>
         Doctoral Program of the International Joint Conference on Artificial Intelligence (IJCAI 2017)</br>
       </li>
