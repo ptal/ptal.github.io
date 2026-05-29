@@ -135,6 +135,37 @@
 </head>
 <body>
 
+<!-- LOGICNN 2026 -->
+
+<div class="ui modal logicnn2026">
+  <div class="ui very padded segment">
+    <div class="ui icon green small buttons">
+      <a href="papers/logicnn2026.pdf"><button class="ui button">.pdf</button></a>
+      <a href="papers/logicnn2026-slides.pdf"><button class="ui button">slides</button></a>
+      <a href=""><button class="ui button">code</button></a>
+    </div>
+    </br>
+    </br>
+    <h3>Story of this paper</h3>
+    <p>This paper is part of the PhD thesis of Yi-Nung Tsao on his work to verify neural network by abstract interpretation.
+      We realized that most verifiers are currently unsound: they can wrongly state a neural network is safe w.r.t. some preconditions.
+      It is often due to floating-point rounding errors.
+      We take a principle approach to neural network verification by relying on techniques from continuous constraint programming; this community has dealt with floating-point arithmetic for many years and has developed sound approaches.
+      The contribution is extending the solver Turbo under the name "JET", and show encouraging preliminary results.
+    </p>
+  </div>
+
+  <div class="ui vertical left aligned very padded segment">
+  <pre><code class="language-latex">@inproceedings{LOGICNN2026-Tsao,
+  author =  {Tsao, Yi-Nung and Talbot, Pierre},
+  title = {{Towards Continuous Constraint Programming for Sound Neural Network Verification}},
+  booktitle = {FLOC 2026 Workshop on Logical Methods for Neural Network Analysis (LogicNN)},
+  pages = {XXX},
+  year = {2026},
+  volume = {XX},
+  doi = {XXX}
+}</code></pre></div></div>
+
 <!-- CP 2026 -->
 
 <div class="ui modal cp2026">
@@ -922,6 +953,11 @@
       <p><b>Replicate</b>: The code is linked to the version of the project that was used in the paper.</p>
       <ol>
       <div class="ui horizontal divider">2026</div>
+      <li>
+        <a class="ui" href="#logicnn2026">Towards Continuous Constraint Programming for Sound Neural Network Verification</a></br>
+        Yi-Nung Tsao, Pierre Talbot</br>
+        FLOC 2026 Workshop on Logical Methods for Neural Network Analysis (LogicNN 2026) </br>
+      </li>
       <li>
         <a class="ui" href="#cp2026">Combining an ϵ-Constraint Method with the Pareto Global Constraint</a></br>
         Manuel Combarro Simòn, Pierre Talbot, Pascal Bouvry</br>
